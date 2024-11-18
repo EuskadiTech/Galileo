@@ -61,4 +61,5 @@ def receta__del(rid):
     if request.method == "POST":
         DB_RECETAS.delete_by_id(str(rid))
         return redirect(url_for("Recetas.index"))
-    return render_template("recetas/del.html")
+    receta = DB_RECETAS.get_by_id(str(rid))
+    return render_template("recetas/del.html", receta=receta)
