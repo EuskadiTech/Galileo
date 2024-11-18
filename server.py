@@ -53,9 +53,8 @@ if __name__ == "__main__":
     #     pyi_splash.close()
     # except:
     #     pass
-    TIP = utils.start_tunnel()
-    TUNNELIP0 = TIP[0]
-    TUNNELIP1 = TIP[1]
+    tunnel = utils.Tunnel()
+    TIP = tunnel.start()
     print(
         f"""
 ------------------------------------
@@ -63,8 +62,7 @@ Servidor arrancado
 
 Puedes acceder a Galileo desde:
 - http://127.0.0.1:8129/ (local)
-- {TUNNELIP0} (caduca en 1 hora)
-- {TUNNELIP1} (no caduca)
+- {TIP} (no caduca)
 
 
 No cierres esta ventana.
@@ -86,4 +84,4 @@ No cierres esta ventana.
     app.register_blueprint(modules.ResumenDiarioBlueprint)
     app.register_blueprint(modules.RecetasBlueprint)
     app.run(HOST, 8129, False)
-    utils.stop_tunnel()
+    tunnel.stop()

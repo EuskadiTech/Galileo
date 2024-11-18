@@ -4,6 +4,9 @@
 # ---> Galileo-custom
 db.*.axd
 
+# ---> Galileo CI/CD
+version.txt
+
 # ---> Python
 # Byte-compiled / optimized / DLL files
 __pycache__/
