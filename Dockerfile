@@ -13,4 +13,6 @@ ENV DATAPATH=/data/
 VOLUME /data
 EXPOSE 8129
 
+RUN echo "Docker" > version.txt
+
 CMD [ "python", "./server.py" ]
