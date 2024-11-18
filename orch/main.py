@@ -1,4 +1,5 @@
 from flask import Flask, redirect, request, Response
+import html
 import requests
 
 app = Flask(__name__)
@@ -95,7 +96,8 @@ def proxy(pid, path):
                 for (name, value) in resp.raw.headers.items()
                 if name.lower() not in excluded_headers
             ]
-            response = Response(resp.content, resp.status_code, headers)
+            escaped_content = html.escape(resp.content.decode('utf-8'))
+            response = Response(escaped_content, resp.status_code, headers)
             return response
         elif request.method == "POST":
             resp = requests.post(
