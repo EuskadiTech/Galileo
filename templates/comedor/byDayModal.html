@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='icons/style.css')}}"
+    />
+    <title>Galileo</title>
+  </head>
+  <body>
+    {% include 'loader.html' %}
+    <header style="background-color: #000; color: #fff">
+      <h3>Galileo - Comedor</h3>
+    </header>
+    <main>
+      <center>
+        <h2>Ver menú</h2>
+        <form action="{{url_for('Comedor.getMenu')}}" method="GET">
+          <fieldset>
+            <legend>por fecha</legend>
+            <label
+              >Menú:
+              <select name="menu">
+                <option value="*">> Todos</option>
+                {% for menu in menus %}
+                <option value="{{menu}}">{{menu}}</option>
+                {% endfor %}
+              </select></label
+            >
+            <br />
+            <label>Dia: <input type="date" name="day" required /></label>
+            <br />
+            <input type="submit" class="actbtn di di-calendar" value="Abrir" />
+            <a class="actbtn di di-exit" href="{{url_for('Comedor.index')}}"
+              >Salir</a
+            >
+          </fieldset>
+        </form>
+      </center>
+    </main>
+  </body>
+</html>

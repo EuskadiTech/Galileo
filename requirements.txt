@@ -1,0 +1,5 @@
+requests
+Flask
+pysondb-v2
+markdown
+sentry-sdk[flask]

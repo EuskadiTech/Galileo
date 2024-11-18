@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+  <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
+  <title>Galileo</title>
+</head>
+
+<body>
+  {% include 'loader.html' %}
+  <header style="background-color: #000; color: #fff">
+    <h3>Galileo - Recetas</h3>
+  </header>
+  <main>
+    <center>
+      <h1>Recetas descargadas en el servidor</h1>
+      <a class="actbtn di di-exit" href="{{url_for('index')}}">Salir</a>
+      <a class="actbtn di di-add2" href="{{url_for('Recetas.new')}}">Crear Receta</a>
+
+      <table border>
+        <thead>
+          <th>Nombre</th>
+          <th>Fecha</th>
+          <th>Origen</th>
+          <th>Acciónes</th>
+        </thead>
+        <tbody>
+          {% for key in recetas %}
+          <tr>
+            <td><a href="{{url_for('Recetas.receta', rid = key)}}">{{recetas[key]["Nombre"]}}</a></td>
+            <td>{{recetas[key]["YYYY-MM-DD"]}}</td>
+            <td>
+              <a href='{{recetas[key]["OrigenURL"]}}'>{{recetas[key]["Origen"]}}</a>
+            </td>
+            <td>
+              <a href="{{url_for('Recetas.receta__del', rid = key)}}">Borrar</a>
+              <a href="{{url_for('Recetas.edit', rid = key)}}">Editar</a>
+              <a href="{{url_for('Recetas.receta', rid = key)}}">Abrir</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </center>
+  </main>
+</body>
+
+</html>

@@ -1,0 +1,212 @@
+* {
+  font-family: arial;
+}
+
+header {
+  border: 1px solid #000;
+  margin-bottom: 5px;
+}
+header a {
+  color: white;
+}
+.red {
+  background-color: red;
+}
+
+body,
+html {
+  height: 95%;
+  color-scheme: light dark;
+}
+
+.print .vertical {
+  height: 7.15cm;
+}
+
+.vertical {
+  float: left;
+  padding: 5px;
+  width: 4.8cm;
+  margin: 5px;
+  overflow-y: scroll;
+}
+
+.vertical label {
+  float: left;
+  position: relative;
+  display: block;
+  width: 2.75cm;
+  height: 3cm;
+  margin: 3.5px;
+  text-align: center;
+  border: 1px solid #000;
+}
+
+.f {
+  width: 100%;
+  bottom: 0;
+  position: absolute;
+}
+
+.f span {
+  width: calc(100% - 0.85cm);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  text-align: center !important;
+}
+
+.f input[type="checkbox"],
+.f input[type="radio"] {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.ico {
+  font-size: 50px;
+}
+
+.ico.smallico {
+  font-size: 35px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  display: block;
+  width: 0.75cm;
+  height: 0.75cm;
+}
+
+h3 {
+  color: #fff;
+  margin: 0;
+}
+
+.milk {
+  width: 4.8cm;
+}
+
+hr {
+  background-color: #000;
+  border-top: 1px solid #000;
+  margin: 2px 0;
+  width: 100%;
+  display: none;
+}
+
+.milk label {
+  position: relative;
+  display: block;
+  width: calc(100% - 2px);
+  height: 0.95cm;
+  margin: 5px 0;
+  text-align: left;
+  border: 1px solid #000;
+}
+
+.milk label .ico {
+  font-size: 35px;
+}
+
+.milk label .ico.smallico {
+  font-size: 19.5px;
+}
+
+.milk .f {
+  width: 75%;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+}
+
+.black {
+  color: #fff;
+  background-color: #000;
+}
+
+.redtext {
+  color: red;
+}
+
+textarea {
+  font-size: 17px;
+}
+
+button {
+  font-size: 25px;
+}
+
+/* input[type="text"] {
+  font-size: 20px;
+}
+
+select {
+  font-size: 20px;
+} */
+
+@media print {
+  .nop {
+    display: none;
+  }
+
+  .vertical {
+    height: 7.15cm;
+  }
+
+  .black {
+    background-color: #fff;
+    color: #000;
+  }
+
+  .pp {
+    width: calc(100% - 25px);
+  }
+}
+
+.anilla_green {
+  background: green;
+}
+.appbtn {
+  display: inline-block;
+  border: 3px solid black;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 5px;
+  height: 100px;
+  width: 140px;
+  color: black;
+  text-decoration: none;
+  text-align: left;
+}
+.appbtn b {
+  text-align: center;
+  display: block;
+  font-size: 115%;
+}
+.appbtn img {
+  height: 64px;
+}
+
+.actbtn {
+  display: inline-block;
+  border: 3px solid blueviolet;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 5px;
+  color: black;
+  text-decoration: none;
+  font-size: inherit !important;
+}
+table {
+  width: 100%;
+  max-width: 900px;
+}
+fieldset {
+  width: fit-content;
+}
+
+input[type="file"] {
+  border: 1px solid black;
+  padding: 7px;
+}

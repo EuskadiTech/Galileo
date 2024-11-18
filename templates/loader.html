@@ -1,0 +1,40 @@
+<script>
+  document.onreadystatechange = function () {
+    if (document.readyState !== "complete") {
+      document.querySelector("#loader").style.display = "block";
+    } else {
+      document.querySelector("#loader").style.display = "none";
+    }
+  };
+  function load(url) {
+    document.querySelector("#loader").style.display = "block";
+    location.href = url;
+  }
+  window.onbeforeunload = () => {
+    document.querySelector("#loader").style.display = "block";
+  };
+</script>
+
+<center
+  id="loader"
+  style="
+    z-index: 9;
+    border: 25px solid red;
+    background-color: #fff;
+    margin: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+  "
+>
+  <img
+    src="{{url_for('static', filename='load.gif')}}"
+    width="200"
+    height="200"
+  />
+  <h2>Cargando...</h2>
+  Espera mientras se muestra esto.
+</center>

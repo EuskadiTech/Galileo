@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='icons/style.css')}}"
+    />
+    <title>Galileo</title>
+  </head>
+
+  <body>
+    {% include 'loader.html' %}
+    <header style="background-color: #000; color: #fff">
+      <h3>Galileo - Comedor</h3>
+    </header>
+    <main>
+      <center>
+        <h2>Solicitar Menu</h2>
+        <form
+          action="{{url_for('Comedor.api__reqMenu')}}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <fieldset>
+            <legend>Generar menú desde una foto</legend>
+            <input
+              type="file"
+              name="file"
+              accept="image/png, image/jpeg"
+              required
+            />
+            <br />
+            <label>Menú: <input type="text" name="menu" id="Menu" /></label>
+            <br />
+            <label
+              >Mes YYYY-MM: <input type="text" name="mes" id="Mes"
+            /></label>
+            <br />
+            <input
+              type="submit"
+              class="actbtn di di-datainto"
+              value="Generar Menú"
+            />
+            <a class="actbtn di di-exit" href="{{url_for('Comedor.index')}}"
+              >Salir</a
+            >
+          </fieldset>
+        </form>
+      </center>
+    </main>
+  </body>
+</html>

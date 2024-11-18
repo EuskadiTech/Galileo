@@ -1,0 +1,23 @@
+Origin;Menu;YYYY-MM;Description;Link
+EuskadiTech;Basal Test;2024-11;DEMO;https://tech.eus
+---
+YYYY-MM-DD;P1 Text;P1 Img;P2 Text;P2 Img;P3 Text;P3 Img;IsEnought
+2024-11-05;Sopa de estrellas con pollo y huevo;sopa-fideos.jpg;Tortilla de patata con ensalada liz;tortilla-patatas.jpg;Yogur natural azucarado;postre-yogur.jpg;KO
+2024-11-06;Alubias rojas;unk.png;Medallones de merluza en salsa verde;alubias-rojas.jpg;Fruta;postre-fruta.jpg;KO
+2024-11-07;Arroz con tomate;arroz-tomate.jpg;Albóndigas de pollo y cerdo en salsa suave;albondigas-pollo.jpg;Yogur sabores;postre-yogur-sabores.jpg;OK
+2024-11-08;Vainas rehogadas;legumbre-vainas.jpg;Croquetas con lechuga;croquetas-jamon-serrano;Fruta;postre-fruta.jpg;OK
+2024-11-11;Lentejas;legumbre-lentejas.jpg;Alitas de pollo con patatas;pollo-alitas.jpg;Fruta;postre-fruta.jpg;KO
+2024-11-12;Puré de acelgas y espinacas;pure-acelgas-espinacas.jpg;Tortilla de patata y chorizo con lechuga;tortilla-patatas-chorizo.jpg;Yogur sabores;postre-yogur-sabores.jpg;KO
+2024-11-13;Patatas en salsa verde;patatas-salsa-verde.jpg;Empanadillas de atún con ensalada liz;empanadillas-atun.jpg;Fruta;postre-fruta.jpg;OK
+2024-11-14;Espaguetis napolitana;espaguetis.jpg;Hamburguesa de vacuno y cerdo al horno en salsa jardinera;hamburguesas-en-salsa1.jpg;Yogur natural azucarado;postre-yogur.jpg;OK
+2024-11-15;Alubias blancas;alubias-blancas.jpg;Filete de abadejo romana com mahonesa;cerdo-lomo-fresco.jpg;Fruta;postre-fruta.jpg;OK
+2024-11-18;Crema de calabaza y zanahoria;pure-calabacin-zanahoria.jpg;Nuggets de pollo con ensalada liz;pollo-nuggets.jpg;Fruta;postre-fruta.jpg;KO
+2024-11-19;Sopa de ave con fideos;sopa-fideos.jpg;Lomo adobado de cerdo rebozado con chips;cerdo-lomo-adobado.jpg;Yogur natural azucarado;postre-yogur.jpg;KO
+2024-11-20;Garbanzos;legumbres-garbanzos.jpg;Arroz con verduritas de la huerta;arroz-verduras.jpg;Fruta;postre-fruta.jpg;OK
+2024-11-21;Patatas a la riojana;patatas-riojana.jpg;Merluza en salsa americana;merluza-salsa-americana.jpg;Fruta;postre-fruta.jpg;OK
+2024-11-22;Menestra de verduras;menestra.jpg;Pechugas de pollo rebozadas con lechuga;pollo-pechuga-rebozada.jpg;Fruta;postre-fruta.jpg;OK
+2024-11-25;Lentejas con arroz integral;legumbres-lentejas.png;Filete de abadejo en salsa marinera;cerdo-lomo-fresco.jpg;Fruta;postre-fruta.jpg;KO
+2024-11-26;Crema de calabacín;pure-calabacin.jpeg;Muslo de pollo asado con judías, zanahoria y patata;pollo-asado.jpg;Fruta;postre-fruta.jpg;KO
+2024-11-27;Sopa de letras;sopa-fideos.jpg;Tortilla de patata y pimientos con lechuga;tortilla-patatas.jpg;Fruta;postre-fruta.jpg;KO
+2024-11-28;Tallarines salteados al estilo oriental;pasta-macarrones-salteados.jpg;Albóndigas de vacuno y cerdo a la jardinera;vacuno-guisado.jpg;Yogur natural azucarado;postre-yogur.jpg;OK
+2024-11-29;Alubias rojas;alubias-rojas.jpg;San jacobo con ensalada liz;sanjacobo.jpg;Fruta;postre-fruta.jpg;KO

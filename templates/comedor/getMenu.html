@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='icons/style.css')}}"
+    />
+    <title>Galileo</title>
+  </head>
+
+  <body>
+    {% include 'loader.html' %}
+    <header style="background-color: #000; color: #fff">
+      <h3>Galileo - Comedor</h3>
+    </header>
+    <main>
+      <center>
+        <h2>Menú del comedor del {{day}}</h2>
+        <a class="actbtn di di-exit" href="{{url_for('Comedor.index')}}"
+          >Salir</a
+        >
+        <a
+          class="actbtn di di-calendar"
+          href="{{url_for('Comedor.byDayModal')}}"
+          >Ver otra fecha</a
+        >
+        <!-- <h2>Menús</h2> -->
+        <table border>
+          <thead>
+            <th>Menú</th>
+            <th>1<sup>er</sup> plato</th>
+            <th>2<sup>er</sup> plato</th>
+            <th>3<sup>er</sup> plato</th>
+          </thead>
+          <tbody>
+            {% for result in results %}
+            <tr>
+              <td>
+                <b>{{result}}</b><br /><small
+                  >{{results[result]["IsEnought"]}}</small
+                >
+              </td>
+              <td>
+                {{results[result]["P1 Text"]}}
+                <img
+                  src='https://naiel.fyi/static/img/{{results[result]["P1 Img"]}}'
+                  style="max-width: 80px; max-height: 40px"
+                  alt=""
+                />
+              </td>
+              <td>
+                {{results[result]["P2 Text"]}}
+                <img
+                  src='https://naiel.fyi/static/img/{{results[result]["P2 Img"]}}'
+                  style="max-width: 80px; max-height: 40px"
+                  alt=""
+                />
+              </td>
+              <td>
+                {{results[result]["P3 Text"]}}
+                <img
+                  src='https://naiel.fyi/static/img/{{results[result]["P3 Img"]}}'
+                  style="max-width: 80px; max-height: 40px"
+                  alt=""
+                />
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </center>
+    </main>
+  </body>
+</html>

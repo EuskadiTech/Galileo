@@ -1,0 +1,68 @@
+.di.actbtn {
+  padding-left: 42px;
+  background-position: left;
+  background-position-x: 5px;
+  background-size: 32px;
+  background-repeat: no-repeat;
+}
+.di.appbtn {
+  background-position: center;
+  background-size: 32px;
+  vertical-align: top;
+  background-color: rgba(255, 255, 255, 0.75);
+  background-blend-mode: lighten;
+}
+.di-datainto {
+  background: url("data_into.png");
+}
+.di-calendar {
+  background: url("calendar.png");
+}
+.di-coffebeans {
+  background: url("coffee_beans.png");
+}
+.di-cook {
+  background: url("cook.png");
+}
+.di-apple {
+  background: url("apple.png");
+}
+.di-cake_slice {
+  background: url("cake_slice.png");
+}
+.di-chocolate {
+  background: url("chocolate.png");
+}
+.di-blender {
+  background: url("blender.png");
+}
+.di-exit {
+  background: url("exit.png");
+}
+.di-mail_earth {
+  background: url("mail_earth.png");
+}
+.di-printer2 {
+  background: url("printer2.png");
+}
+.di-edit {
+  background: url("edit.png");
+}
+.di-download {
+  background: url("download.png");
+}
+.di-add2 {
+  background: url("add2.png");
+}
+.di-save {
+  background: url("save.png");
+}
+
+.dim-food {
+  background-size: 32px !important;
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  background-image: url("cook.png"), url("cake_slice.png"), url("chocolate.png"), url("apple.png") !important;
+  background-blend-mode: lighten;
+  background-position-y: calc(32px * 0), calc(32px * 1), calc(32px * 2), calc(32px * 3) !important;
+  background-repeat: repeat-x;
+}
