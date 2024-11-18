@@ -3,9 +3,10 @@ from datetime import datetime
 import requests
 from requests import Response
 import json
-import time
+from time import sleep
 import subprocess
 import uuid
+from threading import Event, Thread
 
 APPDATA_DIR = "."
 USERDATA_DIR = "./"
@@ -144,48 +145,76 @@ def get_config():
     CONFIG = json.load(open(USERDATA_DIR + "config.json", "r"))
     return CONFIG
 
-
-TUNNEL = None
-TUNNEL_URLS = []
-
-
-def start_tunnel(retries: int = 10):
-    global TUNNEL
-    if os.environ.get("ISDOCKER") != None:
-        return ["", ""]
-    cmd = f"ssh -p 443 -L11129:127.0.0.1:4300 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -t -R0:127.0.0.1:8129 force@a.pinggy.io x:https x:xff x:fullurl"
-    print("> Arrancando Tunel SSH")
-    TUNNEL = subprocess.Popen(
-        cmd.split(" "),
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        stdin=subprocess.DEVNULL,
-    )
-    for i in range(0, retries):
-        try:
-            global TUNNEL_URLS
-            TUNNEL_URLS.append(
-                requests.get("http://127.0.0.1:11129/urls").json().get("urls")[-1]
-            )
-            print("> Tunel SSH Disponible")
-            break
-        except:
-            time.sleep(3)
-    config = get_config()
-    oti = "ETRP No Disp."
-    if config.get("Clave Proxy") != None:
-        oti = requests.post(
-            "https://rp.tech.eus/__rp/publish",
-            json={"conid": config["Clave Proxy"], "baseurl": TUNNEL_URLS[0]},
-        ).json()["url"]
-    TUNNEL_URLS.append(oti)
-    return TUNNEL_URLS
-
-
-def stop_tunnel():
-    global TUNNEL
-    try:
-        TUNNEL.terminate()
-        TUNNEL.kill()
-    except:
+#region Tunnels
+class Tunnel:
+    # TODO: Implement https://ssi.sh/ as a tunnel
+    TUNNEL = None
+    TIMEOUT = 3000 # 50 min
+    TRIGGER = Event()
+    def __init__(self):
         pass
+    
+    def loop(self):
+        TIMER = 0
+        while True:
+            TIMER += 1
+            if self.TRIGGER.is_set():
+                break
+            if TIMER > self.TIMEOUT:
+                print(">> Recargando Tunel SSH")
+                self.stop_ssh_tunnel()
+                sleep(1)
+                self.start_ssh_tunnel()
+            if self.TUNNEL == None:
+                self.start_ssh_tunnel()
+            sleep(1)
+    
+    def start(self):
+        config = get_config()
+        self.thread = Thread(target=self.loop)
+        self.thread.start()
+        return "https://rp.tech.eus/open/" + config["Clave Proxy"]
+    
+    def stop(self):
+        self.TRIGGER.set()
+        self.thread.join()
+    
+    def start_ssh_tunnel(self, retries: int = 10):
+        if os.environ.get("ISDOCKER") != None:
+            return ["", ""]
+        cmd = f"ssh -p 443 -L11129:127.0.0.1:4300 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -t -R0:127.0.0.1:8129 force@a.pinggy.io x:https x:xff x:fullurl"
+        print(" > Arrancando Tunel SSH")
+        self.TUNNEL = subprocess.Popen(
+            cmd.split(" "),
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL,
+        )
+        TUNNEL_URLS = []
+        for i in range(0, retries):
+            try:
+                TUNNEL_URLS.append(
+                    requests.get("http://127.0.0.1:11129/urls").json().get("urls")[-1]
+                )
+                print(" > Tunel SSH Disponible")
+                break
+            except:
+                sleep(3)
+        config = get_config()
+        oti = "ETRP No Disp."
+        if config.get("Clave Proxy") != None:
+            oti = requests.post(
+                "https://rp.tech.eus/__rp/publish",
+                json={"conid": config["Clave Proxy"], "baseurl": TUNNEL_URLS[0]},
+            ).json()["url"]
+        TUNNEL_URLS.append(oti)
+        return TUNNEL_URLS
+
+    def stop_ssh_tunnel(self):
+        try:
+            self.TUNNEL.terminate()
+            self.TUNNEL.kill()
+            self.TUNNEL = None
+        except:
+            pass
+#endregion
