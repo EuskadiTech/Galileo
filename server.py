@@ -4,6 +4,7 @@ from werkzeug.wrappers import Response
 from os.path import join as path_join
 import logging
 import sentry_sdk
+from launcher import get_local_version
 
 import utils
 import modules
@@ -36,7 +37,7 @@ log.disabled = True
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html")
+    return render_template("index.html", VERSION = get_local_version())
 
 
 @app.route("/api/purgecache", methods=["GET"])
