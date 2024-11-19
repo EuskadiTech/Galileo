@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+  <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
+  <title>Galileo</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='vendor/simplemde.min.css')}}" />
+  <link rel="stylesheet" href="{{url_for('static', filename='vendor/font-awesome.min.css')}}" />
+</head>
+
+<body>
+  {% include 'loader.html' %}
+
+  <header class="nop" style="background-color: #000; color: #fff">
+    <h3>Galileo - Personas</h3>
+  </header>
+  <main>
+    <center>
+      <h2 class="nop">Tarjeta Identificativa de {{receta["Nombre"]}}</h2>
+        <table border style="width: calc(100% - 30px); max-width: 30rem; text-align: left;">
+          <tr>
+            <td style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px;">{{receta["Nombre"]}}</td>
+            <td style="width: 150px; text-align: center;" rowspan="2">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=15&data={{receta['Codigo']}}"
+                width="150px"><br><small>
+                  Codigo - {{receta["Codigo"]}}
+                  
+                  {% if receta["PIN"] != "" %}
+                  <br>PIN - {{receta["PIN"]}}
+                  {% endif %}
+                </small>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              {{content | safe}}
+            </td>
+          </tr>
+          <tr class="nop">
+            <td style="font-size: 75%;">
+              <b>Roles:</b> <code style="font-family: monospace !important;">{{receta['Roles']}}</code>
+              <br />
+              <b>Fecha de Nacimiento:</b> {{receta['F-nac']}}
+            </td>
+            <td style="width: 150px; text-align: center;" rowspan="1">
+              <code style="font-family: monospace !important;font-size: 20px;">{{receta['Puntos']}} puntos</code>
+            </td>
+          </tr>
+        </table>
+      <div class="nop">
+        <br>
+        <a href="https://axis.tech.eus/naiel.fyi/mdsyntax.html" target="_blank" rel="noopener noreferrer">Manual de
+          Markdown</a>
+        <br />
+        <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
+      </div>
+    </center>
+  </main>
+  <script src="{{url_for('static', filename='vendor/simplemde.min.js')}}"></script>
+  <script>
+    new SimpleMDE({
+      element: document.getElementById("contentMD"),
+      spellChecker: false,
+      status: false,
+    });
+  </script>
+</body>
+
+</html>

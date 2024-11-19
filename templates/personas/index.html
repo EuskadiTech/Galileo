@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+  <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
+  <title>Galileo</title>
+</head>
+
+<body>
+  {% include 'loader.html' %}
+  <header style="background-color: #000; color: #fff">
+    <h3>Galileo - Personas</h3>
+  </header>
+  <main>
+    <center>
+      <h1>Listado de Personas</h1>
+      <a class="actbtn di di-exit" href="{{url_for('index')}}">Salir</a>
+      <a class="actbtn di di-add2" href="{{url_for('Personas.new')}}">Añadir Persona</a>
+      <a class="actbtn di di-barcode" href="{{url_for('Personas.scan')}}">Escanear Codigo</a>
+
+      <table border>
+        <thead>
+          <th>Codigo</th>
+          <th>Nombre</th>
+          <th>Roles</th>
+          <th>Puntos</th>
+          <th>Acciónes</th>
+        </thead>
+        <tbody>
+          {% for key in personas %}
+          <tr>
+            <td>{{key}}</td>
+            <td><a href="{{url_for('Personas.persona', rid = key)}}">{{personas[key]["Nombre"]}}</a></td>
+            <td>{{personas[key]["Roles"]}}</td>
+            <td>{{personas[key]["Puntos"]}} puntos</td>
+            <td>
+              <a href="{{url_for('Personas.rdel', rid = key)}}">Borrar</a>
+              <a href="{{url_for('Personas.edit', rid = key)}}">Editar</a>
+              <a href="{{url_for('Personas.persona', rid = key)}}">Abrir</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </center>
+  </main>
+</body>
+
+</html>
