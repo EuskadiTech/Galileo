@@ -25,6 +25,7 @@ def new():
                 "markdown": request.form.get("markdown", ""),
                 "Codigo": str(randint(100,9999)),
                 "PIN": request.form.get("pin", "").upper(),
+                "Region": request.form.get("region", "Sin Aula").upper(),
             }
         )
         return redirect(url_for("Personas.index"))
@@ -66,6 +67,7 @@ def edit(rid):
                 "Codigo": request.form.get("codigo", receta["Codigo"]),
                 "markdown": request.form.get("markdown", receta["markdown"]),
                 "PIN": request.form.get("pin", receta["PIN"]).upper(),
+                "Region": request.form.get("region", receta["Region"]).upper(),
             }
         )
         return redirect(url_for("Personas.index"))

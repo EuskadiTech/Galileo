@@ -2,7 +2,7 @@ from flask import Blueprint, request, render_template, url_for
 from utils import DateParser, get_config, cached_request
 from random import choice
 from ..Comedor.localutils import fromDay_comedor
-
+from ..Cafe.views import get_receta
 app = Blueprint("ResumenDiario", __name__)
 
 
@@ -19,6 +19,7 @@ def index():
         "Joke": "",
         "Comedor": fromDay_comedor(),
         "ComedorOKKO": {"OK": "suficiente", "KO": "poca"},
+        "Receta": get_receta()
     }
     config = get_config()
     if "print" in request.args.keys():

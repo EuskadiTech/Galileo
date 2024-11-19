@@ -16,7 +16,7 @@ header a {
 body,
 html {
   height: 95%;
-  color-scheme: light dark;
+  color-scheme: only light;
 }
 
 .print .vertical {

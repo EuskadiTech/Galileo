@@ -20,17 +20,39 @@
     {% include 'loader.html' %}
 
     <header style="background-color: #000; color: #fff">
-      <h3>Galileo - Personas</h3>
+      <h3>Galileo - SuperCafé</h3>
     </header>
     <main>
       <center>
-        <h2>Escanear Codigo</h2>
+        <h2>Elegir Cliente</h2>
         <form method="post">
-          <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
-            <legend>Escanear Codigo</legend>
+          <fieldset style="width: calc(100% - 30px); max-width: 410px; text-align: left;">
+            <legend>por codigo</legend>
             <input type="hidden" name="code" id="reader_output">
             <div style="width: 400px" id="reader"></div>
-            <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}"
+            <a class="actbtn di di-exit" href="{{url_for('Recetas.index')}}"
+              >Salir</a
+            >
+          </fieldset>
+        </form>
+        <form method="post">
+          <fieldset style="width: calc(100% - 30px); max-width: 410px; text-align: left;">
+            <legend>por nombre</legend>
+            <select name="code" style="width: 100%; font-size: 25px; font-family: monospace;">
+              <option value="" disabled selected>Elige...</option>
+          {% for key in personas %}
+          {% if "cafe_cliente" in personas[key]["Roles"] %}
+          <option value='{{personas[key]["Codigo"]}}'>{{personas[key]["Nombre"]}}</option>
+          {% endif %}
+          {% endfor %}
+            </select>
+            <br>
+            <input
+              type="submit"
+              class="actbtn di di-save"
+              value="Buscar"
+            />
+            <a class="actbtn di di-exit" href="{{url_for('Cafe.index')}}"
               >Salir</a
             >
           </fieldset>
