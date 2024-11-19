@@ -145,6 +145,12 @@ def get_config():
     CONFIG = json.load(open(USERDATA_DIR + "config.json", "r"))
     return CONFIG
 
+def set_config(setconf):
+    global CONFIG
+    json.dump(setconf, open(USERDATA_DIR + "config.json", "w"))
+    CONFIG = json.load(open(USERDATA_DIR + "config.json", "r"))
+    return CONFIG
+
 #region Tunnels
 class Tunnel:
     # TODO: Implement https://ssi.sh/ as a tunnel

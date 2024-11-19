@@ -20,24 +20,29 @@
     {% include 'loader.html' %}
 
     <header style="background-color: #000; color: #fff">
-      <h3>Galileo - Personas</h3>
+      <h3>Galileo - SuperCafé</h3>
     </header>
     <main>
       <center>
-        <h2>Escanear Codigo</h2>
+        <h2>Establecer configuración</h2>
         <form method="post">
-          <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
-            <legend>Escanear Codigo</legend>
-            <input type="hidden" name="code" id="reader_output">
-            <div style="width: 400px" id="reader"></div>
-            <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}"
+          <fieldset style="width: calc(100% - 30px); max-width: 410px; text-align: left;">
+            <legend>configuración</legend>
+            <label>Receta: <input type="text" name="receta" value="{{Receta}}"></label>
+            <br>
+            <input
+              type="submit"
+              class="actbtn di di-save"
+              value="Buscar"
+            />
+            <a class="actbtn di di-exit" href="{{url_for('Cafe.index')}}"
               >Salir</a
             >
           </fieldset>
         </form>
       </center>
     </main>
-    <script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
+    <!-- <script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
     <script>
       var html5QrcodeScanner = new Html5QrcodeScanner(
           "reader", { fps: 10, qrbox: 250 });
@@ -54,6 +59,6 @@
       }
 
       html5QrcodeScanner.render(onScanSuccess);
-    </script>
+    </script> -->
   </body>
 </html>

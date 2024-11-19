@@ -49,6 +49,7 @@ app.register_blueprint(modules.ComedorBlueprint)
 app.register_blueprint(modules.ResumenDiarioBlueprint)
 app.register_blueprint(modules.RecetasBlueprint)
 app.register_blueprint(modules.PersonasBlueprint)
+app.register_blueprint(modules.CafeBlueprint)
 
 if __name__ == "__main__":
     # try:

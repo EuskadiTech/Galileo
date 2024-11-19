@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
+    <title>Galileo</title>
+    <!-- <link rel="stylesheet" href="{{url_for('static', filename='vendor/font-awesome.min.css')}}" /> -->
+</head>
+
+<body>
+    {% include 'loader.html' %}
+    <script>
+        function chAnilla(l, o) {
+            console.log(o), document.getElementById(l).style = "background-color: " + o.split(";")[1] + "; color: " + o.split(";")[2]
+        }
+    </script>
+    <form class="print" method="post">
+        <header style="background-color:#000;color:#fff">
+            <h3>Comanda del Café - 
+                {{client["Nombre"]}} ({{client["Region"]}})
+            </h3>
+        </header>
+        <main>
+            <fieldset class="milk colors vertical">
+                <summary>Anilla</summary>
+                {% for anilla in anillas %}
+                <label style="background-color: {{anilla['color']}}; color: {{anilla['text']}};"><br>
+                    <div class="f"><span>
+                        {{anilla['name']}}
+                        </span><input name="Anilla" type="radio" value="{{anilla['name']}};{{anilla['color']}};{{anilla['text']}}">
+                    </div>
+                </label>
+                {% endfor %}
+            </fieldset>
+            <fieldset class="milk vertical">
+                <summary>Selección</summary>
+                <label><img height="36px"
+                        src="https://globalsymbols.com/uploads/production/image/imagefile/15368/17_15369_a786017e-af12-491f-846d-0ab3fa955aea.png"><br>
+                    <div class="f"><span>Café</span><input name="Selección[]" type="radio" value="Descafeinado"></div>
+                    <label><img height="36px"
+                            src="https://globalsymbols.com/uploads/production/image/imagefile/15368/17_15369_a786017e-af12-491f-846d-0ab3fa955aea.png"><br>
+                        <div class="f"><span>C. Soluble</span><input name="Selección[]" type="radio" value="Soluble">
+                        </div>
+                    </label>
+                    <label><img height="36px"
+                            src="https://brandemia.org/sites/default/files/inline/images/colcacao_pack_despues3.jpg"><span
+                            class="ico smallico redtext"><sup>*</sup></span><br>
+                        <div class="f"><span>Colacao</span><input name="Selección[]" type="radio" value="Colacao"></div>
+                    </label><label><img height="36px"
+                            src="https://globalsymbols.com/uploads/production/image/imagefile/5908/13_5908_86fe156f-7090-4208-8ef7-4870f87bdbec.svg"><br>
+                        <div class="f"><span>Infusión</span><input name="Selección[]" type="radio" value="Infusión">
+                        </div>
+                    </label>
+                    <label><i class="ico fas fa-ban redtext"></i><br>
+                        <div class="f"><span>Sin Selección</span><input name="Selección[]" type="radio" value=""></div>
+                    </label>
+                    <hr class="dotted"><label class="black" id="receta"><img height="36px"
+                            src="https://globalsymbols.com/uploads/production/image/imagefile/15428/17_15429_4eb0ef42-0045-4019-ab20-a76fd2d43cec.png"
+                            width="36px"><br>
+                        <div class="f"><span>Receta<br><small class="nop" id="receta_name">
+                                    {{Receta}}
+                                </small></span><input name="Selección[]" type="checkbox" value="Receta del dia"></div>
+                    </label>
+                    <label><span class="ico redtext">C<sup>*</sup></span><br>
+                        <div class="f"><span>Con Cafeina</span><input name="Selección[]" type="checkbox"
+                                value="Con Cafeina"></div>
+                    </label>
+                    <br>
+            </fieldset>
+            <fieldset class="milk vertical">
+                <summary>Tamaño</summary><label><img height="36px"
+                        src="{{url_for('static', filename='cafe-ico/tamano-grande.png')}}"><br>
+                    <div class="f"><span>Grande</span><input name="tamano[]" type="radio" value="Grande"></div>
+                </label><label><img height="36px"
+                        src="{{url_for('static', filename='cafe-ico/tamano-pequeno.png')}}"><br>
+                    <div class="f"><span>Pequeño</span><input name="tamano[]" type="radio" value="Pequeno"></div>
+                </label><br>
+            </fieldset>
+            <fieldset class="milk vertical">
+                <summary>Leche</summary><label><img height="36px"
+                        src="{{url_for('static', filename='cafe-ico/leche-vaca.png')}}"><br>
+                    <div class="f"><span>De vaca</span><input name="Leche[]" type="radio" value="Normal"></div>
+                </label><label><img height="36px" src="{{url_for('static', filename='cafe-ico/leche-avena.png')}}"><br>
+                    <div class="f"><span>Vegetal</span><input name="Leche[]" type="radio" value="Vegetal"></div>
+                </label><label><img height="36px"
+                        src="{{url_for('static', filename='cafe-ico/leche-sinlactosa.png')}}"><br>
+                    <div class="f"><span>Sin Lactosa</span><input name="Leche[]" type="radio" value="Sin Lactosa"></div>
+                </label>
+                <hr class="dotted"><label><i class="ico fa-solid fa-ban" style="color:tomato"></i><br>
+                    <div class="f"><span>Sin Leche</span><input type="radio" name="Leche[]" value="NoL" id="cbox1">
+                    </div>
+                </label><br>
+            </fieldset>
+            <fieldset class="milk vertical">
+                <summary>Temperatura</summary><label><img height="36px"
+                        src="{{url_for('static', filename='cafe-ico/temperatura-frio.png')}}"><br>
+                    <div class="f"><span>Frio</span><input name="Temperatura[]" type="radio" value="Frio"></div>
+                </label><label><img height="36px"
+                        src="{{url_for('static', filename='cafe-ico/temperatura-templado.png')}}"><br>
+                    <div class="f"><span>Templado</span><input name="Temperatura[]" type="radio" value="Templado"></div>
+                </label><label><img height="36px"
+                        src="{{url_for('static', filename='cafe-ico/temperatura-caliente.png')}}"><br>
+                    <div class="f"><span>Caliente</span><input name="Temperatura[]" type="radio" value="Caliente"></div>
+                </label><br>
+            </fieldset>
+
+            <fieldset class="milk vertical">
+                <summary>Complementos</summary>
+                <label><img height="36px" src="{{url_for('static', filename='cafe-ico/extra-azucarblanco.png')}}"><br>
+                    <div class="f"><span>Azucar Blanco</span><input name="Complementos[]" type="radio"
+                            value="Azucar Blanco">
+                    </div>
+                </label>
+                <label><img height="36px" src="{{url_for('static', filename='cafe-ico/extra-azucarmoreno.png')}}"><br>
+                    <div class="f"><span>Azucar Moreno</span><input name="Complementos[]" type="radio"
+                            value="Azucar Moreno">
+                    </div>
+                </label><label><img height="36px"
+                        src="{{url_for('static', filename='cafe-ico/extra-edulcorante.png')}}"><br>
+                    <div class="f"><span>Edulcorante</span><input name="Complementos[]" type="radio"
+                            value="Edulcorante"></div>
+                </label><label><img height="36px" src="{{url_for('static', filename='cafe-ico/extra-stevia.png')}}"><br>
+                    <div class="f"><span>Stevia</span><input name="Complementos[]" type="radio" value="Stevia"></div>
+                </label><label><img height="36px"
+                        src="{{url_for('static', filename='cafe-ico/extra-stevia-l.jpg')}}"><br>
+                    <div class="f"><span>Stevia Liquido</span><input name="Complementos[]" type="radio"
+                            value="Stevia Liquido">
+                    </div>
+                </label>
+                <label><i class="ico fas fa-ban" style="color: red"></i>
+                    <div class="f"><span>Sin Complemento</span><input name="Complementos[]" type="radio" value="">
+                    </div>
+                </label>
+                </label><label><i class="ico" style="color: red">x2</i><br>
+                    <div class="f"><span>Doble</span><input name="Complementos[]" type="checkbox" value="Doble"></div>
+                </label>
+
+            </fieldset>
+            <fieldset class="milk vertical">
+                <summary>Variables</summary>
+                <b>Infusión</b>
+                <select name="VarInfusion">
+                    <option selected value="">No es infusión</option>
+                    <optgroup label="Té">
+                        <option>Te de Piña</option>
+                        <option>Te de Fresa</option>
+                        <option>Te de Frutos rojos</option>
+                        <option>Te de Chai</option>
+                        <option>Te de Tila</option>
+                        <option>Te de Mango</option>
+                        <option>Te Negro</option>
+                    </optgroup>
+                </select>
+            </fieldset>
+            <fieldset class="milk vertical pp">
+                <summary>Notas</summary><textarea class="nop" name="notas" rows="4"></textarea>
+                <button class="nop" type="submit">Enviar</button>
+                <!-- <button class="nop" type="button" onclick="window.print()">Imprimir</button>
+                <br> -->
+                <br>
+                <button onclick='location.href = "{{url_for("Cafe.index")}}"' type="button"
+                    class="np">Volver a Inicio</button>
+            </fieldset>
+        </main>
+    </form>
+</body>
+
+</html>
