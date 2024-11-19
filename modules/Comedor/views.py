@@ -47,8 +47,8 @@ def byDayModal():
 
 @app.route("/comedor/getMenu")
 def getMenu():
-    results = fromDay_comedor(**request.args)
-    day = DateParser(request.args["day"]).pretty_dayCode()
+    day = DateParser(request.args.get("day")).pretty_dayCode()
+    results = fromDay_comedor(day=day, **request.args)
     return render_template("comedor/getMenu.html", results=results, day=day)
 
 
