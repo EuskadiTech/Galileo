@@ -45,6 +45,10 @@ def api__purgecache():
     utils.clear_cache()
     return "Hecho!"
 
+app.register_blueprint(modules.ComedorBlueprint)
+app.register_blueprint(modules.ResumenDiarioBlueprint)
+app.register_blueprint(modules.RecetasBlueprint)
+app.register_blueprint(modules.PersonasBlueprint)
 
 if __name__ == "__main__":
     # try:
@@ -80,8 +84,5 @@ No cierres esta ventana.
         app.wsgi_app,
         {BASE: app.wsgi_app},
     )
-    app.register_blueprint(modules.ComedorBlueprint)
-    app.register_blueprint(modules.ResumenDiarioBlueprint)
-    app.register_blueprint(modules.RecetasBlueprint)
     app.run(HOST, 8129, False)
     tunnel.stop()

@@ -24,24 +24,29 @@
     {% include 'loader.html' %}
 
     <header style="background-color: #000; color: #fff">
-      <h3>Galileo - Recetas</h3>
+      <h3>Galileo - Personas</h3>
     </header>
     <main>
       <center>
-        <h2>Añadir receta</h2>
+        <h2>Añadir persona</h2>
         <form
-          action="{{url_for('Recetas.new')}}"
+          action="{{url_for('Personas.new')}}"
           method="POST"
           enctype="multipart/form-data"
         >
           <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
-            <legend>Añadir receta</legend>
+            <legend>Añadir persona</legend>
             <label>Nombre: <input type="text" name="nombre" required></label>
             <br />
-            <label>Fecha: <input type="date" name="fecha" required></label>
+            <label>PIN: <input type="text" autocomplete="off" name="pin"></label>
+            <br />
+            <label>Roles: <input type="text" name="roles" required></label>
+            <a target="_blank" rel="noopener noreferrer" href="https://axis.tech.eus/naiel.fyi/galileo-roles.html">Lista de roles</a>
+            <br />
+            <label>Fecha de Nacimiento: <input type="date" name="fecha" required></label>
             <br />
             <br />
-            <textarea name="receta" id="contentMD" cols="30" rows="10"></textarea>
+            <textarea name="markdown" id="contentMD" cols="30" rows="10"></textarea>
             <br />
             <a href="https://axis.tech.eus/naiel.fyi/mdsyntax.html" target="_blank" rel="noopener noreferrer">Manual de Markdown</a>
             <br />
@@ -50,7 +55,7 @@
               class="actbtn di di-save"
               value="Crear"
             />
-            <a class="actbtn di di-exit" href="{{url_for('Recetas.index')}}"
+            <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}"
               >Salir</a
             >
           </fieldset>

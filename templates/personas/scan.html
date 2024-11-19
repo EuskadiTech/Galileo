@@ -24,32 +24,16 @@
     {% include 'loader.html' %}
 
     <header style="background-color: #000; color: #fff">
-      <h3>Galileo - Recetas</h3>
+      <h3>Galileo - Personas</h3>
     </header>
     <main>
       <center>
-        <h2>Añadir receta</h2>
-        <form
-          action="{{url_for('Recetas.new')}}"
-          method="POST"
-          enctype="multipart/form-data"
-        >
+        <h2>Escanear Codigo</h2>
+        <form method="post">
           <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
             <legend>Añadir receta</legend>
-            <label>Nombre: <input type="text" name="nombre" required></label>
-            <br />
-            <label>Fecha: <input type="date" name="fecha" required></label>
-            <br />
-            <br />
-            <textarea name="receta" id="contentMD" cols="30" rows="10"></textarea>
-            <br />
-            <a href="https://axis.tech.eus/naiel.fyi/mdsyntax.html" target="_blank" rel="noopener noreferrer">Manual de Markdown</a>
-            <br />
-            <input
-              type="submit"
-              class="actbtn di di-save"
-              value="Crear"
-            />
+            <input type="hidden" name="code" id="reader_output">
+            <div style="width: 400px" id="reader"></div>
             <a class="actbtn di di-exit" href="{{url_for('Recetas.index')}}"
               >Salir</a
             >
@@ -57,13 +41,23 @@
         </form>
       </center>
     </main>
-    <script src="{{url_for('static', filename='vendor/simplemde.min.js')}}"></script>
+    <script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
     <script>
-      new SimpleMDE({
-        element: document.getElementById("contentMD"),
-        spellChecker: false,
-        status: false,
-      });
+      var html5QrcodeScanner = new Html5QrcodeScanner(
+          "reader", { fps: 10, qrbox: 250 });
+              
+      function onScanSuccess(decodedText, decodedResult) {
+          // Handle on success condition with the decoded text or result.
+          console.log(`Scan result: ${decodedText}`, decodedResult);
+          // ...
+          html5QrcodeScanner.clear();
+          document.getElementById("reader_output").value = decodedText
+          // ^ this will stop the scanner (video feed) and clear the scan area.
+          document.querySelector("form").submit();
+
+      }
+
+      html5QrcodeScanner.render(onScanSuccess);
     </script>
   </body>
 </html>

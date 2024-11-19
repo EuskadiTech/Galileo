@@ -57,6 +57,12 @@
 .di-save {
   background: url("save.png");
 }
+.di-barcode {
+  background: url("barcode.png");
+}
+.di-user {
+  background: url("user.png");
+}
 
 .dim-food {
   background-size: 32px !important;
