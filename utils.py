@@ -169,6 +169,7 @@ class Tunnel:
             if TIMER > self.TIMEOUT:
                 print(">> Recargando Tunel SSH")
                 self.stop_ssh_tunnel()
+                TIMER = 0
                 sleep(1)
                 self.start_ssh_tunnel()
             if self.TUNNEL == None:
