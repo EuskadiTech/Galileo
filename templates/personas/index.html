@@ -35,7 +35,7 @@
           {% for key in personas %}
           <tr>
             <td>{{personas[key]["Codigo"]}}</td>
-            <td><a href="{{url_for('Personas.persona', rid = key)}}">{{personas[key]["Nombre"]}}</a></td>
+            <td><a href="{{url_for('Personas.persona', rid = key)}}">{{personas[key]["Nombre"]}} ({{personas[key]["Region"]}})</a></td>
             <td>{{personas[key]["Roles"]}}</td>
             <td>{{personas[key]["Puntos"]}} puntos</td>
             <td>

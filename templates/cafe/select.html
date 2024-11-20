@@ -42,7 +42,7 @@
               <option value="" disabled selected>Elige...</option>
           {% for key in personas %}
           {% if "cafe_cliente" in personas[key]["Roles"] %}
-          <option value='{{personas[key]["Codigo"]}}'>{{personas[key]["Nombre"]}}</option>
+          <option value='{{personas[key]["Codigo"]}}'>{{personas[key]["Nombre"]}} ({{personas[key]["Region"]}})</option>
           {% endif %}
           {% endfor %}
             </select>
