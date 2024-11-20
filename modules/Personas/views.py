@@ -12,6 +12,10 @@ app = Blueprint("Personas", __name__)
 def index():
     return render_template("personas/index.html", personas=DB_PERSONAS.get_all())
 
+@app.route("/personas/print", methods=["GET"])
+def print():
+    return render_template("personas/print.html", recetas=DB_PERSONAS.get_all())
+
 
 @app.route("/personas/new", methods=["GET", "POST"])
 def new():
