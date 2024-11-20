@@ -21,18 +21,18 @@
   <main>
     <center>
       <h2 class="nop">Tarjeta Identificativas</h2>
-      {% for receta in recetas %}
+      {% for key in recetas %}
 
       <table border style="width: calc(100% - 30px); max-width: 30rem; text-align: left;">
         <tr>
-          <td style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px;">{{receta["Nombre"]}} ({{receta["Region"]}})</td>
+          <td style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px;">{{recetas[key]["Nombre"]}} ({{recetas[key]["Region"]}})</td>
           <td style="width: 150px; text-align: center;" rowspan="2">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=15&data={{receta['Codigo']}}"
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=15&data={{recetas[key]['Codigo']}}"
               width="150px"><br><small>
-                Codigo - {{receta["Codigo"]}}
+                Codigo - {{recetas[key]["Codigo"]}}
                 
-                {% if receta["PIN"] != "" %}
-                <br>PIN - {{receta["PIN"]}}
+                {% if recetas[key]["PIN"] != "" %}
+                <br>PIN - {{recetas[key]["PIN"]}}
                 {% endif %}
               </small>
           </td>
@@ -44,12 +44,12 @@
         </tr>
         <tr class="nop">
           <td style="font-size: 75%;">
-            <b>Roles:</b> <code style="font-family: monospace !important;">{{receta['Roles']}}</code>
+            <b>Roles:</b> <code style="font-family: monospace !important;">{{recetas[key]['Roles']}}</code>
             <br />
-            <b>Fecha de Nacimiento:</b> {{receta['F-nac']}}
+            <b>Fecha de Nacimiento:</b> {{recetas[key]['F-nac']}}
           </td>
           <td style="width: 150px; text-align: center;" rowspan="1">
-            <code style="font-family: monospace !important;font-size: 20px;">{{receta['Puntos']}} puntos</code>
+            <code style="font-family: monospace !important;font-size: 20px;">{{recetas[key]['Puntos']}} puntos</code>
           </td>
         </tr>
       </table>
