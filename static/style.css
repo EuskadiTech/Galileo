@@ -28,6 +28,7 @@ html {
   padding: 5px;
   width: 4.8cm;
   margin: 5px;
+  margin-bottom: 20px;
   overflow-y: scroll;
 }
 
@@ -50,6 +51,19 @@ html {
 
 .f span {
   width: calc(100% - 0.85cm);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  text-align: center !important;
+}
+.f.fb {
+  width: 100% !important;
+  bottom: 0;
+  position: absolute;
+}
+.f.fn span {
+
+  width: calc(100%) !important;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -87,12 +101,17 @@ h3 {
   width: 4.8cm;
 }
 
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
 hr {
-  background-color: #000;
+  /* background-color: #000; */
   border-top: 1px solid #000;
   margin: 2px 0;
   width: 100%;
-  display: none;
+  /* display: none; */
 }
 
 .milk label {
