@@ -124,7 +124,10 @@
       </header>
       <header>
         <h1 style="font-size: 47.5px">
-          {{data["Today"]}} - {{data["Weather"]["Icon"]}} 🥪
+          {{data["Today"]}} - {{data["Weather"]["Icon"]}}
+          {% if data["Comedor"][menu]["IsEnought"] == "KO" %}
+          🥪
+          {% endif %}
           <span class="noprint"
             ><button class="noprint" onclick="printThis()" type="button">
               🖨️
@@ -132,7 +135,7 @@
           >
         </h1>
         <small style="font-size: 12px">
-          <i> Creado por EuskadiTech, clima por wttr.in</i>
+          <i> Creado por EuskadiTech&trade;, clima por wttr.in</i>
         </small>
       </header>
       <!-- <h1 style="border: 16px solid red">NO IMPRIMIR</h1> -->
@@ -152,8 +155,8 @@
         {% if data["Receta"] != "No Disp." %}
         <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
           <div class="card-body">
-            <b>☕️ Receta de hoy</b><br />
-            Hoy la receta es: <br><b>{{data["Receta"]}}</b>
+            <b>☕️ Receta del café</b><br />
+            Hoy con el café tenemos <br><b>{{data["Receta"]}}</b>.
           </div>
         </div>
         {% endif %}
@@ -200,60 +203,6 @@
           </div>
         </div>
         {% endfor %}
-        <!--- Menu del comedor Naiel --->
-        <!-- <div class="grid-item card" style="border: 4px solid rgb(0, 123, 255);">
-                <div class="card-body">
-                    <b>🍽️ Menú NV</b><br>
-
-                    <ol style="padding-left: 25px;">
-                        <li>
-                            <?php echo $Food_NV["TXT1"]; ?> <img
-                                src="https://naiel.fyi/static/img/<?php echo $Food_NV["IMG1"]; ?>"
-                                style="max-width: 100px; max-height: 50px;" alt="<?php echo $Food_NV["TXT1"]; ?>">
-                        </li>
-                        <li>
-                            <?php echo $Food_NV["TXT2"]; ?> <img
-                                src="https://naiel.fyi/static/img/<?php echo $Food_NV["IMG2"]; ?>"
-                                style="max-width: 100px; max-height: 50px;" alt="<?php echo $Food_NV["TXT2"]; ?>">
-                        </li>
-                        <li>
-                            <?php echo $Food_NV["TXT3"]; ?> <img
-                                src="https://naiel.fyi/static/img/<?php echo $Food_NV["IMG3"]; ?>"
-                                style="max-width: 100px; max-height: 50px;" alt="<?php echo $Food_NV["TXT3"]; ?>">
-                        </li>
-                    </ol>
-                    <small style="font-size: 60%;">
-                        <i>Puede ser incorrecto.</i>
-                        <i>La IA piensa que hay
-                            <?php echo strtolower($Food_NV["STAT"]); ?> cantidad de comida.
-                        </i>
-                    </small>
-                </div>
-            </div> -->
-
-        <!--- Menu del comedor Basal --->
-        <!-- <div class="grid-item card" style="border: 4px solid rgb(0, 123, 255);">
-                <div class="card-body">
-                    <b>🍽️ Menú OA</b><br>
-
-                    <ol style="padding-left: 25px;">
-                        <li>
-                            <?php echo $Food_OA["TXT1"]; ?> <img
-                                src="https://naiel.fyi/static/img/<?php echo $Food_OA["IMG1"]; ?>"
-                                style="max-width: 100px; max-height: 50px;" alt="<?php echo $Food_OA["TXT1"]; ?>">
-                        </li>
-                        <li>
-                            <?php echo $Food_OA["TXT2"]; ?> <img
-                                src="https://naiel.fyi/static/img/<?php echo $Food_OA["IMG2"]; ?>"
-                                style="max-width: 100px; max-height: 50px;" alt="<?php echo $Food_OA["TXT2"]; ?>">
-                        </li>
-                    </ol>
-                    <small style="font-size: 60%;">
-                        <i>Puede ser incorrecto.</i>
-                    </small>
-                </div>
-            </div> -->
-
         {% if config["Weather"]["Enabled"] %}
         <!--- Clima de hoy --->
         <div class="grid-item card" style="border: 4px solid rgb(23, 162, 184)">
@@ -275,43 +224,6 @@
           </div>
         </div>
         {% endif %}
-
-        <!--- Actividades principales --->
-        <!-- <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69);">
-                <div class="card-body">
-                    <b>⏰ Actividades principales</b><br>
-                    <ul>
-                        <li>Lectura fácil (Comunitario) </li>
-                        <li>Paseo (Comunitario)</li>
-                        <li>Materiales (Aula A)</li>
-                    </ul>
-                </div>
-            </div> -->
-
-        <!-- <div class="grid-item card" style="border: 4px solid #9b59b6;">
-                <div class="card-body">
-                    <small style="font-size: 60%;">
-                        <b>Manual de iconos</b>
-                        <ul>
-                            <li>El icono [🥪 sandvich] indica la ración de comida del menú de Naiel.</li>
-                            <li>El icono [<?php echo $CurrentWeatherIcon ?> clima] indica el clima real.</li>
-                            <li>El icono [🖨️ imprimir] ubicado en el encabezado imprime el documento.</li>
-                        </ul>
-                    </small>
-                </div>
-            </div> -->
-
-        <!--- SuperCafé: Haz tu pedido online --->
-        <!-- <div class="grid-item card" style="border: 4px solid rgb(255, 193, 7);">
-                <div class="card-body">
-                    <b>☕ ¡Haz tu comanda online!</b><br>
-
-                    <center><a href="comanda.php?license=alortuella"
-                    class="btn btn-warning">Acceder (pulsa o escanea)<br>
-                    <img src="https://axis.tech.eus/naiel.fyi/alo.png" width="175" alt=""></a></center>
-                </div>
-            </div> -->
-
         <!--- Encargos --->
         <!-- <div class="grid-item card" style="border: 4px solid rgb(52, 58, 64);">
                 <div class="card-body">
@@ -328,28 +240,6 @@
                 </div>
             </div> -->
 
-        <!--- Encargos --->
-        <!-- <div class="grid-item card" style="border: 4px solid rgb(108, 117, 125);">
-                <div class="card-body">
-                    <b>🚨 Noticias</b>
-                    <br>
-                    <small style="font-size: 50%;">
-                        <?php echo $News; ?>
-                    </small>
-                </div>
-            </div> -->
-
-        <!--- Ver Online --->
-        <!-- <div class="grid-item card" style="border: 4px solid rgb(200, 200, 200);">
-                <div class="card-body">
-                    <b>📲 ¿Como ver esto online?</b>
-                    <center style="font-size: 15px;">
-                        Escanea o visita
-                        <code>https://naiel.fyi/dia1.php</code>
-                        <img src="https://axis.tech.eus/naiel.fyi/dia1.png" width="180" alt="">
-                    </center>
-                </div>
-            </div> -->
       </div>
     </div>
 
