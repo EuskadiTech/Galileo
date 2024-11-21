@@ -127,9 +127,6 @@
       <header>
         <h1 style="font-size: 47.5px">
           {{data["Today"]}} - {{data["Weather"]["Icon"]}}
-          {% if data["Comedor"][menu]["IsEnought"] == "KO" %}
-          🥪
-          {% endif %}
           <span class="noprint"
             ><button class="noprint" onclick="printThis()" type="button">
               🖨️
