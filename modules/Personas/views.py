@@ -29,7 +29,7 @@ def new():
                 "markdown": request.form.get("markdown", ""),
                 "Codigo": str(randint(100,9999)),
                 "PIN": request.form.get("pin", "").upper(),
-                "Region": request.form.get("region", "Sin Aula").upper(),
+                "Region": request.form.get("region", "Sin Aula"),
             }
         )
         return redirect(url_for("Personas.index"))
