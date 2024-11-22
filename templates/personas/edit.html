@@ -62,6 +62,18 @@
               >Salir</a
             >
           </fieldset>
+          <fieldset class="milk colors vertical">
+              <summary>Anilla</summary>
+              {% for anilla in ANILLAS %}
+              <label style="background-color: {{anilla['color']}}; color: {{anilla['text']}};"><br>
+                  <div class="f"><span>
+                          {{anilla['name']}}
+                      </span><input name="anilla" type="radio" {{"checked" if receta["SC_Anilla"] == anilla['name']}}
+                          value="{{anilla['name']}};{{anilla['color']}};{{anilla['text']}}">
+                  </div>
+              </label>
+              {% endfor %}
+          </fieldset>
         </form>
       </center>
     </main>

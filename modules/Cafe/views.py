@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, url_for, redirect
 from ..Personas.models import DB_PERSONAS
 import utils
-from .models import DB_COMANDAS
+from .models import DB_COMANDAS, ANILLAS
 app = Blueprint("Cafe", __name__)
 
 def set_receta(receta):
@@ -12,63 +12,6 @@ def set_receta(receta):
 def get_receta():
     conf: dict = utils.get_config()
     return conf.get("Receta", "No Disp.")
-ANILLAS = [
-    {
-        "name": "Salmón",
-        "color": "#e89689",
-        "text": "black"
-    },
-    {
-        "name": "Rosa",
-        "color": "#ba5961",
-        "text": "black"
-    },
-    {
-        "name": "Verde Claro",
-        "color": "#96b3ad",
-        "text": "black"
-    },
-    {
-        "name": "Turquesa",
-        "color": "#5bbdb3",
-        "text": "black"
-    },
-    {
-        "name": "Marrón",
-        "color": "#403233",
-        "text": "white"
-    },
-    {
-        "name": "Blanco",
-        "color": "white",
-        "text": "black"
-    },
-    {
-        "name": "Negro",
-        "color": "black",
-        "text": "white"
-    },
-    {
-        "name": "Amarillo",
-        "color": "#edde3b",
-        "text": "black"
-    },
-    {
-        "name": "Gris",
-        "color": "gray",
-        "text": "white"
-    },
-    {
-        "name": "Rojo",
-        "color": "#a81900",
-        "text": "white"
-    },
-    {
-        "name": "Rojo Oscuro",
-        "color": "#610d14",
-        "text": "white"
-    }
-]
 
 @app.route("/cafe", methods=["GET"])
 def index():
@@ -117,7 +60,7 @@ def comanda(rid):
             "notas": request.form.get("notas"),
             "_persona": rid,
             "_grupo": "00 Sin Agrupar;white;black;",
-            "_fase": "cocina"
+            "_fase": "Cocina"
         }
         if data["Tama_o"][0] == "Grande" and data["Leche"][0] != "Sin Leche":
             total += 20
@@ -161,6 +104,8 @@ def cocina():
     def query(data):
         if data["_fase"] == "cocina":
             return True
+        if data["_fase"] == "Cocina":
+            return True
     for key, val in  DB_COMANDAS.get_by_query(query).items():
         persona = DB_PERSONAS.get_by_id(val["_persona"])
         if regiones.get(persona["Region"]) == None:
@@ -196,6 +141,8 @@ def pago():
     def query(data):
         if data["_fase"] == "pago":
             return True
+        if data["_fase"] == "Pago":
+            return True
     for key, val in  DB_COMANDAS.get_by_query(query).items():
         persona = DB_PERSONAS.get_by_id(val["_persona"])
         if regiones.get(persona["Region"]) == None:
@@ -216,7 +163,7 @@ def updategrp():
 
 @app.route("/cafe/del_cocina/<rid>", methods=["GET"])
 def rdel(rid):
-    DB_COMANDAS.update_by_id(rid, {"_fase": "pago"})
+    DB_COMANDAS.update_by_id(rid, {"_fase": "Pago"})
     return redirect(url_for("Cafe.cocina"))
 
 @app.route("/cafe/del_pago/<rid>", methods=["GET"])
@@ -227,7 +174,7 @@ def rdel_pago(rid):
         puntos += 1
     if com["MetodoDePago"][0] == "Puntos":
         puntos -= 10
-    DB_PERSONAS.update_by_id(com["_persona"], {"Puntos": puntos})
-    DB_COMANDAS.delete_by_id(rid)
-    # DB_COMANDAS.update_by_id(rid, {"_fase": "_archive"})
+    DB_PERSONAS.update_by_id(com["_persona"], {"Puntos": puntos, "SC_lastcomanda": com})
+    # DB_COMANDAS.delete_by_id(rid)
+    DB_COMANDAS.update_by_id(rid, {"_fase": "Historial"})
     return redirect(url_for("Cafe.pago"))
