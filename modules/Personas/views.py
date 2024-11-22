@@ -39,7 +39,7 @@ def new():
         DB_PERSONAS.add(
             {
                 "Nombre": request.form.get("nombre", ""),
-                "Roles": " ".join(request.form.getlist("roles", "")),
+                "Roles": " ".join(request.form.getlist("roles[]", "")),
                 "Puntos": 0,
                 "F-nac": request.form.get("fecha", ""),
                 "markdown": request.form.get("markdown", ""),
@@ -135,7 +135,7 @@ def edit(rid):
             str(rid),
             {
                 "Nombre": request.form.get("nombre", receta["Nombre"]),
-                "Roles": " ".join(request.form.getlist("roles", receta["Roles"])),
+                "Roles": " ".join(request.form.getlist("roles[]", receta["Roles"])),
                 "F-nac": request.form.get("fecha", receta["F-nac"]),
                 "Puntos": int(request.form.get("puntos", receta["Puntos"])),
                 "Codigo": request.form.get("codigo", receta["Codigo"]),

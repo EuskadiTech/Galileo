@@ -42,7 +42,7 @@
             <br />
             <label>Región: <input type="text" name="region" required value="{{receta['Region']}}"></label>
             <br />
-            <!--<label>Roles: <input type="text" name="roles" required value="{{receta['Roles']}}"></label>
+            <!--<label>Roles: <input type="text" name="roles[]" required value="{{receta['Roles']}}"></label>
             <br />-->
             <label>Puntos: <input type="number" name="puntos" required value="{{receta['Puntos']}}"></label>
             <br />
@@ -70,9 +70,9 @@
           <fieldset style="width: calc(100% - 30px);max-width: 15rem;text-align: left;float: left;">
               <legend>Roles</legend>
               <ul>
-                <li><label>ADMIN <input type="checkbox" name="roles" value="admin"></label></li>
-                <li><label>SuperCafé: Leer <input type="checkbox" name="roles" value="cafe:read"></label></li>
-                <li><label>SuperCafé: Escribir <input type="checkbox" name="roles" value="cafe:write"></label></li>
+                <li><label>ADMIN <input type="checkbox" name="roles[]" value="admin"></label></li>
+                <li><label>SuperCafé: Leer <input type="checkbox" name="roles[]" value="cafe:read"></label></li>
+                <li><label>SuperCafé: Escribir <input type="checkbox" name="roles[]" value="cafe:write"></label></li>
               </ul>
           </fieldset>
         </form>
