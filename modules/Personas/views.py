@@ -10,15 +10,30 @@ app = Blueprint("Personas", __name__)
 
 @app.route("/personas", methods=["GET"])
 def index():
-    return render_template("personas/index.html", personas=DB_PERSONAS.get_all())
+    try:
+        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
+        user.isLoggedIn("personas:read")
+    except Exception as e:
+        return redirect(url_for("Personas.auth_scan", err=e.args))
+    return render_template("personas/index.html", personas=DB_PERSONAS.get_all(), USER=user)
 
 @app.route("/personas/print", methods=["GET"])
 def print():
-    return render_template("personas/print.html", recetas=DB_PERSONAS.get_all())
+    try:
+        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
+        user.isLoggedIn("personas:read")
+    except Exception as e:
+        return redirect(url_for("Personas.auth_scan", err=e.args))
+    return render_template("personas/print.html", recetas=DB_PERSONAS.get_all(), USER=user)
 
 
 @app.route("/personas/new", methods=["GET", "POST"])
 def new():
+    try:
+        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
+        user.isLoggedIn("personas:write")
+    except Exception as e:
+        return redirect(url_for("Personas.auth_scan", err=e.args))
     if request.method == "POST":
         DB_PERSONAS.add(
             {
@@ -35,17 +50,22 @@ def new():
             }
         )
         return redirect(url_for("Personas.index"))
-    return render_template("personas/new.html", ANILLAS=ANILLAS)
+    return render_template("personas/new.html", ANILLAS=ANILLAS, USER=user)
 
 @app.route("/personas/scan", methods=["GET", "POST"])
 def scan():
+    try:
+        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
+        user.isLoggedIn("personas:read")
+    except Exception as e:
+        return redirect(url_for("Personas.auth_scan", err=e.args))
     if request.method == "POST":
         def query(data):
             if data["Codigo"] == str(request.form["code"]):
                 return True
         keys = list(DB_PERSONAS.get_by_query(query).keys())[0]
         return redirect(url_for("Personas.persona", rid=keys))
-    return render_template("personas/scan.html")
+    return render_template("personas/scan.html", USER=user)
 
 #region Auth
 @app.route("/auth/scan", methods=["GET", "POST"])
@@ -76,21 +96,38 @@ def auth_pin():
         return resp
     return render_template("personas/auth/pin.html", code = request.args["code"])
 
+@app.route("/auth/logout", methods=["GET", "POST"])
+def auth_logout():
+    resp = make_response(redirect(url_for("index")))
+    resp.set_cookie('AUTH_CODE', "")
+    resp.set_cookie('AUTH_PIN', "")
+    return resp
+
 #endregion
 
 @app.route("/personas/<rid>", methods=["GET"])
 def persona(rid):
+    try:
+        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
+        user.isLoggedIn("personas:read")
+    except Exception as e:
+        return redirect(url_for("Personas.auth_scan", err=e.args))
     receta = DB_PERSONAS.get_by_id(str(rid))
     return render_template(
         "personas/persona.html",
         receta=receta,
         content=markdown(receta["markdown"]),
-        rid=rid,
+        rid=rid, USER=user
     )
 
 
 @app.route("/personas/<rid>/edit", methods=["GET", "POST"])
 def edit(rid):
+    try:
+        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
+        user.isLoggedIn("personas:write")
+    except Exception as e:
+        return redirect(url_for("Personas.auth_scan", err=e.args))
     receta = DB_PERSONAS.get_by_id(str(rid))
     if request.method == "POST":
         DB_PERSONAS.update_by_id(
@@ -108,13 +145,18 @@ def edit(rid):
             }
         )
         return redirect(url_for("Personas.index"))
-    return render_template("personas/edit.html", receta=receta, rid=rid, ANILLAS=ANILLAS)
+    return render_template("personas/edit.html", receta=receta, rid=rid, ANILLAS=ANILLAS, USER=user)
 
 
 @app.route("/personas/<rid>/del", methods=["GET", "POST"])
 def rdel(rid):
+    try:
+        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
+        user.isLoggedIn("personas:write")
+    except Exception as e:
+        return redirect(url_for("Personas.auth_scan", err=e.args))
     if request.method == "POST":
         DB_PERSONAS.delete_by_id(str(rid))
         return redirect(url_for("Personas.index"))
     receta = DB_PERSONAS.get_by_id(str(rid))
-    return render_template("personas/del.html", receta=receta)
+    return render_template("personas/del.html", receta=receta, USER=user)

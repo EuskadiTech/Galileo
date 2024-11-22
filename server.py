@@ -41,8 +41,8 @@ def index():
     try:
         user = modules.Personas.localutils.PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
         user.isLoggedIn()
-    except:
-        return redirect(url_for("Personas.auth_scan"))
+    except Exception as e:
+        return redirect(url_for("Personas.auth_scan", err=e.args))
     return render_template("index.html", VERSION = get_local_version(), USER = user)
 
 
