@@ -28,6 +28,9 @@
     </header>
     <main>
       <center>
+        {% if err != None %}
+          <h1 style="border: 5px solid red; padding: 15px;">Error: {{err}}</h1>
+        {% endif %}
         <h2>Añadir persona</h2>
         <form
           action="{{url_for('Personas.new')}}"
@@ -41,9 +44,6 @@
             <label>PIN: <input type="text" autocomplete="off" name="pin"></label>
             <br />
             <label>Región: <input type="text" name="region" required></label>
-            <br />
-            <label>Roles: <input type="text" name="roles" required></label>
-            <a target="_blank" rel="noopener noreferrer" href="https://axis.tech.eus/naiel.fyi/galileo-roles.html">Lista de roles</a>
             <br />
             <label>Fecha de Nacimiento: <input type="date" name="fecha" required></label>
             <br />
@@ -62,9 +62,29 @@
             >
           </fieldset>
           <fieldset style="width: calc(100% - 30px);max-width: 15rem;text-align: left;float: left;">
-              <summary>Anilla SuperCafé</summary>
+              <legend>Anilla SuperCafé</legend>
               <label>Color: <input type="color" name="SC_Anilla_Color" value='#ff0000'></label><br>
               <label>Nombre: <input type="text" name="SC_Anilla_Nombre" value='Anilla'></label>
+          </fieldset>
+          <fieldset style="width: calc(100% - 30px);max-width: 15rem;text-align: left;float: left;">
+            <legend>Roles</legend>
+            <ul>
+              <li><label>ADMIN <input type="checkbox" name="roles[]" value="admin"></label></li>
+              <li><label>SuperCafé: Leer <input type="checkbox" name="roles[]" value="cafe:read"></label></li>
+              <li><label>SuperCafé: Puede tomar Cafeina <input type="checkbox" name="roles[]" value="cafe:cafeina"></label></li>
+              <li><label>SuperCafé: Solo Leche sin Lactosa <input type="checkbox" name="roles[]" value="cafe:nolact"></label></li>
+              <li><label>SuperCafé: Pant. Cocina <input type="checkbox" name="roles[]" value="cafe:write"></label></li>
+              <li><label>SuperCafé: Pant. Pagos <input type="checkbox" name="roles[]" value="cafe:write"></label></li>
+              <li><label>Comedor: Leer <input type="checkbox" name="roles[]" value="comedor:read"></label></li>
+              <li><label>Comedor: Escribir <input type="checkbox" name="roles[]" value="comedor:write"></label></li>
+              <li><label>Comedor: Borrar <input type="checkbox" name="roles[]" value="comedor:delete"></label></li>
+              <li><label>Personas: Leer <input type="checkbox" name="roles[]" value="personas:read"></label></li>
+              <li><label>Personas: Escribir <input type="checkbox" name="roles[]" value="personas:write"></label></li>
+              <li><label>Personas: Borrar <input type="checkbox" name="roles[]" value="personas:delete"></label></li>
+              <li><label>Recetas: Leer <input type="checkbox" name="roles[]" value="recetas:read"></label></li>
+              <li><label>Recetas: Escribir <input type="checkbox" name="roles[]" value="recetas:write"></label></li>
+              <li><label>Recetas: Borrar <input type="checkbox" name="roles[]" value="recetas:delete"></label></li>
+            </ul>
           </fieldset>
         </form>
       </center>

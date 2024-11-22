@@ -19,7 +19,9 @@
   </header>
   <main>
     <center>
+      {% if err != None %}
       <h1 style="border: 5px solid red; padding: 15px;">Error: {{err}}</h1>
+      {% endif %}
       <h2>Iniciar sesión</h2>
       <form method="post">
         <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">

@@ -53,7 +53,7 @@ def new():
             }
         )
         return redirect(url_for("Personas.index"))
-    return render_template("personas/new.html", ANILLAS=ANILLAS, USER=user)
+    return render_template("personas/new.html", ANILLAS=ANILLAS, USER=user, err=request.args.get("err"))
 
 @app.route("/personas/scan", methods=["GET", "POST"])
 def scan():
