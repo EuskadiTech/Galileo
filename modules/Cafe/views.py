@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template, url_for, redirect
 from ..Personas.models import DB_PERSONAS
 import utils
 from .models import DB_COMANDAS, ANILLAS
+from ..Personas.localutils import PersonAuth
 app = Blueprint("Cafe", __name__)
 
 def set_receta(receta):
