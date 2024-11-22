@@ -27,6 +27,6 @@ class PersonAuth:
         if needsRole not in person["Roles"] and needsRole != "":
             if "admin" not in person["Roles"]:
                 raise NotAllowed("No estas autorizado; Te falta el rol " + needsRole)
-        self.person = person
+        self.u = person
         return True
 #endregion
