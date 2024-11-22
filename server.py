@@ -4,6 +4,7 @@ from werkzeug.wrappers import Response
 from os.path import join as path_join
 import logging
 import sentry_sdk
+import browser
 from launcher import get_local_version
 
 import utils
@@ -85,5 +86,10 @@ No cierres esta ventana.
         app.wsgi_app,
         {BASE: app.wsgi_app},
     )
+    try:
+        if utils.os.environ.get("ISDOCKER") == None:
+            webbrowser.open_new_tab(TIP)
+    except:
+        print("[D] No se ha podido iniciar el navegador web.")
     app.run(HOST, 8129, False)
     tunnel.stop()
