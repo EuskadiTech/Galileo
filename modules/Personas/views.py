@@ -81,7 +81,7 @@ def auth_scan():
         resp.set_cookie('AUTH_CODE', request.form["code"])
         resp.set_cookie('AUTH_PIN', "")
         return resp
-    return render_template("personas/auth/scan.html")
+    return render_template("personas/auth/scan.html", err=request.args.get("err"))
 
 @app.route("/auth/pin", methods=["GET", "POST"])
 def auth_pin():
@@ -95,7 +95,7 @@ def auth_pin():
         resp.set_cookie('AUTH_CODE', request.form["code"])
         resp.set_cookie('AUTH_PIN', request.form["pin"])
         return resp
-    return render_template("personas/auth/pin.html", code = request.args["code"])
+    return render_template("personas/auth/pin.html", code = request.args["code"], err=request.args.get("err"))
 
 @app.route("/auth/logout", methods=["GET", "POST"])
 def auth_logout():
