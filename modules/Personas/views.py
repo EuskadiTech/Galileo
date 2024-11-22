@@ -1,10 +1,10 @@
-from flask import Blueprint, request, send_file, render_template, url_for, redirect
+from flask import Blueprint, request, send_file, render_template, url_for, redirect, make_response
 from io import BytesIO
 from markdown import markdown
 from .models import DB_PERSONAS
 from ..Cafe.models import ANILLAS
 from random import randint
-
+from . import localutils
 app = Blueprint("Personas", __name__)
 
 
@@ -47,6 +47,36 @@ def scan():
         return redirect(url_for("Personas.persona", rid=keys))
     return render_template("personas/scan.html")
 
+#region Auth
+@app.route("/auth/scan", methods=["GET", "POST"])
+def auth_scan():
+    if request.method == "POST":
+        user = localutils.PersonAuth(request.form["code"])
+        try:
+            user.isLoggedIn()
+        except localutils.PinRequired:
+            return redirect("Personas.auth_pin", code = request.form["code"])
+        resp = make_response(redirect(url_for("index")))
+        resp.set_cookie('AUTH_CODE', request.form["code"])
+        resp.set_cookie('AUTH_PIN', "")
+        return resp
+    return render_template("personas/scan.html")
+
+@app.route("/auth/pin", methods=["GET", "POST"])
+def auth_pin():
+    if request.method == "POST":
+        user = localutils.PersonAuth(request.form["code"], request.form["pin"])
+        try:
+            user.isLoggedIn()
+        except localutils.PinRequired:
+            return redirect("Personas.auth_pin", code = request.form["code"])
+        resp = make_response(redirect(url_for("index")))
+        resp.set_cookie('AUTH_CODE', request.form["code"])
+        resp.set_cookie('AUTH_PIN', request.form["pin"])
+        return resp
+    return render_template("personas/pin.html", code = request.args["code"])
+
+#endregion
 
 @app.route("/personas/<rid>", methods=["GET"])
 def persona(rid):

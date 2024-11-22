@@ -20,16 +20,16 @@
     {% include 'loader.html' %}
 
     <header style="background-color: #000; color: #fff">
-      <h3>Galileo - Personas</h3>
+      <h3>Iniciar sesión en Galileo</h3>
     </header>
     <main>
       <center>
-        <h2>Escanear Codigo</h2>
+        <h2>Introduce el PIN</h2>
         <form method="post">
           <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
-            <legend>Escanear Codigo</legend>
-            <label style="font-size: 30px;">Codigo: <input type="text" name="code" style="font-family: monospace;" id="reader_output"></label>
-            <div style="width: 400px" id="reader"></div>
+            <legend>Introducir PIN</legend>
+            <input type="hidden" name="code" value="{{code}}">
+            <label style="font-size: 30px;">PIN: <input type="text" name="pin" style="font-family: monospace;"></label>
             <input
               type="submit"
               class="actbtn di di-user"
@@ -42,23 +42,5 @@
         </form>
       </center>
     </main>
-    <script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
-    <script>
-      var html5QrcodeScanner = new Html5QrcodeScanner(
-          "reader", { fps: 10, qrbox: 250 });
-              
-      function onScanSuccess(decodedText, decodedResult) {
-          // Handle on success condition with the decoded text or result.
-          console.log(`Scan result: ${decodedText}`, decodedResult);
-          // ...
-          html5QrcodeScanner.clear();
-          document.getElementById("reader_output").value = decodedText
-          // ^ this will stop the scanner (video feed) and clear the scan area.
-          document.querySelector("form").submit();
-
-      }
-
-      html5QrcodeScanner.render(onScanSuccess);
-    </script>
   </body>
 </html>

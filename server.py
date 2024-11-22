@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.wrappers import Response
 from os.path import join as path_join
@@ -38,7 +38,12 @@ log.disabled = True
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html", VERSION = get_local_version())
+    try:
+        user = modules.Personas.localutils.PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
+        user.isLoggedIn()
+    except:
+        return redirect(url_for("Personas.auth_scan"))
+    return render_template("index.html", VERSION = get_local_version(), USER = user)
 
 
 @app.route("/api/purgecache", methods=["GET"])
