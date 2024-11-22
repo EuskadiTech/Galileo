@@ -36,6 +36,7 @@ def new():
             user.isLoggedIn("personas:write")
         except Exception as e:
             return redirect(url_for("Personas.auth_scan", err=e.args))
+    user = {}
     if request.method == "POST":
         DB_PERSONAS.add(
             {
