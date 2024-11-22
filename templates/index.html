@@ -19,9 +19,10 @@
     </header>
     <main>
       <center>
+        <h2>¡Hola {{USER["Nombre"}}!</h2>
         <h1>Bienvenidx a Galileo</h1>
         <a class="actbtn di di-exit" href="{{url_for('Personas.auth_logout')}}">Cerrar Sesión</a>
-        <h2>Modulos</h2>
+        <br>
         <a
           class="appbtn di di-calendar"
           href="{{url_for('ResumenDiario.index')}}"
@@ -46,7 +47,6 @@
           Base de datos de las personas y sus codigos.
         </a>
         <br><br>
-        <b><i>Versión {{VERSION}}</i></b>
       </center>
     </main>
   </body>
