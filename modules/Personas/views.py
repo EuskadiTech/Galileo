@@ -2,7 +2,7 @@ from flask import Blueprint, request, send_file, render_template, url_for, redir
 from io import BytesIO
 from markdown import markdown
 from .models import DB_PERSONAS
-
+from ..Cafe.models import ANILLAS
 from random import randint
 
 app = Blueprint("Personas", __name__)
@@ -30,10 +30,12 @@ def new():
                 "Codigo": str(randint(100,9999)),
                 "PIN": request.form.get("pin", "").upper(),
                 "Region": request.form.get("region", "Sin Aula"),
+                "SC_lastcomanda": {},
+                "SC_Anilla": request.form.get("anilla", "Sin Anilla"),
             }
         )
         return redirect(url_for("Personas.index"))
-    return render_template("personas/new.html")
+    return render_template("personas/new.html", ANILLAS=ANILLAS)
 
 @app.route("/personas/scan", methods=["GET", "POST"])
 def scan():
@@ -72,10 +74,11 @@ def edit(rid):
                 "markdown": request.form.get("markdown", receta["markdown"]),
                 "PIN": request.form.get("pin", receta["PIN"]).upper(),
                 "Region": request.form.get("region", receta["Region"]).upper(),
+                "SC_Anilla": request.form.get("anilla", receta["SC_Anilla"]),
             }
         )
         return redirect(url_for("Personas.index"))
-    return render_template("personas/edit.html", receta=receta, rid=rid)
+    return render_template("personas/edit.html", receta=receta, rid=rid, ANILLAS=ANILLAS)
 
 
 @app.route("/personas/<rid>/del", methods=["GET", "POST"])

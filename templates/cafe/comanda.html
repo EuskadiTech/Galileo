@@ -78,7 +78,7 @@
                 <label style="background-color: {{anilla['color']}}; color: {{anilla['text']}};"><br>
                     <div class="f"><span>
                             {{anilla['name']}}
-                        </span><input name="Anilla" type="radio"
+                        </span><input name="Anilla" type="radio" {{"checked" if client["SC_Anilla"] == anilla['name']}}
                             value="{{anilla['name']}};{{anilla['color']}};{{anilla['text']}}">
                     </div>
                 </label>
