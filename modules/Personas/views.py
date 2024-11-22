@@ -55,7 +55,7 @@ def auth_scan():
         try:
             user.isLoggedIn()
         except localutils.PinRequired:
-            return redirect("Personas.auth_pin", code = request.form["code"])
+            return redirect(url_for("Personas.auth_pin", code = request.form["code"]))
         resp = make_response(redirect(url_for("index")))
         resp.set_cookie('AUTH_CODE', request.form["code"])
         resp.set_cookie('AUTH_PIN', "")

@@ -18,7 +18,7 @@ class PersonAuth:
         if len(keys) < 1:
             raise UnknownCodeError("Usuario no existe")
         person = DB_PERSONAS.get_by_id(str(keys[0]))
-        if person["PIN"] != "":
+        if person["PIN"] != "" and self.userPin == "":
             raise PinRequired("Este usuario requiere un PIN")
         if person["PIN"] != self.userPin.upper():
             raise InvalidPin("El PIN introducido no es correcto")
