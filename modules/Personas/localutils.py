@@ -30,9 +30,3 @@ class PersonAuth:
         self.person = person
         return True
 #endregion
-
-
-def test():
-    usuario = PersonAuth("9180") # Error: Requiere Pin
-    usuario = PersonAuth("9180", "INVALIDO") # Error: Pin incorrecto
-    usuario = PersonAuth("9180", "ARBOL") # OK
