@@ -30,7 +30,9 @@ def print():
 
 @app.route("/personas/new", methods=["GET", "POST"])
 def new():
+    er = True
     if DB_PERSONAS.get_all() != {}:
+        er = False
         try:
             user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
             user.isLoggedIn("personas:write")
@@ -38,6 +40,7 @@ def new():
             return redirect(url_for("Personas.auth_scan", err=e.args))
     user = {}
     if request.method == "POST":
+        code = str(randint(100,9999))
         DB_PERSONAS.add(
             {
                 "Nombre": request.form.get("nombre", ""),
@@ -45,13 +48,15 @@ def new():
                 "Puntos": 0,
                 "F-nac": request.form.get("fecha", ""),
                 "markdown": request.form.get("markdown", ""),
-                "Codigo": str(randint(100,9999)),
+                "Codigo": code,
                 "PIN": request.form.get("pin", "").upper(),
                 "Region": request.form.get("region", "Sin Aula"),
                 "SC_lastcomanda": {},
                 "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
             }
         )
+        if er:
+            return redirect(url_for("Personas.auth_scan", err = "Codigo del usuario creado: " + code))
         return redirect(url_for("Personas.index"))
     return render_template("personas/new.html", ANILLAS=ANILLAS, USER=user, err=request.args.get("err"))
 
