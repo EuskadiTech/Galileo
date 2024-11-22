@@ -112,7 +112,8 @@ def cocina():
             regiones[persona["Region"]] = []
         regiones[persona["Region"]].append((key,val))
     return render_template(
-        "cafe/cocina.html",
+        "cafe/display.html",
+        fase = "Cocina",
         personas = DB_PERSONAS.get_all(),
         Receta = get_receta(),
         comandas = DB_COMANDAS.get_by_query(query).items(),
@@ -149,11 +150,32 @@ def pago():
             regiones[persona["Region"]] = []
         regiones[persona["Region"]].append((key,val))
     return render_template(
-        "cafe/pago.html",
+        "cafe/display.html",
+        fase = "Pago",
         personas = DB_PERSONAS.get_all(),
         Receta = get_receta(),
         comandas = DB_COMANDAS.get_by_query(query).items(),
         regiones=regiones
+    )
+
+@app.route("/cafe/historial/<rid>", methods=["GET", "POST"])
+def historial(rid):
+    regiones = {}
+    def query(data):
+        if data["_persona"] == rid:
+            return True
+    for key, val in  DB_COMANDAS.get_by_query(query).items():
+        persona = DB_PERSONAS.get_by_id(val["_persona"])
+        if regiones.get(persona["Region"]) == None:
+            regiones[persona["Region"]] = []
+        regiones[persona["Region"]].append((key,val))
+    return render_template(
+        "cafe/display.html",
+        fase = "Historial",
+        personas = DB_PERSONAS.get_all(),
+        Receta = "Receta del dia",
+        comandas = DB_COMANDAS.get_by_query(query).items(),
+        regiones = regiones
     )
 
 @app.route("/cafe/updategrp", methods=["GET"])

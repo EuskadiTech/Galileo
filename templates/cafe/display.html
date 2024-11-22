@@ -31,7 +31,7 @@
   </script>
   <form method="post">
     <header style="background-color:#000;color:#fff">
-      <h3>Pantalla Cocina
+      <h3>Galileo - SuperCafé - Pantalla {{fase}}
         <button onclick='location.href="{{url_for("Cafe.index")}}"' type="button" class="np">Inicio</button>
       </h3>
     </header>
@@ -92,7 +92,9 @@
           #fff, -1px 1px #fff; color: black; background-color:
           {{comanda[1]['_grupo'].split(';')[1]}}">
 
-
+        {% if fase == "Historial" %}
+        Fase: <b>{{comanda[1]['_fase']}}</b>
+        {% endif %}
         <h3 style="color: black !important;">
           {{personas[comanda[1]['_persona']]['Nombre']}} ({{personas[comanda[1]['_persona']]['Region']}})
         </h3>
@@ -172,8 +174,12 @@
         </ul>
 
         <hr>
-        Total: <b>{{comanda[1].get("_precio", "?")}}c</b>
-        <br>Metodo de pago: <b>{{comanda[1].get("MetodoDePago", "")[0]}}</b>
+        {% if "Puntos" not in comanda[1].get("MetodoDePago", "") %}
+        Total: <b>{{comanda[1].get("_precio", "?")}}c</b><br>
+        {% else %}
+        Total: <b>Gratis</b>
+        {% endif %}
+        Metodo de pago: <b>{{comanda[1].get("MetodoDePago", "")[0]}}</b>
 
         <hr>
         {{comanda[1].get("notas", "")}}
