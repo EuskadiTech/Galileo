@@ -38,6 +38,8 @@ log.disabled = True
 
 @app.route("/", methods=["GET"])
 def index():
+    if modules.Persona.models.DB_PERSONAS.get_all == {}:
+        return redirect(url_for("Personas.new", err = "Configura a un Administrador"))
     try:
         user = modules.Personas.localutils.PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
         user.isLoggedIn()

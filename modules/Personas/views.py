@@ -30,11 +30,12 @@ def print():
 
 @app.route("/personas/new", methods=["GET", "POST"])
 def new():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("personas:write")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+    if DB_PERSONAS.get_all() != {}:
+        try:
+            user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
+            user.isLoggedIn("personas:write")
+        except Exception as e:
+            return redirect(url_for("Personas.auth_scan", err=e.args))
     if request.method == "POST":
         DB_PERSONAS.add(
             {
