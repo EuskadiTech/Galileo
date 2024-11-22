@@ -118,7 +118,7 @@
             </fieldset>
             <fieldset class="milk vertical" id="fs_cafeina">
                 <summary>Cafeina</summary>
-                {% if "cafe_cafeina" in client["Roles"] %}
+                {% if "cafe:cafeina" in client["Roles"] %}
                 <label><span class="ico redtext">C<sup>*</sup></span><br>
                     <div class="f"><span>Con Cafeina</span><input name="Cafeina" type="radio" value="Con Cafeina">
                     </div>
@@ -157,11 +157,19 @@
                 <input name="Tama_o" id="fs_size_default" type="radio" value="Sin Elegir" style="display: none;">
             </fieldset>
             <fieldset class="milk vertical" id="fs_milk">
+                {% if "cafe:nolact" in client["Roles"] %}
+                <label style="background-color: lightcoral;"><br>
+                    <div class="f fb fn"><span>LECHE SIN LACTOSA</span>
+                    </div>
+                </label>
+                {% else %}
                 <summary>Leche</summary><label><img height="36px"
                         src="{{url_for('static', filename='cafe-ico/leche-vaca.png')}}"><br>
                     <div class="f"><span>De vaca</span><input name="Leche" type="radio" value="Leche de vaca"></div>
                 </label><label><img height="36px" src="{{url_for('static', filename='cafe-ico/leche-avena.png')}}"><br>
                     <div class="f"><span>Vegetal</span><input name="Leche" type="radio" value="Leche Vegetal"></div>
+                
+                {% endif %}
                 </label><label><img height="36px"
                         src="{{url_for('static', filename='cafe-ico/leche-sinlactosa.png')}}"><br>
                     <div class="f"><span>Sin Lactosa</span><input name="Leche" type="radio" value="Leche Sin Lactosa">
