@@ -4,7 +4,7 @@ from werkzeug.wrappers import Response
 from os.path import join as path_join
 import logging
 import sentry_sdk
-import browser
+import webbrowser
 from launcher import get_local_version
 
 import utils
