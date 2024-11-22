@@ -71,18 +71,14 @@
                         </span><input name="MetodoDePago" type="radio" value="Deuda" disabled>
                     </div>
                 </label>
-            </fieldset>
-            <fieldset class="milk colors vertical">
-                <summary>Anilla</summary>
-                {% for anilla in anillas %}
-                <label style="background-color: {{anilla['color']}}; color: {{anilla['text']}};"><br>
-                    <div class="f"><span>
-                            {{anilla['name']}}
-                        </span><input name="Anilla" type="radio" {{"checked" if client["SC_Anilla"] == anilla['name']}}
-                            value="{{anilla['name']}};{{anilla['color']}};{{anilla['text']}}">
+                <br><br><hr>
+                <b>Anilla:</b>
+                <label style="background-color: {{client['Anilla'].split(';')[1]}};color: transparent;"><br>
+                    <div class="f fb fn"><span class="background-color:  {{client['Anilla'].split(';')[1]}}; display: block; filter: invert(100%); -moz-background-clip: text; -webkit-background-clip: text;">
+                        {{client['Anilla'].split(';')[0]}}
+                        </span>
                     </div>
                 </label>
-                {% endfor %}
             </fieldset>
             <fieldset class="milk vertical">
                 <summary>Selección</summary>

@@ -34,7 +34,7 @@
           method="POST"
           enctype="multipart/form-data"
         >
-          <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
+          <fieldset style="width: calc(100% - 30px);max-width: 35rem;text-align: left;float: left;">
             <legend>Añadir persona</legend>
             <label>Nombre: <input type="text" name="nombre" required></label>
             <br />
@@ -61,17 +61,10 @@
               >Salir</a
             >
           </fieldset>
-          <fieldset class="milk colors vertical">
-              <summary>Anilla</summary>
-              {% for anilla in ANILLAS %}
-              <label style="background-color: {{anilla['color']}}; color: {{anilla['text']}};"><br>
-                  <div class="f"><span>
-                          {{anilla['name']}}
-                      </span><input name="anilla" type="radio"
-                          value="{{anilla['name']}};{{anilla['color']}};{{anilla['text']}}">
-                  </div>
-              </label>
-              {% endfor %}
+          <fieldset style="width: calc(100% - 30px);max-width: 15rem;text-align: left;float: left;">
+              <summary>Anilla SuperCafé</summary>
+              <label>Color: <input type="color" name="SC_Anilla_Color" value='#ff0000'></label>{{receta["SC_Anilla"].split(";")[1]}}
+              <label>Nombre: <input type="text" name="SC_Anilla_Nombre" value='Anilla'></label>
           </fieldset>
         </form>
       </center>

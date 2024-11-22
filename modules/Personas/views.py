@@ -31,7 +31,7 @@ def new():
                 "PIN": request.form.get("pin", "").upper(),
                 "Region": request.form.get("region", "Sin Aula"),
                 "SC_lastcomanda": {},
-                "SC_Anilla": request.form.get("anilla", "Sin Anilla"),
+                "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
             }
         )
         return redirect(url_for("Personas.index"))
@@ -74,7 +74,7 @@ def edit(rid):
                 "markdown": request.form.get("markdown", receta["markdown"]),
                 "PIN": request.form.get("pin", receta["PIN"]).upper(),
                 "Region": request.form.get("region", receta["Region"]).upper(),
-                "SC_Anilla": request.form.get("anilla", receta["SC_Anilla"]),
+                "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
             }
         )
         return redirect(url_for("Personas.index"))
