@@ -5,6 +5,7 @@ from .models import DB_PERSONAS
 from ..Cafe.models import ANILLAS
 from random import randint
 from . import localutils
+from .localutils import PersonAuth
 app = Blueprint("Personas", __name__)
 
 

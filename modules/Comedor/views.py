@@ -12,6 +12,7 @@ from .localutils import (
     fromDay_comedor,
 )
 from utils import get_config
+from ..Personas.localutils import PersonAuth
 
 app = Blueprint("Comedor", __name__)
 
