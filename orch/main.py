@@ -79,9 +79,9 @@ def proxy(pid, path):
     try:
         SITE_NAME = URLS[pid]
         url = f"{SITE_NAME}/rd/{pid}/{path}"
-        Allow = True
+        Allow = False
         if str(path).startswith("api"):
-            Allow = False
+            Allow = True
         if request.method == "GET":
             resp = requests.get(url, params=request.args, allow_redirects=Allow)
             excluded_headers = [
@@ -96,6 +96,8 @@ def proxy(pid, path):
                 if name.lower() not in excluded_headers
             ]
             response = Response(resp.content, resp.status_code, headers)
+            for c in resp.cookies:
+                response.set_cookie(c.name, c.value)
             return response
         elif request.method == "POST":
             resp = requests.post(
@@ -117,6 +119,8 @@ def proxy(pid, path):
                 if name.lower() not in excluded_headers
             ]
             response = Response(resp.content, resp.status_code, headers)
+            for c in resp.cookies:
+                response.set_cookie(c.name, c.value)
             return response
     except KeyError:
         return KO_TEMPLATE
