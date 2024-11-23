@@ -70,7 +70,13 @@ def creq__menuComedor(pid):
 
 @app.route("/open/<pid>")
 def open(pid):
-    return redirect("/rd/" + pid)
+    try:
+        SITE_NAME = URLS[pid]
+        url = f"{SITE_NAME}/status"
+        resp = requests.get(url, allow_redirects=True)
+        return redirect(url)
+    except:
+        return KO_TEMPLATE
 
 
 @app.route("/rd/<pid>/", methods=["GET", "POST"], defaults={"path": ""})
