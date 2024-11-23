@@ -53,7 +53,7 @@ def api__purgecache():
     utils.clear_cache()
     return "Hecho!"
 @app.route("/status", methods=["GET"])
-def api__purgecache():
+def status():
     utils.clear_cache()
     return "G-Serv is online."
 

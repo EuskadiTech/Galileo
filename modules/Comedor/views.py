@@ -74,7 +74,7 @@ def getMenu():
     except Exception as e:
         return redirect(url_for("Personas.auth_scan", err=e.args))
     day = DateParser(request.args.get("day")).pretty_dayCode()
-    results = fromDay_comedor(day=day, **request.args)
+    results = fromDay_comedor(day=day, menu=request.args.get("menu", "*"))
     return render_template("comedor/getMenu.html", results=results, day=day, USER=user)
 
 

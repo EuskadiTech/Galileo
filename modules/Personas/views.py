@@ -84,6 +84,8 @@ def auth_scan():
             user.isLoggedIn()
         except localutils.PinRequired:
             return redirect(url_for("Personas.auth_pin", code = request.form["code"]))
+        except Exception as e:
+            return redirect(url_for("Personas.auth_scan", err = e))
         resp = make_response(redirect(url_for("index")))
         resp.set_cookie('AUTH_CODE', request.form["code"])
         resp.set_cookie('AUTH_PIN', "")

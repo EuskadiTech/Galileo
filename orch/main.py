@@ -1,5 +1,6 @@
 from flask import Flask, redirect, request, Response
 import requests
+import http
 
 app = Flask(__name__)
 URLS = {}
@@ -89,7 +90,7 @@ def proxy(pid, path):
         if str(path).startswith("api"):
             Allow = True
         if request.method == "GET":
-            resp = requests.get(url, params=request.args, allow_redirects=Allow)
+            resp = requests.get(url, params=request.args, allow_redirects=Allow, cookies=request.cookies)
             excluded_headers = [
                 "content-encoding",
                 "content-length",
@@ -102,8 +103,9 @@ def proxy(pid, path):
                 if name.lower() not in excluded_headers
             ]
             response = Response(resp.content, resp.status_code, headers)
-            for c in resp.cookies:
-                response.set_cookie(c.name, c.value)
+            if resp.headers.get("Set-Cookie") != None:
+              for c, v in http.cookies.SimpleCookie(resp.headers.get("Set-Cookie")).items():
+                  response.set_cookie(c, v.value)
             return response
         elif request.method == "POST":
             resp = requests.post(
@@ -112,6 +114,7 @@ def proxy(pid, path):
                 params=request.args,
                 files=request.files,
                 allow_redirects=Allow,
+                cookies=request.cookies,
             )
             excluded_headers = [
                 "content-encoding",
@@ -125,8 +128,9 @@ def proxy(pid, path):
                 if name.lower() not in excluded_headers
             ]
             response = Response(resp.content, resp.status_code, headers)
-            for c in resp.cookies:
-                response.set_cookie(c.name, c.value)
+            if resp.headers.get("Set-Cookie") != None:
+              for c, v in http.cookies.SimpleCookie(resp.headers.get("Set-Cookie")).items():
+                  response.set_cookie(c, v.value)
             return response
     except KeyError:
         return KO_TEMPLATE
