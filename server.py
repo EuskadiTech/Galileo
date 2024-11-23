@@ -52,6 +52,10 @@ def index():
 def api__purgecache():
     utils.clear_cache()
     return "Hecho!"
+@app.route("/status", methods=["GET"])
+def api__purgecache():
+    utils.clear_cache()
+    return "G-Serv is online."
 
 app.register_blueprint(modules.ComedorBlueprint)
 app.register_blueprint(modules.ResumenDiarioBlueprint)
