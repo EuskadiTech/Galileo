@@ -6,6 +6,8 @@ class PinRequired(Exception):
     pass
 class InvalidPin(Exception):
     pass
+class LoggedOutError(Exception):
+    pass
 class NotAllowed(Exception):
     pass
 class PersonAuth:
@@ -16,6 +18,8 @@ class PersonAuth:
         def query(data):
             if data["Codigo"] == str(self.userCode):
                 return True
+        if self.userCode == "UNK":
+            raise LoggedOutError("No has iniciado sesión")
         keys = list(DB_PERSONAS.get_by_query(query).keys())
         if len(keys) < 1:
             raise UnknownCodeError("El Usuario no existe")
