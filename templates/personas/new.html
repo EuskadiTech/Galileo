@@ -1,102 +1,102 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='icons/style.css')}}"
-    />
-    <title>Galileo</title>
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='vendor/simplemde.min.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='vendor/font-awesome.min.css')}}"
-    />
-  </head>
 
-  <body>
-    {% include 'loader.html' %}
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+  <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
+  <title>Galileo</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='vendor/simplemde.min.css')}}" />
+  <link rel="stylesheet" href="{{url_for('static', filename='vendor/font-awesome.min.css')}}" />
+</head>
 
-    <header style="background-color: #000; color: #fff">
-      <h3>Galileo - Personas</h3>
-    </header>
-    <main>
-      <center>
-        {% if err != None %}
-          <h1 style="border: 5px solid red; padding: 15px;">Error: {{err}}</h1>
-        {% endif %}
-        <h2>Añadir persona</h2>
-        <form
-          action="{{url_for('Personas.new')}}"
-          method="POST"
-          enctype="multipart/form-data"
-        >
-          <fieldset style="width: calc(100% - 30px);max-width: 35rem;text-align: left;float: left;">
-            <legend>Añadir persona</legend>
-            <label>Nombre: <input type="text" name="nombre" required></label>
-            <br />
-            <label>PIN: <input type="text" autocomplete="off" name="pin"></label>
-            <br />
-            <label>Región: <input type="text" name="region" required></label>
-            <br />
-            <label>Fecha de Nacimiento: <input type="date" name="fecha" required></label>
-            <br />
-            <br />
-            <textarea name="markdown" id="contentMD" cols="30" rows="10"></textarea>
-            <br />
-            <a href="https://axis.tech.eus/naiel.fyi/mdsyntax.html" target="_blank" rel="noopener noreferrer">Manual de Markdown</a>
-            <br />
-            <input
-              type="submit"
-              class="actbtn di di-save"
-              value="Crear"
-            />
-            <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}"
-              >Salir</a
-            >
-          </fieldset>
-          <fieldset style="width: calc(100% - 30px);max-width: 15rem;text-align: left;float: left;">
-              <legend>Anilla SuperCafé</legend>
-              <label>Color: <input type="color" name="SC_Anilla_Color" value='#ff0000'></label><br>
-              <label>Nombre: <input type="text" name="SC_Anilla_Nombre" value='Anilla'></label>
-          </fieldset>
-          <fieldset style="width: calc(100% - 30px);max-width: 20rem;text-align: left;float: left;">
-            <legend>Roles</legend>
-            <ul>
-              <li><label>ADMIN <input type="checkbox" name="roles[]" value="admin"></label></li>
-              <li><label>SuperCafé: Leer <input type="checkbox" name="roles[]" value="cafe:read"></label></li>
-              <li><label>SuperCafé: Puede tomar Cafeina <input type="checkbox" name="roles[]" value="cafe:cafeina"></label></li>
-              <li><label>SuperCafé: Solo Leche sin Lactosa <input type="checkbox" name="roles[]" value="cafe:nolact"></label></li>
-              <li><label>SuperCafé: Pant. Cocina <input type="checkbox" name="roles[]" value="cafe:cocina"></label></li>
-              <li><label>SuperCafé: Pant. Pagos <input type="checkbox" name="roles[]" value="cafe:pagos"></label></li>
-              <li><label>SuperCafé: Enviar Comanda <input type="checkbox" name="roles[]" value="cafe:write"></label></li>
-              <li><label>Comedor: Leer <input type="checkbox" name="roles[]" value="comedor:read"></label></li>
-              <li><label>Comedor: Escribir <input type="checkbox" name="roles[]" value="comedor:write"></label></li>
-              <li><label>Comedor: Borrar <input type="checkbox" name="roles[]" value="comedor:delete"></label></li>
-              <li><label>Personas: Leer <input type="checkbox" name="roles[]" value="personas:read"></label></li>
-              <li><label>Personas: Escribir <input type="checkbox" name="roles[]" value="personas:write"></label></li>
-              <li><label>Personas: Borrar <input type="checkbox" name="roles[]" value="personas:delete"></label></li>
-              <li><label>Recetas: Leer <input type="checkbox" name="roles[]" value="recetas:read"></label></li>
-              <li><label>Recetas: Escribir <input type="checkbox" name="roles[]" value="recetas:write"></label></li>
-              <li><label>Recetas: Borrar <input type="checkbox" name="roles[]" value="recetas:delete"></label></li>
-            </ul>
-          </fieldset>
-        </form>
-      </center>
-    </main>
-    <script src="{{url_for('static', filename='vendor/simplemde.min.js')}}"></script>
-    <script>
-      new SimpleMDE({
-        element: document.getElementById("contentMD"),
-        spellChecker: false,
-        status: false,
-      });
-    </script>
-  </body>
+<body>
+  {% include 'loader.html' %}
+
+  <header style="background-color: #000; color: #fff">
+    <h3>Galileo - Personas</h3>
+  </header>
+  <main>
+    <center>
+      {% if err != None %}
+      <h1 style="border: 5px solid red; padding: 15px;">Error: {{err}}</h1>
+      {% endif %}
+      <h2>Añadir persona</h2>
+      <form action="{{url_for('Personas.new')}}" method="POST" enctype="multipart/form-data">
+        <fieldset style="width: calc(100% - 30px);max-width: 35rem;text-align: left;float: left;">
+          <legend>Añadir persona</legend>
+          <label>Nombre: <input type="text" name="nombre" required></label>
+          <br />
+          <label>PIN: <input type="text" autocomplete="off" name="pin"></label>
+          <br />
+          <label>Región: <input type="text" name="region" required></label>
+          <br />
+          <label>Fecha de Nacimiento: <input type="date" name="fecha" required></label>
+          <br />
+          <br />
+          <textarea name="markdown" id="contentMD" cols="30" rows="10"></textarea>
+          <br />
+          <a href="https://axis.tech.eus/naiel.fyi/mdsyntax.html" target="_blank" rel="noopener noreferrer">Manual de
+            Markdown</a>
+          <br />
+          <input type="submit" class="actbtn di di-save" value="Crear" />
+          <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
+        </fieldset>
+        <fieldset style="width: calc(100% - 30px);max-width: 15rem;text-align: left;float: left;">
+          <legend>Anilla SuperCafé</legend>
+          <label>Color: <input type="color" name="SC_Anilla_Color" value='#ff0000'></label><br>
+          <label>Nombre: <input type="text" name="SC_Anilla_Nombre" value='Anilla'></label>
+        </fieldset>
+        <fieldset style="width: calc(100% - 30px);max-width: 20rem;text-align: left;float: left;">
+          <legend>Roles</legend>
+          <ul>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="admin" {{"checked" if
+                  err=="Configura a un Administrador" else "" }}> Administrador </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:read">
+                SuperCafé: Leer </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:cafeina">
+                SuperCafé: Puede tomar Cafeina </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:nolact">
+                SuperCafé: Solo Leche sin Lactosa </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:cocina">
+                SuperCafé: Pant. Cocina </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:pagos">
+                SuperCafé: Pant. Pagos </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:write">
+                SuperCafé: Enviar Comanda </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="comedor:read">
+                Comedor: Leer </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="comedor:write">
+                Comedor: Escribir </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="comedor:delete">
+                Comedor: Borrar </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="personas:read">
+                Personas: Leer </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="personas:write">
+                Personas: Escribir </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="personas:delete">
+                Personas: Borrar </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="recetas:read">
+                Recetas: Leer </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="recetas:write">
+                Recetas: Escribir </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="recetas:delete">
+                Recetas: Borrar </label></li>
+          </ul>
+        </fieldset>
+      </form>
+    </center>
+  </main>
+  <script src="{{url_for('static', filename='vendor/simplemde.min.js')}}"></script>
+  <script>
+    new SimpleMDE({
+      element: document.getElementById("contentMD"),
+      spellChecker: false,
+      status: false,
+    });
+  </script>
+</body>
+
 </html>
