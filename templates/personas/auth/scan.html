@@ -15,17 +15,21 @@
   {% include 'loader.html' %}
 
   <header style="background-color: #000; color: #fff">
-    <h3>Galileo - Personas</h3>
+    <h3>Iniciar sesión en Galileo</h3>
   </header>
   <main>
     <center>
-      <h2>Escanear Codigo</h2>
+      {% if err != None %}
+      <h1 style="border: 5px solid red; padding: 15px;">Error: {{err}}</h1>
+      {% endif %}
+      <h2>Iniciar sesión</h2>
       <form method="post">
         <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
           <legend>Escanear Codigo</legend>
           <label style="font-size: 30px;">Codigo: <input type="text" name="code"
-              style="font-family: monospace;font-size: 30px;" id="reader_output"></label>
+              style="font-family: monospace; font-size: 30px;" id="reader_output"></label>
           <div style="width: 400px" id="reader"></div>
+          <br>
           <input type="submit" class="actbtn di di-user" value="Buscar" />
           <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
         </fieldset>

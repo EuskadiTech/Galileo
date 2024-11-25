@@ -1,6 +1,9 @@
 name: Build and publish
 on:
   push:
+    branches:
+      - auth
+      - main
     tags: 
       - 'v*.*.*'
 
@@ -90,6 +93,7 @@ jobs:
       - build-windows
     name: Release via GHA
     runs-on: ubuntu-latest
+    if: startsWith(github.ref_name, 'v')
     permissions:
       contents: write
     steps:

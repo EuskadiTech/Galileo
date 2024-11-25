@@ -1,5 +1,6 @@
 from flask import Flask, redirect, request, Response
 import requests
+import http
 
 app = Flask(__name__)
 URLS = {}
@@ -70,7 +71,13 @@ def creq__menuComedor(pid):
 
 @app.route("/open/<pid>")
 def open(pid):
-    return redirect("/rd/" + pid)
+    try:
+        SITE_NAME = URLS[pid]
+        url = f"{SITE_NAME}/status"
+        resp = requests.get(url, allow_redirects=True)
+        return redirect(url)
+    except:
+        return KO_TEMPLATE
 
 
 @app.route("/rd/<pid>/", methods=["GET", "POST"], defaults={"path": ""})
@@ -79,11 +86,11 @@ def proxy(pid, path):
     try:
         SITE_NAME = URLS[pid]
         url = f"{SITE_NAME}/rd/{pid}/{path}"
-        Allow = True
+        Allow = False
         if str(path).startswith("api"):
-            Allow = False
+            Allow = True
         if request.method == "GET":
-            resp = requests.get(url, params=request.args, allow_redirects=Allow)
+            resp = requests.get(url, params=request.args, allow_redirects=Allow, cookies=request.cookies)
             excluded_headers = [
                 "content-encoding",
                 "content-length",
@@ -96,14 +103,18 @@ def proxy(pid, path):
                 if name.lower() not in excluded_headers
             ]
             response = Response(resp.content, resp.status_code, headers)
+            if resp.headers.get("Set-Cookie") != None:
+              for c, v in http.cookies.SimpleCookie(resp.headers.get("Set-Cookie")).items():
+                  response.set_cookie(c, v.value)
             return response
         elif request.method == "POST":
             resp = requests.post(
                 url,
-                data=request.form,
+                data=request.form.to_dict(False),
                 params=request.args,
                 files=request.files,
                 allow_redirects=Allow,
+                cookies=request.cookies,
             )
             excluded_headers = [
                 "content-encoding",
@@ -117,6 +128,9 @@ def proxy(pid, path):
                 if name.lower() not in excluded_headers
             ]
             response = Response(resp.content, resp.status_code, headers)
+            if resp.headers.get("Set-Cookie") != None:
+              for c, v in http.cookies.SimpleCookie(resp.headers.get("Set-Cookie")).items():
+                  response.set_cookie(c, v.value)
             return response
     except KeyError:
         return KO_TEMPLATE

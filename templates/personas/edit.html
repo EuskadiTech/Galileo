@@ -1,82 +1,159 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='icons/style.css')}}"
-    />
-    <title>Galileo</title>
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='vendor/simplemde.min.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='vendor/font-awesome.min.css')}}"
-    />
-  </head>
 
-  <body>
-    {% include 'loader.html' %}
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+  <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
+  <title>Galileo</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='vendor/simplemde.min.css')}}" />
+  <link rel="stylesheet" href="{{url_for('static', filename='vendor/font-awesome.min.css')}}" />
+</head>
 
-    <header style="background-color: #000; color: #fff">
-      <h3>Galileo - Personas</h3>
-    </header>
-    <main>
-      <center>
-        <h2>Persona: {{receta["Nombre"]}}</h2>
-        <form
-          action="{{url_for('Personas.edit', rid=rid)}}"
-          method="POST"
-          enctype="multipart/form-data"
-        >
-          <fieldset style="width: calc(100% - 30px);max-width: 35rem;text-align: left;float: left;">
-            <legend>Añadir receta</legend>
-            <label>Nombre: <input type="text" name="nombre" required value="{{receta['Nombre']}}"></label>
-            <br />
-            <label>PIN: <input type="text" autocomplete="off" name="pin" value="{{receta['PIN']}}"></label>
-            <br />
-            <label>Región: <input type="text" name="region" required value="{{receta['Region']}}"></label>
-            <br />
-            <label>Roles: <input type="text" name="roles" required value="{{receta['Roles']}}"></label>
-            <br />
-            <label>Puntos: <input type="number" name="puntos" required value="{{receta['Puntos']}}"></label>
-            <br />
-            <label>Fecha de Nacimiento: <input type="date" name="fecha" required value="{{receta['F-nac']}}"></label>
-            <br />
-            <br />
-            <textarea name="markdown" id="contentMD" cols="30" rows="10">{{receta['markdown']}}</textarea>
-            <br />
-            <a href="https://axis.tech.eus/naiel.fyi/mdsyntax.html" target="_blank" rel="noopener noreferrer">Manual de Markdown</a>
-            <br />
-            <input
-              type="submit"
-              class="actbtn di di-save"
-              value="Guardar"
-            />
-            <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}"
-              >Salir</a
-            >
-          </fieldset>
-          <fieldset style="width: calc(100% - 30px);max-width: 15rem;text-align: left;float: left;">
-              <summary>Anilla SuperCafé</summary>
-              <label>Color: <input type="color" name="SC_Anilla_Color" value='{{receta["SC_Anilla"].split(";")[1]}}'></label><br>
-              <label>Nombre: <input type="text" name="SC_Anilla_Nombre" value='{{receta["SC_Anilla"].split(";")[0]}}'></label>
-          </fieldset>
-        </form>
-      </center>
-    </main>
-    <script src="{{url_for('static', filename='vendor/simplemde.min.js')}}"></script>
-    <script>
-      new SimpleMDE({
-        element: document.getElementById("contentMD"),
-        spellChecker: false,
-        status: false,
-      });
-    </script>
-  </body>
+<body>
+  {% include 'loader.html' %}
+
+  <header style="background-color: #000; color: #fff">
+    <h3>Galileo - Personas</h3>
+  </header>
+  <main>
+    <center>
+      <h2>Persona: {{receta["Nombre"]}}</h2>
+      <form action="{{url_for('Personas.edit', rid=rid)}}" method="POST">
+        <fieldset style="width: calc(100% - 30px);max-width: 35rem;text-align: left;float: left;">
+          <legend>Añadir receta</legend>
+          <label>Nombre: <input type="text" name="nombre" required value="{{receta['Nombre']}}"></label>
+          <br />
+          <label>PIN: <input type="text" autocomplete="off" name="pin" value="{{receta['PIN']}}"></label>
+          <br />
+          <label>Región: <input type="text" name="region" required value="{{receta['Region']}}"></label>
+          <br />
+          <!--<label>Roles: <input type="text" name="roles[]" required value="{{receta['Roles']}}"></label>
+            <br />-->
+          <label>Puntos: <input type="number" name="puntos" required value="{{receta['Puntos']}}"></label>
+          <br />
+          <label>Fecha de Nacimiento: <input type="date" name="fecha" required value="{{receta['F-nac']}}"></label>
+          <br />
+          <br />
+          <textarea name="markdown" id="contentMD" cols="30" rows="10">{{receta['markdown']}}</textarea>
+          <br />
+          <a href="https://axis.tech.eus/naiel.fyi/mdsyntax.html" target="_blank" rel="noopener noreferrer">Manual de
+            Markdown</a>
+          <br />
+          <input type="submit" class="actbtn di di-save" value="Guardar" />
+          <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
+        </fieldset>
+        <fieldset style="width: calc(100% - 30px);max-width: 15rem;text-align: left;float: left;">
+          <legend>Anilla SuperCafé</legend>
+          <label>Color: <input type="color" name="SC_Anilla_Color"
+              value='{{receta["SC_Anilla"].split(";")[1]}}'></label><br>
+          <label>Nombre: <input type="text" name="SC_Anilla_Nombre"
+              value='{{receta["SC_Anilla"].split(";")[0]}}'></label>
+        </fieldset>
+        <fieldset style="width: calc(100% - 30px);max-width: 20rem;text-align: left;float: left;">
+          <legend>Roles</legend>
+          <b>Sistema</b>
+          <ul style="list-style-type: none; padding-left: 15px; margin: 5px 0;">
+            {% if "admin" in USER.u["Roles"] %}
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="admin" {{"checked"
+                  if "admin" in receta["Roles"] }}> Administrador </label></li>
+            {% endif %}
+          </ul>
+          <b>Resumen Diario</b>
+          <ul style="list-style-type: none; padding-left: 15px; margin: 5px 0;">
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]"
+                  value="resumendiario:_module" {{"checked" if "resumendiario:_module" in receta["Roles"] }}>
+                Acceder </label></li>
+          </ul>
+          <b>SuperCafé</b>
+          <ul style="list-style-type: none; padding-left: 15px; margin: 5px 0;">
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:_module"
+                  {{"checked" if "cafe:_module" in receta["Roles"] }}>
+                Acceder </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:read"
+                  {{"checked" if "cafe:read" in receta["Roles"] }}>
+                Leer </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:client"
+                  {{"checked" if "cafe:client" in receta["Roles"] }}>
+                Cliente </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:cafeina"
+                  {{"checked" if "cafe:cafeina" in receta["Roles"] }}>
+                Puede tomar Cafeina </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:nolact"
+                  {{"checked" if "cafe:nolact" in receta["Roles"] }}>
+                Solo Leche sin Lactosa </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:cocina"
+                  {{"checked" if "cafe:cocina" in receta["Roles"] }}>
+                Pant. Cocina </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:pagos"
+                  {{"checked" if "cafe:pagos" in receta["Roles"] }}>
+                Pant. Pagos </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:send"
+                  {{"checked" if "cafe:send" in receta["Roles"] }}>
+                Enviar Comanda </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:write"
+                  {{"checked" if "cafe:write" in receta["Roles"] }}>
+                Editar </label></li>
+          </ul>
+          <b>Comedor</b>
+          <ul style="list-style-type: none; padding-left: 15px; margin: 5px 0;">
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="comedor:_module"
+                  {{"checked" if "comedor:_module" in receta["Roles"] }}>
+                Acceder </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="comedor:read"
+                  {{"checked" if "comedor:read" in receta["Roles"] }}>
+                Leer </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="comedor:write"
+                  {{"checked" if "comedor:write" in receta["Roles"] }}>
+                Escribir </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="comedor:delete"
+                  {{"checked" if "comedor:delete" in receta["Roles"] }}>
+                Borrar </label></li>
+          </ul>
+          <b>Personas</b>
+          <ul style="list-style-type: none; padding-left: 15px; margin: 5px 0;">
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="personas:_module"
+                  {{"checked" if "personas:_module" in receta["Roles"] }}>
+                Acceder </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="personas:read"
+                  {{"checked" if "personas:read" in receta["Roles"] }}>
+                Leer </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="personas:write"
+                  {{"checked" if "personas:write" in receta["Roles"] }}>
+                Escribir </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="personas:delete"
+                  {{"checked" if "personas:delete" in receta["Roles"] }}>
+                Borrar </label></li>
+          </ul>
+          <b>Recetas</b>
+          <ul style="list-style-type: none; padding-left: 15px; margin: 5px 0;">
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="recetas:_module"
+                  {{"checked" if "recetas:_module" in receta["Roles"] }}>
+                Acceder </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="recetas:read"
+                  {{"checked" if "recetas:read" in receta["Roles"] }}>
+                Leer </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="recetas:write"
+                  {{"checked" if "recetas:write" in receta["Roles"] }}>
+                Escribir </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="recetas:delete"
+                  {{"checked" if "recetas:delete" in receta["Roles"] }}>
+                Borrar </label></li>
+          </ul>
+        </fieldset>
+      </form>
+    </center>
+  </main>
+  <script src="{{url_for('static', filename='vendor/simplemde.min.js')}}"></script>
+  <script>
+    new SimpleMDE({
+      element: document.getElementById("contentMD"),
+      spellChecker: false,
+      status: false,
+    });
+  </script>
+</body>
+
 </html>

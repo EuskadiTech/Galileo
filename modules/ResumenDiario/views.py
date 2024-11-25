@@ -3,6 +3,7 @@ from utils import DateParser, get_config, cached_request
 from random import choice
 from ..Comedor.localutils import fromDay_comedor
 from ..Cafe.views import get_receta
+from ..Personas.localutils import PersonAuth
 app = Blueprint("ResumenDiario", __name__)
 
 

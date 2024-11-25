@@ -27,7 +27,6 @@
         <thead>
           <th>Codigo</th>
           <th>Nombre</th>
-          <th>Roles</th>
           <th>Puntos</th>
           <th>Acciónes</th>
         </thead>
@@ -36,7 +35,6 @@
           <tr>
             <td>{{personas[key]["Codigo"]}}</td>
             <td><a href="{{url_for('Personas.persona', rid = key)}}">{{personas[key]["Nombre"]}} ({{personas[key]["Region"]}})</a></td>
-            <td>{{personas[key]["Roles"]}}</td>
             <td>{{personas[key]["Puntos"]}} puntos</td>
             <td>
               <a href="{{url_for('Personas.rdel', rid = key)}}">Borrar</a>
