@@ -115,7 +115,7 @@ def api__reqMenu():
 def api__deleteMenu(mid):
     try:
         user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("comedor:write")
+        user.isLoggedIn("comedor:delete")
     except Exception as e:
         return redirect(url_for("Personas.auth_scan", err=e.args))
     DB_COMEDOR.delete_by_id(str(mid))

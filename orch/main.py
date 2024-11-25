@@ -110,7 +110,7 @@ def proxy(pid, path):
         elif request.method == "POST":
             resp = requests.post(
                 url,
-                data=request.form,
+                data=request.form.to_dict(False),
                 params=request.args,
                 files=request.files,
                 allow_redirects=Allow,

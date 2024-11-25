@@ -44,7 +44,7 @@ def config():
 def select():
     try:
         user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:write")
+        user.isLoggedIn("cafe:send")
     except Exception as e:
         return redirect(url_for("Personas.auth_scan", err=e.args))
     if request.method == "POST":
@@ -62,7 +62,7 @@ def select():
 def comanda(rid):
     try:
         user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:write")
+        user.isLoggedIn("cafe:send")
     except Exception as e:
         return redirect(url_for("Personas.auth_scan", err=e.args))
     if request.method == "POST":
@@ -107,7 +107,7 @@ def comanda(rid):
 def cocina():
     try:
         user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:write")
+        user.isLoggedIn("cafe:cocina")
     except Exception as e:
         return redirect(url_for("Personas.auth_scan", err=e.args))
     regiones = {}
@@ -127,14 +127,14 @@ def cocina():
         personas = DB_PERSONAS.get_all(),
         Receta = get_receta(),
         comandas = DB_COMANDAS.get_by_query(query).items(),
-        regiones=regiones, USER=user
+        regiones=regiones, USER=user, fc="cocina", ft="Pago"
     )
 
 @app.route("/cafe/pago", methods=["GET", "POST"])
 def pago():
     try:
         user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:write")
+        user.isLoggedIn("cafe:pago")
     except Exception as e:
         return redirect(url_for("Personas.auth_scan", err=e.args))
     regiones = {}
@@ -154,7 +154,7 @@ def pago():
         personas = DB_PERSONAS.get_all(),
         Receta = get_receta(),
         comandas = DB_COMANDAS.get_by_query(query).items(),
-        regiones=regiones, USER=user
+        regiones=regiones, USER=user, fc="pago", ft="Historial"
     )
 
 @app.route("/cafe/historial/<rid>", methods=["GET", "POST"])
@@ -186,36 +186,27 @@ def historial(rid):
 def updategrp():
     try:
         user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:write")
+        user.isLoggedIn("cafe:cocina")
     except Exception as e:
         return redirect(url_for("Personas.auth_scan", err=e.args))
     DB_COMANDAS.update_by_id(request.args["f"], {"_grupo": request.args["v"]})
     return redirect(url_for("Cafe.cocina"))
 
-@app.route("/cafe/del_cocina/<rid>", methods=["GET"])
-def rdel(rid):
+@app.route("/cafe/transfer_fase/<rid>/<ft>/<fc>", methods=["GET"])
+def rdel(rid, ft, fc):
     try:
         user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:write")
+        user.isLoggedIn("cafe:" + fc)
     except Exception as e:
         return redirect(url_for("Personas.auth_scan", err=e.args))
-    DB_COMANDAS.update_by_id(rid, {"_fase": "Pago"})
-    return redirect(url_for("Cafe.cocina"))
-
-@app.route("/cafe/del_pago/<rid>", methods=["GET"])
-def rdel_pago(rid):
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:write")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
-    com = DB_COMANDAS.get_by_id(rid)
-    puntos = DB_PERSONAS.get_by_id(com["_persona"])["Puntos"]
-    if com["MetodoDePago"][0] == "Efectivo":
-        puntos += 1
-    if com["MetodoDePago"][0] == "Puntos":
-        puntos -= 10
-    DB_PERSONAS.update_by_id(com["_persona"], {"Puntos": puntos, "SC_lastcomanda": com})
-    # DB_COMANDAS.delete_by_id(rid)
-    DB_COMANDAS.update_by_id(rid, {"_fase": "Historial"})
-    return redirect(url_for("Cafe.pago"))
+    DB_COMANDAS.update_by_id(rid, {"_fase": ft})
+    if fc=="pago":
+        com = DB_COMANDAS.get_by_id(rid)
+        puntos = DB_PERSONAS.get_by_id(com["_persona"])["Puntos"]
+        if com["MetodoDePago"][0] == "Efectivo":
+            puntos += 1
+        if com["MetodoDePago"][0] == "Puntos":
+            puntos -= 10
+        DB_PERSONAS.update_by_id(com["_persona"], {"Puntos": puntos, "SC_lastcomanda": com})
+        # DB_COMANDAS.delete_by_id(rid)
+    return redirect(url_for("Cafe." + fc))

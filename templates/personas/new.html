@@ -24,7 +24,7 @@
       <h1 style="border: 5px solid red; padding: 15px;">Error: {{err}}</h1>
       {% endif %}
       <h2>Añadir persona</h2>
-      <form action="{{url_for('Personas.new')}}" method="POST" enctype="multipart/form-data">
+      <form action="{{url_for('Personas.new')}}" method="POST">
         <fieldset style="width: calc(100% - 30px);max-width: 35rem;text-align: left;float: left;">
           <legend>Añadir persona</legend>
           <label>Nombre: <input type="text" name="nombre" required></label>
@@ -54,37 +54,8 @@
           <ul>
             <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="admin" {{"checked" if
                   err=="Configura a un Administrador" else "" }}> Administrador </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:read">
-                SuperCafé: Leer </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:cafeina">
-                SuperCafé: Puede tomar Cafeina </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:nolact">
-                SuperCafé: Solo Leche sin Lactosa </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:cocina">
-                SuperCafé: Pant. Cocina </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:pagos">
-                SuperCafé: Pant. Pagos </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:write">
-                SuperCafé: Enviar Comanda </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="comedor:read">
-                Comedor: Leer </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="comedor:write">
-                Comedor: Escribir </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="comedor:delete">
-                Comedor: Borrar </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="personas:read">
-                Personas: Leer </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="personas:write">
-                Personas: Escribir </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="personas:delete">
-                Personas: Borrar </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="recetas:read">
-                Recetas: Leer </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="recetas:write">
-                Recetas: Escribir </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="recetas:delete">
-                Recetas: Borrar </label></li>
           </ul>
+          <i>El resto de roles son disponibles despues de crear la persona</i>
         </fieldset>
       </form>
     </center>

@@ -132,11 +132,13 @@
           </optgroup>
         </select>
         <br>
-        <label style="background-color: {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}};color: transparent;"><br>
-            <div class="f fb fn"><span style="background-color:  {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}}; display: block; filter: invert(100%); -moz-background-clip: text; -webkit-background-clip: text; text-shadow: none;">
-                {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[0]}}
-                </span>
-            </div>
+        <label
+          style="background-color: {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}};color: transparent;"><br>
+          <div class="f fb fn"><span
+              style="background-color:  {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}}; display: block; filter: invert(100%); -moz-background-clip: text; -webkit-background-clip: text; text-shadow: none;">
+              {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[0]}}
+            </span>
+          </div>
         </label>
         <br>
         <hr>
@@ -177,14 +179,15 @@
         {% if "Puntos" not in comanda[1].get("MetodoDePago", "") %}
         Total: <b>{{comanda[1].get("_precio", "?")}}c</b><br>
         {% else %}
-        Total: <b>Gratis</b>
+        Total: <b>Gratis</b><br>
         {% endif %}
         Metodo de pago: <b>{{comanda[1].get("MetodoDePago", "")[0]}}</b>
 
         <hr>
         {{comanda[1].get("notas", "")}}
         <hr><br>
-        <button class="nop small" type="button" onclick="location.href='{{url_for('Cafe.rdel', rid=comanda[0])}}'">
+        <button class="nop small" type="button"
+          onclick="location.href='{{url_for('Cafe.rdel', rid=comanda[0], ft=ft, fc=fc)}}'">
           ¡Hecho!</button>
       </fieldset>
       {% endfor %}
