@@ -7,9 +7,10 @@ import sentry_sdk
 import webbrowser
 from launcher import get_local_version
 
+import modules.Personas
+import modules.Personas.localutils
 import utils
 import modules
-
 
 sentry_sdk.init(
     dsn="https://d77090e7896c5eb40bd1375e3e0e9539@o4508296642560000.ingest.de.sentry.io/4508296645443664",
@@ -35,17 +36,10 @@ log = logging.getLogger("werkzeug")
 log.setLevel(logging.CRITICAL)
 log.disabled = True
 
-
 @app.route("/", methods=["GET"])
-def index():
-    if modules.Personas.models.DB_PERSONAS.get_all() == {}:
-        return redirect(url_for("Personas.new", err = "Configura a un Administrador"))
-    try:
-        user = modules.Personas.localutils.PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn()
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
-    return render_template("index.html", VERSION = get_local_version(), USER = user)
+@modules.Personas.localutils.with_auth()
+def index(user):
+    return render_template("index.html", VERSION = get_local_version(), USER = USER)
 
 
 @app.route("/api/purgecache", methods=["GET"])
