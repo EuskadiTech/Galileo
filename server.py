@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.wrappers import Response
 from os.path import join as path_join
@@ -39,7 +39,7 @@ log.disabled = True
 @app.route("/", methods=["GET"])
 @modules.Personas.localutils.with_auth()
 def index(user):
-    return render_template("index.html", VERSION = get_local_version(), USER = USER)
+    return render_template("index.html", VERSION = get_local_version(), USER = user)
 
 
 @app.route("/api/purgecache", methods=["GET"])
@@ -50,6 +50,10 @@ def api__purgecache():
 def status():
     utils.clear_cache()
     return "G-Serv is online."
+
+@app.route("/uploads/<path:path>")
+def get_upload(path):
+    return send_from_directory(path_join(utils.USERDATA_DIR, "uploads"), path)
 
 app.register_blueprint(modules.ComedorBlueprint)
 app.register_blueprint(modules.ResumenDiarioBlueprint)

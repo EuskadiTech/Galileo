@@ -95,11 +95,15 @@
         {% if fase == "Historial" %}
         Fase: <b>{{comanda[1]['_fase']}}</b>
         {% endif %}
-        <h3 style="color: black !important;">
+        <!--<h3 style="color: black !important;">
           {{personas[comanda[1]['_persona']]['Nombre']}} ({{personas[comanda[1]['_persona']]['Region']}})
-        </h3>
+        </h3>-->
+        <div style="border: 1px solid black; text-align: center;">
+            <img src='{{ url_for("get_upload", path=personas[comanda[1]["_persona"]]["Foto"]) }}' alt="" height="75px"><br>
+            {{personas[comanda[1]['_persona']]["Nombre"]}} ({{personas[comanda[1]['_persona']]["Region"]}})
+        </div>
+        {% if fase == "Cocina" %}
         <select
-          style="color: {{comanda[1]['_grupo'].split(';')[2]}}; background-color: {{comanda[1]['_grupo'].split(';')[3]}};"
           id="group" onchange='ChangeGroup(this, "{{comanda[0]}}")' required>
           <option disabled selected>
             {{comanda[1]['_grupo'].split(';')[0]}}
@@ -131,6 +135,7 @@
           </optgroup>
           </optgroup>
         </select>
+        {% endif %}
         <br>
         <label
           style="background-color: {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}};color: transparent;"><br>

@@ -23,7 +23,8 @@
       <h2 class="nop">Tarjeta Identificativa de {{receta["Nombre"]}}</h2>
         <table border style="width: calc(100% - 30px); max-width: 30rem; text-align: left;">
           <tr>
-            <td style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px;">{{receta["Nombre"]}} ({{receta["Region"]}})</td>
+            <td colspan="2" style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px;">
+              {{receta["Nombre"]}} ({{receta["Region"]}})</td>
             <td style="width: 150px; text-align: center;" rowspan="2">
               <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=15&data={{receta['Codigo']}}"
                 width="150px"><br><small>
@@ -36,15 +37,18 @@
             </td>
           </tr>
           <tr>
+            <td style="padding: 0; width: 125px;">
+              <img src='{{ url_for("get_upload", path=receta["Foto"]) }}' alt="" height="125px">
+            </td>
             <td>
-              {{content | safe}}
+              <center>
+                {{content | safe}}
+              </center>
             </td>
           </tr>
           <tr class="nop">
-            <td style="font-size: 75%;">
-              <b>Roles:</b> <code style="font-family: monospace !important;">{{receta['Roles']}}</code>
-              <br />
-              <b>Fecha de Nacimiento:</b> {{receta['F-nac']}}
+            <td style="font-size: 75%;" colspan="2">
+              <b>Roles:</b> <code style="font-family: monospace !important;">{{" ".join(receta['Roles'])}}</code>
             </td>
             <td style="width: 150px; text-align: center;" rowspan="1">
               <code style="font-family: monospace !important;font-size: 20px;">{{receta['Puntos']}} puntos</code>

@@ -40,8 +40,11 @@
         <main class="grid"
             data-masonry='{ "itemSelector": ".vertical", "horizontalOrder": false, "gutter": 20, "fitWidth": true, "resize": true}'>
             <fieldset class="milk colors vertical">
-                {{client["Nombre"]}} ({{client["Region"]}}) tiene:
-                <br><b>{{client["Puntos"]}} puntos</b>
+                <div style="border: 1px solid black; text-align: center;">
+                    <img src='{{ url_for("get_upload", path=client["Foto"]) }}' alt="" height="125px">
+                    {{client["Nombre"]}} ({{client["Region"]}})
+                </div>
+                tiene: <b>{{client["Puntos"]}} puntos</b>
                 {% if client["Puntos"] >= 10 %}
                 <label style="background-color: lightcoral; animation: blinker 3s linear infinite;"><br>
                     <div class="f fb fn"><span>Café Gratis<br><small>Usa los puntos</small></span>

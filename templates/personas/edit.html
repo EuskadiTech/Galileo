@@ -30,6 +30,8 @@
           <br />
           <label>Región: <input type="text" name="region" required value="{{receta['Region']}}"></label>
           <br />
+          <label>Foto (URL): <input type="text" name="foto" required value="{{receta['Foto']}}"></label>
+          <br />
           <!--<label>Roles: <input type="text" name="roles[]" required value="{{receta['Roles']}}"></label>
             <br />-->
           <label>Puntos: <input type="number" name="puntos" required value="{{receta['Puntos']}}"></label>
@@ -87,15 +89,15 @@
             <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:cocina"
                   {{"checked" if "cafe:cocina" in receta["Roles"] }}>
                 Pant. Cocina </label></li>
-            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:pagos"
-                  {{"checked" if "cafe:pagos" in receta["Roles"] }}>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:pago"
+                  {{"checked" if "cafe:pago" in receta["Roles"] }}>
                 Pant. Pagos </label></li>
             <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:send"
                   {{"checked" if "cafe:send" in receta["Roles"] }}>
                 Enviar Comanda </label></li>
             <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="cafe:write"
                   {{"checked" if "cafe:write" in receta["Roles"] }}>
-                Editar </label></li>
+                Editar Receta </label></li>
           </ul>
           <b>Comedor</b>
           <ul style="list-style-type: none; padding-left: 15px; margin: 5px 0;">

@@ -2,7 +2,7 @@ from flask import Blueprint, request, render_template, url_for, redirect
 from ..Personas.models import DB_PERSONAS
 import utils
 from .models import DB_COMANDAS, ANILLAS
-from ..Personas.localutils import PersonAuth
+from ..Personas.localutils import PersonAuth, with_auth
 app = Blueprint("Cafe", __name__)
 
 def set_receta(receta):
@@ -15,23 +15,15 @@ def get_receta():
     return conf.get("Receta", "No Disp.")
 
 @app.route("/cafe", methods=["GET"])
-def index():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:read")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("cafe:_module")
+def index(user):
     return render_template(
         "cafe/index.html",
         Receta = get_receta(), USER=user
     )
 @app.route("/cafe/config", methods=["GET", "POST"])
-def config():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:write")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("cafe:write")
+def config(user):
     if request.method == "POST":
         set_receta(request.form["receta"])
         return redirect(url_for("Cafe.index"))
@@ -41,12 +33,8 @@ def config():
     )
 
 @app.route("/cafe/select", methods=["GET", "POST"])
-def select():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:send")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("cafe:send")
+def select(user):
     if request.method == "POST":
         def query(data):
             if data["Codigo"] == str(request.form["code"]):
@@ -59,12 +47,8 @@ def select():
     )
 
 @app.route("/cafe/comanda/<rid>", methods=["GET", "POST"])
-def comanda(rid):
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:send")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("cafe:send")
+def comanda(user, rid):
     if request.method == "POST":
         total = 10
         data = {
@@ -104,12 +88,8 @@ def comanda(rid):
     )
 
 @app.route("/cafe/cocina", methods=["GET", "POST"])
-def cocina():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:cocina")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("cafe:cocina")
+def cocina(user):
     regiones = {}
     def query(data):
         if data["_fase"] == "cocina":
@@ -131,12 +111,8 @@ def cocina():
     )
 
 @app.route("/cafe/pago", methods=["GET", "POST"])
-def pago():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:pago")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("cafe:pago")
+def pago(user):
     regiones = {}
     def query(data):
         if data["_fase"] == "pago":
@@ -158,12 +134,8 @@ def pago():
     )
 
 @app.route("/cafe/historial/<rid>", methods=["GET", "POST"])
-def historial(rid):
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:read")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("cafe:read")
+def historial(user, rid):
     regiones = {}
     def query(data):
         if data["_persona"] == rid:
@@ -183,22 +155,14 @@ def historial(rid):
     )
 
 @app.route("/cafe/updategrp", methods=["GET"])
-def updategrp():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:cocina")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("cafe:cocina")
+def updategrp(user):
     DB_COMANDAS.update_by_id(request.args["f"], {"_grupo": request.args["v"]})
     return redirect(url_for("Cafe.cocina"))
 
 @app.route("/cafe/transfer_fase/<rid>/<ft>/<fc>", methods=["GET"])
-def rdel(rid, ft, fc):
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("cafe:" + fc)
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("cafe:cocina")
+def rdel(user, rid, ft, fc):
     DB_COMANDAS.update_by_id(rid, {"_fase": ft})
     if fc=="pago":
         com = DB_COMANDAS.get_by_id(rid)

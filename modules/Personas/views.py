@@ -9,60 +9,6 @@ from .localutils import PersonAuth, with_auth
 app = Blueprint("Personas", __name__)
 
 
-@app.route("/personas", methods=["GET"])
-@with_auth("personas:read")
-def index(user):
-    return render_template("personas/index.html", personas=DB_PERSONAS.get_all(), USER=user)
-
-@app.route("/personas/print", methods=["GET"])
-@with_auth("personas:read")
-def print(user):
-    return render_template("personas/print.html", recetas=DB_PERSONAS.get_all(), USER=user)
-
-
-@app.route("/personas/new", methods=["GET", "POST"])
-def new():
-    er = True
-    if DB_PERSONAS.get_all() != {}:
-        er = False
-        try:
-            user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-            user.isLoggedIn("personas:write")
-        except Exception as e:
-            return redirect(url_for("Personas.auth_scan", err=e.args))
-    user = {}
-    if request.method == "POST":
-        code = str(randint(100,9999))
-        DB_PERSONAS.add(
-            {
-                "Nombre": request.form.get("nombre", ""),
-                "Roles": request.form.getlist("roles[]"),
-                "Puntos": 0,
-                "F-nac": request.form.get("fecha", ""),
-                "markdown": request.form.get("markdown", ""),
-                "Codigo": code,
-                "PIN": request.form.get("pin", "").upper(),
-                "Region": request.form.get("region", "Sin Aula"),
-                "SC_lastcomanda": {},
-                "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
-            }
-        )
-        if er:
-            return redirect(url_for("Personas.auth_scan", err = "Codigo del usuario creado: " + code))
-        return redirect(url_for("Personas.index"))
-    return render_template("personas/new.html", ANILLAS=ANILLAS, USER=user, err=request.args.get("err"))
-
-@app.route("/personas/scan", methods=["GET", "POST"])
-@with_auth("personas:read")
-def scan(user):
-    if request.method == "POST":
-        def query(data):
-            if data["Codigo"] == str(request.form["code"]):
-                return True
-        keys = list(DB_PERSONAS.get_by_query(query).keys())[0]
-        return redirect(url_for("Personas.persona", rid=keys))
-    return render_template("personas/scan.html", USER=user)
-
 #region Auth
 @app.route("/auth/scan", methods=["GET", "POST"])
 def auth_scan():
@@ -103,6 +49,62 @@ def auth_logout():
 
 #endregion
 
+
+@app.route("/personas", methods=["GET"])
+@with_auth("personas:read")
+def index(user):
+    return render_template("personas/index.html", personas=DB_PERSONAS.get_all(), USER=user)
+
+@app.route("/personas/print", methods=["GET"])
+@with_auth("personas:read")
+def print(user):
+    return render_template("personas/print.html", recetas=DB_PERSONAS.get_all(), USER=user)
+
+
+@app.route("/personas/new", methods=["GET", "POST"])
+def new():
+    er = True
+    if DB_PERSONAS.get_all() != {}:
+        er = False
+        try:
+            user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
+            user.isLoggedIn("personas:write")
+        except Exception as e:
+            return redirect(url_for("Personas.auth_scan", err=e.args))
+    user = {}
+    if request.method == "POST":
+        code = str(randint(100,9999))
+        DB_PERSONAS.add(
+            {
+                "Nombre": request.form.get("nombre", ""),
+                "Roles": request.form.getlist("roles[]"),
+                "Puntos": 0,
+                "F-nac": request.form.get("fecha", ""),
+                "markdown": request.form.get("markdown", ""),
+                "Codigo": code,
+                "PIN": request.form.get("pin", "").upper(),
+                "Region": request.form.get("region", "Sin Aula"),
+                "SC_lastcomanda": {},
+                "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
+                "Foto": request.form.get("foto", "https://naiel.fyi/static/img/unk.jpg"),
+            }
+        )
+        if er:
+            return redirect(url_for("Personas.auth_scan", err = "Codigo del usuario creado: " + code))
+        return redirect(url_for("Personas.index"))
+    return render_template("personas/new.html", ANILLAS=ANILLAS, USER=user, err=request.args.get("err"))
+
+@app.route("/personas/scan", methods=["GET", "POST"])
+@with_auth("personas:read")
+def scan(user):
+    if request.method == "POST":
+        def query(data):
+            if data["Codigo"] == str(request.form["code"]):
+                return True
+        keys = list(DB_PERSONAS.get_by_query(query).keys())[0]
+        return redirect(url_for("Personas.persona", rid=keys))
+    return render_template("personas/scan.html", USER=user)
+
 @app.route("/personas/<rid>", methods=["GET"])
 @with_auth("personas:read")
 def persona(user, rid):
@@ -120,27 +122,31 @@ def persona(user, rid):
 def edit(user, rid):
     receta = DB_PERSONAS.get_by_id(str(rid))
     if request.method == "POST":
-        DB_PERSONAS.update_by_id(
-            str(rid),
-            {
-                "Nombre": request.form.get("nombre", receta["Nombre"]),
-                "Roles": request.form.getlist("roles[]"),
-                "F-nac": request.form.get("fecha", receta["F-nac"]),
-                "Puntos": int(request.form.get("puntos", receta["Puntos"])),
-                "Codigo": request.form.get("codigo", receta["Codigo"]),
-                "markdown": request.form.get("markdown", receta["markdown"]),
-                "PIN": request.form.get("pin", receta["PIN"]).upper(),
-                "Region": request.form.get("region", receta["Region"]).upper(),
-                "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
-            }
-        )
+        try:
+            DB_PERSONAS.update_by_id(
+                str(rid),
+                {
+                    "Nombre": request.form.get("nombre", receta["Nombre"]),
+                    "Roles": request.form.getlist("roles[]"),
+                    "F-nac": request.form.get("fecha", receta["F-nac"]),
+                    "Puntos": int(request.form.get("puntos", receta["Puntos"])),
+                    "Codigo": request.form.get("codigo", receta["Codigo"]),
+                    "markdown": request.form.get("markdown", receta["markdown"]),
+                    "PIN": request.form.get("pin", receta["PIN"]).upper(),
+                    "Region": request.form.get("region", receta["Region"]).upper(),
+                    "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
+                    "Foto":request.form.get("foto", ""),
+                }
+            )
+        except:
+            DB_PERSONAS.add_new_key("Foto", "")
         return redirect(url_for("Personas.index"))
     return render_template("personas/edit.html", receta=receta, rid=rid, ANILLAS=ANILLAS, USER=user)
 
 
 @app.route("/personas/<rid>/del", methods=["GET", "POST"])
-@with_auth("personas:write")
-def rdel(rid):
+@with_auth("personas:delete")
+def rdel(user, rid):
     if request.method == "POST":
         DB_PERSONAS.delete_by_id(str(rid))
         return redirect(url_for("Personas.index"))
