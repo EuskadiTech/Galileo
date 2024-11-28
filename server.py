@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.wrappers import Response
 from os.path import join as path_join
@@ -7,9 +7,10 @@ import sentry_sdk
 import webbrowser
 from launcher import get_local_version
 
+import modules.Personas
+import modules.Personas.localutils
 import utils
 import modules
-
 
 sentry_sdk.init(
     dsn="https://d77090e7896c5eb40bd1375e3e0e9539@o4508296642560000.ingest.de.sentry.io/4508296645443664",
@@ -35,16 +36,9 @@ log = logging.getLogger("werkzeug")
 log.setLevel(logging.CRITICAL)
 log.disabled = True
 
-
 @app.route("/", methods=["GET"])
-def index():
-    if modules.Personas.models.DB_PERSONAS.get_all() == {}:
-        return redirect(url_for("Personas.new", err = "Configura a un Administrador"))
-    try:
-        user = modules.Personas.localutils.PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn()
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@modules.Personas.localutils.with_auth()
+def index(user):
     return render_template("index.html", VERSION = get_local_version(), USER = user)
 
 
@@ -56,6 +50,10 @@ def api__purgecache():
 def status():
     utils.clear_cache()
     return "G-Serv is online."
+
+@app.route("/uploads/<path:path>")
+def get_upload(path):
+    return send_from_directory(path_join(utils.USERDATA_DIR, "uploads"), path)
 
 app.register_blueprint(modules.ComedorBlueprint)
 app.register_blueprint(modules.ResumenDiarioBlueprint)

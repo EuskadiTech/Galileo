@@ -99,6 +99,7 @@ h3 {
 
 .milk {
   width: 4.8cm;
+  overflow-x: hidden;
 }
 
 @keyframes blinker {

@@ -1,6 +1,6 @@
 .DS_Store
 ._*
-
+uploads/
 # ---> Galileo-custom
 db.*.axd
 
