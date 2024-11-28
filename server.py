@@ -53,7 +53,7 @@ def status():
 
 @app.route("/uploads/<path:path>")
 def get_upload(path):
-    return send_from_directory(path_join(utils.USERDATA_DIR, "uploads"), path)
+    return send_from_directory(utils.USERDATA_DIR + "uploads", path)
 
 app.register_blueprint(modules.ComedorBlueprint)
 app.register_blueprint(modules.ResumenDiarioBlueprint)
