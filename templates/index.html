@@ -19,6 +19,7 @@
     <center>
       <h2>¡Hola {{USER.u["Nombre"]}}!</h2>
       <h1>Bienvenidx a Galileo</h1>
+      <h2>Tienes {{USER.u["Puntos"]}} puntos</h2>
       <a class="actbtn di di-exit" href="{{url_for('Personas.auth_logout')}}">Cerrar Sesión</a>
       <br>
       {% if "resumendiario:_module" in USER.u["Roles"] %}
@@ -28,10 +29,17 @@
       </a>
       {% endif %}
       {% if "cafe:_module" in USER.u["Roles"] %}
-      <a class="appbtn di di-coffebeans" href="{{url_for('Cafe.index')}}">
-        <b>SuperCafé</b>
-        Programa para la gestión de las comandas.
-      </a>
+        {% if "cafe:cocina" in USER.u["Roles"] or "cafe:pago" in USER.u["Roles"] %}
+        <a class="appbtn di di-coffebeans" href="{{url_for('Cafe.index')}}">
+          <b>SuperCafé</b>
+          Programa para la gestión de las comandas.
+        </a>
+        {% else %}
+        <a class="appbtn di di-coffebeans" href="{{url_for('Cafe.comanda', rid=USER.rid)}}">
+          <b>Enviar Comanda</b>
+          Enviar una comanda
+        </a>
+        {% endif %}
       {% endif %}
       {% if "comedor:_module" in USER.u["Roles"] %}
       <a class="appbtn di di-cook" href="{{url_for('Comedor.index')}}">
