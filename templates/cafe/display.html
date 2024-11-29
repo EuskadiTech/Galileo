@@ -99,7 +99,7 @@
           {{personas[comanda[1]['_persona']]['Nombre']}} ({{personas[comanda[1]['_persona']]['Region']}})
         </h3>-->
         <div style="border: 1px solid black; text-align: center;">
-            <img src='{{ url_for("get_upload", fspath=personas[comanda[1]["_persona"]]["Foto"]) }}' alt="" height="75px"><br>
+            <img src='{{ personas[comanda[1]["_persona"]]["Foto"] }}' alt="" height="75px"><br>
             {{personas[comanda[1]['_persona']]["Nombre"]}} ({{personas[comanda[1]['_persona']]["Region"]}})
         </div>
         {% if fase == "Cocina" %}
