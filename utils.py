@@ -180,7 +180,7 @@ class Tunnel:
         config = get_config()
         self.thread = Thread(target=self.loop)
         self.thread.start()
-        return "https://rp.tech.eus/open/" + config["Clave Proxy"]
+        return "https://rp.tech.eus/rd/" + config["Clave Proxy"]
     
     def stop(self):
         self.TRIGGER.set()
