@@ -10,6 +10,7 @@ from launcher import get_local_version
 import modules.Personas
 import modules.Personas.localutils
 import utils
+from utils import USERDATA_DIR
 import modules
 
 sentry_sdk.init(
@@ -53,8 +54,9 @@ def status():
 
 @app.route("/uploads/<fspath>")
 def get_upload(fspath):
-    print("/uploads -", fspath)
-    return send_from_directory(utils.USERDATA_DIR + "uploads", fspath)
+    print("/uploads/" + fspath)
+    print("FS " + USERDATA_DIR + "uploads" + "/" + fspath)
+    return send_from_directory(USERDATA_DIR + "uploads", fspath)
 
 app.register_blueprint(modules.ComedorBlueprint)
 app.register_blueprint(modules.ResumenDiarioBlueprint)
