@@ -51,9 +51,10 @@ def status():
     utils.clear_cache()
     return "G-Serv is online."
 
-@app.route("/uploads/<path:path>")
-def get_upload(path):
-    return send_from_directory(utils.USERDATA_DIR + "uploads", path)
+@app.route("/uploads/<fspath>")
+def get_upload(fspath):
+    print("/uploads -", fspath)
+    return send_from_directory(utils.USERDATA_DIR + "uploads", fspath)
 
 app.register_blueprint(modules.ComedorBlueprint)
 app.register_blueprint(modules.ResumenDiarioBlueprint)
