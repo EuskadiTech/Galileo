@@ -2,27 +2,19 @@ from flask import Blueprint, request, send_file, render_template, url_for, redir
 from io import BytesIO
 from markdown import markdown
 from .models import DB_RECETAS
-from ..Personas.localutils import PersonAuth
+from ..Personas.localutils import PersonAuth, with_auth
 app = Blueprint("Recetas", __name__)
 
 
 @app.route("/recetas", methods=["GET"])
-def index():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("recetas:read")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("recetas:_module")
+def index(user):
     return render_template("recetas/index.html", recetas=DB_RECETAS.get_all(), USER=user)
 
 
 @app.route("/recetas/new", methods=["GET", "POST"])
-def new():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("recetas:write")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("recetas:write")
+def new(user):
     if request.method == "POST":
         DB_RECETAS.add(
             {
@@ -38,12 +30,8 @@ def new():
 
 
 @app.route("/recetas/<rid>", methods=["GET"])
-def receta(rid):
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("recetas:read")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("recetas:read")
+def receta(user, rid):
     receta = DB_RECETAS.get_by_id(str(rid))
     return render_template(
         "recetas/receta.html",
@@ -55,12 +43,8 @@ def receta(rid):
 
 
 @app.route("/recetas/<rid>/edit", methods=["GET", "POST"])
-def edit(rid):
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("recetas:write")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("recetas:write")
+def edit(user, rid):
     receta = DB_RECETAS.get_by_id(str(rid))
     if request.method == "POST":
         DB_RECETAS.update_by_id(
@@ -78,12 +62,8 @@ def edit(rid):
 
 
 @app.route("/recetas/<rid>/del", methods=["GET", "POST"])
-def receta__del(rid):
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("recetas:delete")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("recetas:delete")
+def receta__del(user, rid):
     if request.method == "POST":
         DB_RECETAS.delete_by_id(str(rid))
         return redirect(url_for("Recetas.index"))

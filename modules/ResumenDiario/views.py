@@ -3,12 +3,13 @@ from utils import DateParser, get_config, cached_request
 from random import choice
 from ..Comedor.localutils import fromDay_comedor
 from ..Cafe.views import get_receta
-from ..Personas.localutils import PersonAuth
+from ..Personas.localutils import PersonAuth, with_auth
 app = Blueprint("ResumenDiario", __name__)
 
 
 @app.route("/resumendiario", methods=["GET"])
-def index():
+@with_auth("resumendiario:_module")
+def index(user):
     today = DateParser()
     data = {
         "Print": False,

@@ -12,18 +12,14 @@ from .localutils import (
     fromDay_comedor,
 )
 from utils import get_config
-from ..Personas.localutils import PersonAuth
+from ..Personas.localutils import PersonAuth, with_auth
 
 app = Blueprint("Comedor", __name__)
 
 
 @app.route("/comedor", methods=["GET"])
-def index():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("comedor:read")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("comedor:read")
+def index(user):
     comedor = list_comedor()
     return render_template(
         "comedor/index.html",
@@ -33,32 +29,20 @@ def index():
 
 
 @app.route("/comedor/loadMenuModal", methods=["GET"])
-def loadMenuModal():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("comedor:write")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("comedor:write")
+def loadMenuModal(user):
     return render_template("comedor/loadMenuModal.html", USER=user)
 
 
 @app.route("/comedor/request", methods=["GET"])
-def centralreq():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("comedor:write")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("comedor:write")
+def centralreq(user):
     return render_template("comedor/request.html", USER=user)
 
 
 @app.route("/comedor/byDayModal", methods=["GET"])
-def byDayModal():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("comedor:read")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("comedor:read")
+def byDayModal(user):
     return render_template(
         "comedor/byDayModal.html",
         menus=list_comedor_menus(),
@@ -67,24 +51,16 @@ def byDayModal():
 
 
 @app.route("/comedor/getMenu")
-def getMenu():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("comedor:read")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("comedor:read")
+def getMenu(user):
     day = DateParser(request.args.get("day")).pretty_dayCode()
     results = fromDay_comedor(day=day, menu=request.args.get("menu", "*"))
     return render_template("comedor/getMenu.html", results=results, day=day, USER=user)
 
 
 @app.route("/api/comedor/loadMenu", methods=["POST"])
-def api__loadMenu():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("comedor:write")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
+@with_auth("comedor:write")
+def api__loadMenu(user):
     f = request.files["file"]
     co = f.read().decode("utf-8")
     load_comedor(co)
@@ -92,12 +68,8 @@ def api__loadMenu():
 
 
 @app.route("/api/comedor/reqMenu", methods=["POST"])
+@with_auth("comedor:write")
 def api__reqMenu():
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("comedor:write")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
     config = get_config()
     pid = config["Clave Proxy"]
     f = request.files["file"]
@@ -112,23 +84,15 @@ def api__reqMenu():
 
 
 @app.route("/api/comedor/deleteMenu/<mid>")
+@with_auth("comedor:delete")
 def api__deleteMenu(mid):
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("comedor:delete")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
     DB_COMEDOR.delete_by_id(str(mid))
     return redirect(url_for("Comedor.index"))
 
 
 @app.route("/api/comedor/downloadMenu/<mid>")
+@with_auth("comedor:read")
 def api__downloadMenu(mid):
-    try:
-        user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-        user.isLoggedIn("comedor:read")
-    except Exception as e:
-        return redirect(url_for("Personas.auth_scan", err=e.args))
     bio = BytesIO()
     menu = DB_COMEDOR.get_by_id(str(mid))
     bio.write(menu["source_plain"].encode("utf-8"))

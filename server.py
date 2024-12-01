@@ -63,6 +63,7 @@ app.register_blueprint(modules.ResumenDiarioBlueprint)
 app.register_blueprint(modules.RecetasBlueprint)
 app.register_blueprint(modules.PersonasBlueprint)
 app.register_blueprint(modules.CafeBlueprint)
+app.register_blueprint(modules.AdminBlueprint)
 
 if __name__ == "__main__":
     # try:

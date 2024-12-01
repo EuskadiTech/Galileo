@@ -44,7 +44,7 @@ def with_auth(role: str = ""):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if DB_PERSONAS.get_all() == {}:
-                return redirect(url_for("Personas.new", err = "Configura a un Administrador"))
+                return redirect(url_for("Admin.setup__adminaccount", err = "Configura a un Administrador"))
             try:
                 user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
                 user.isLoggedIn(role)
