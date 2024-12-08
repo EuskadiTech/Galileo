@@ -4,7 +4,7 @@ Un programa todo en uno.
 ## Instalación 
 ### Docker
 ```bash
-docker run -p 8129:8129 -v ./GalileoDat:/data ghcr.io/naielv/galileo:main
+docker run -d --restart=always -p 8129:8129 -v ./GalileoDat:/data ghcr.io/euskaditech/galileo:main
 ```
 ## Configuración
 Ejemplo:
