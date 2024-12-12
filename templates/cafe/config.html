@@ -1,28 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='icons/style.css')}}"
-    />
-    <title>Galileo</title>
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='vendor/font-awesome.min.css')}}"
-    />
-  </head>
+{% extends "_layout.html" %}
 
-  <body>
-    {% include 'loader.html' %}
-
-    <header style="background-color: #000; color: #fff">
-      <h3>Galileo - SuperCafé</h3>
-    </header>
-    <main>
+{% block container %}
       <center>
         <h2>Establecer configuración</h2>
         <form method="post">
@@ -32,33 +10,13 @@
             <br>
             <input
               type="submit"
-              class="actbtn di di-save"
-              value="Buscar"
+              class="btn btn-primary"
+              value="Guardar"
             />
-            <a class="actbtn di di-exit" href="{{url_for('Cafe.index')}}"
+            <a class="btn" href="{{url_for('Cafe.index')}}"
               >Salir</a
             >
           </fieldset>
         </form>
       </center>
-    </main>
-    <!-- <script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
-    <script>
-      var html5QrcodeScanner = new Html5QrcodeScanner(
-          "reader", { fps: 10, qrbox: 250 });
-              
-      function onScanSuccess(decodedText, decodedResult) {
-          // Handle on success condition with the decoded text or result.
-          console.log(`Scan result: ${decodedText}`, decodedResult);
-          // ...
-          html5QrcodeScanner.clear();
-          document.getElementById("reader_output").value = decodedText
-          // ^ this will stop the scanner (video feed) and clear the scan area.
-          document.querySelector("form").submit();
-
-      }
-
-      html5QrcodeScanner.render(onScanSuccess);
-    </script> -->
-  </body>
-</html>
+{% endblock %}

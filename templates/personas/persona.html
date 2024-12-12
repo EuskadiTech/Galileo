@@ -1,24 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends "_layout.html" %}
 
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width,initial-scale=1" name="viewport" />
-  <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
-  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-  <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
-  <title>Galileo</title>
-  <link rel="stylesheet" href="{{url_for('static', filename='vendor/simplemde.min.css')}}" />
-  <link rel="stylesheet" href="{{url_for('static', filename='vendor/font-awesome.min.css')}}" />
-</head>
-
-<body>
-  {% include 'loader.html' %}
-
-  <header class="nop" style="background-color: #000; color: #fff">
-    <h3>Galileo - Personas</h3>
-  </header>
-  <main>
+{% block container %}
     <center>
       <h2 class="nop">Tarjeta Identificativa de {{receta["Nombre"]}}</h2>
         <table border style="width: calc(100% - 30px); max-width: 30rem; text-align: left;">
@@ -65,7 +47,4 @@
         <a class="actbtn di di-edit" href="{{url_for('Cafe.historial', rid=rid)}}">Historial SuperCafé</a>
       </div>
     </center>
-  </main>
-</body>
-
-</html>
+{% endblock %}

@@ -1,18 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends "_layout.html" %}
 
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width,initial-scale=1" name="viewport" />
-  <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
-  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-  <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
-  <title>Galileo</title>
-</head>
-
-<body>
-  {% include 'loader.html' %}
-  <main>
+{% block container %}
     <fieldset>
       <legend>{{receta["Nombre"]}} - {{receta["YYYY-MM-DD"]}}</legend>
       {{content | safe }}
@@ -22,7 +10,4 @@
       <a class="actbtn di di-edit" href="{{url_for('Recetas.edit', rid=rid)}}">Editar</a>
       <a class="actbtn di di-printer2" onclick="print()">Imprimir</a>
     </center>
-  </main>
-</body>
-
-</html>
+{% endblock %}

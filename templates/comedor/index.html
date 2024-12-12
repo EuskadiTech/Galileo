@@ -1,41 +1,24 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='icons/style.css')}}"
-    />
-    <title>Galileo</title>
-  </head>
+{% extends "_layout.html" %}
 
-  <body>
-    {% include 'loader.html' %}
-    <header style="background-color: #000; color: #fff">
-      <h3>Galileo - Comedor</h3>
-    </header>
-    <main>
+{% block container %}
       <center>
         <h2>Menús descargados en el servidor</h2>
-        <a class="actbtn di di-exit" href="{{url_for('index')}}">Salir</a>
+        <a class="btn" href="{{url_for('index')}}">Salir</a>
         <a
-          class="actbtn di di-mail_earth"
+          class="btn btn-primary"
           href="{{url_for('Comedor.centralreq')}}"
           >Solicitar menú</a
         >
         <a
-          class="actbtn di di-calendar"
+          class="btn btn-primary"
           href="{{url_for('Comedor.byDayModal')}}"
           >Ver menú</a
         >
-        <a class="actbtn di di-cook" href="{{url_for('Comedor.getMenu')}}"
+        <a class="btn btn-primary" href="{{url_for('Comedor.getMenu')}}"
           >Menú de hoy</a
         >
         <a
-          class="actbtn di di-datainto"
+          class="btn btn-primary"
           href="{{url_for('Comedor.loadMenuModal')}}"
           >Importar Menú</a
         >
@@ -72,6 +55,4 @@
           </tbody>
         </table>
       </center>
-    </main>
-  </body>
-</html>
+{% endblock %}

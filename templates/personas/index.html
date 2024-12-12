@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends "_layout.html" %}
 
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width,initial-scale=1" name="viewport" />
-  <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
-  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-  <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
-  <title>Galileo</title>
-</head>
-
-<body>
-  {% include 'loader.html' %}
-  <header style="background-color: #000; color: #fff">
-    <h3>Galileo - Personas</h3>
-  </header>
-  <main>
+{% block container %}
     <center>
       <h1>Listado de Personas</h1>
       <a class="actbtn di di-exit" href="{{url_for('index')}}">Salir</a>
@@ -46,7 +31,4 @@
         </tbody>
       </table>
     </center>
-  </main>
-</body>
-
-</html>
+{% endblock %}
