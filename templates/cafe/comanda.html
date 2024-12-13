@@ -1,270 +1,291 @@
-<!doctype html>
-<html>
+{% extends "_layout.html" %}
 
-<head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-    <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
-    <title>Galileo</title>
-    <!-- <link rel="stylesheet" href="{{url_for('static', filename='vendor/font-awesome.min.css')}}" /> -->
-</head>
+{% block container %}
+<style>
+    label {
+        background-color: white;
+        color: black;
+        border: 1px solid black;
+        max-width: 15rem;
+        height: 60px;
+        padding: 5px;
+        border-radius: 15px;
+    }
 
-<body>
-    {% include 'loader.html' %}
-    <script>
-        function chAnilla(l, o) {
-            console.log(o), document.getElementById(l).style = "background-color: " + o.split(";")[1] + "; color: " + o.split(";")[2]
+    label span {
+        float: left;
+        text-shadow: none;
+    }
+
+    label input {
+        top: 0 !important;
+        margin-top: 0 !important;
+        position: relative;
+        float: right;
+        height: 32px !important;
+        width: 32px !important;
+    }
+
+    label:has(input:disabled) {
+        background-image: repeating-linear-gradient(-45deg, rgba(0, 0, 0, 1.25), rgba(0, 0, 0, 1.25) 1px, transparent 1px, transparent 6px);
+
+
+    }
+
+    label img {
+        float: left;
+        max-width: 64px;
+        width: auto;
+        max-height: 64px;
+        height: 100%;
+    }
+
+    .ico {
+        line-height: 64px;
+        font-size: 64px;
+    }
+
+    .smallico {
+        line-height: 32px !important;
+        font-size: 32px !important;
+    }
+
+    .redtext {
+        color: red;
+    }
+
+    input,
+    select,
+    textarea {
+        color: black;
+    }
+</style>
+<script>
+    function chAnilla(l, o) {
+        console.log(o), document.getElementById(l).style = "background-color: " + o.split(";")[1] + "; color: " + o.split(";")[2]
+    }
+    function fsc(mode, id) {
+        var el = document.getElementById(id);
+        var eld = document.getElementById(id + "_default");
+        switch (mode) {
+            case "show":
+                el.style.display = "block"
+                break;
+            case "hide":
+                el.style.display = "none"
+                eld.checked = true
+                break;
         }
-        function fsc(mode, id) {
-            var el = document.getElementById(id);
-            var eld = document.getElementById(id + "_default");
-            switch (mode) {
-                case "show":
-                    el.style.display = "block"
-                    break;
-                case "hide":
-                    el.style.display = "none"
-                    eld.checked = true
-                    break;
-            }
-        }
-    </script>
-    <form method="post">
-        <header style="background-color:#000;color:#fff">
-            <h3>Comanda del Cafe -
-                {{client["Nombre"]}} ({{client["Region"]}})
-            </h3>
-        </header>
-        <main class="grid"
-            data-masonry='{ "itemSelector": ".vertical", "horizontalOrder": false, "gutter": 20, "fitWidth": true, "resize": true}'>
-            <fieldset class="milk colors vertical">
-                <div style="border: 1px solid black; text-align: center;">
-                    <img src='{{ client["Foto"] }}' alt="" height="125px"><br>
-                    {{client["Nombre"]}} ({{client["Region"]}})
+    }
+</script>
+<form method="post">
+    <fieldset class="milk colors vertical">
+        <label style="background-color: {{client['SC_Anilla'].split(';')[1]}};color: transparent;">
+            <img src='{{ client["Foto"] }}' style="height: 64px !important;">
+            <div class="f fb fn"><span
+                    style="background-color:  {{client['SC_Anilla'].split(';')[1]}}; display: block; filter: invert(100%); -moz-background-clip: text; -webkit-background-clip: text;">
+                    <b>{{client["Nombre"]}} ({{client["Region"]}})</b>
+                    <br>
+                    {{client['SC_Anilla'].split(';')[0]}}
+                </span>
+                <div
+                    style="color: #000 !important; background-color: white;text-align: center;font-size: 22.5px; word-wrap: break-word;word-break: break-all;padding: 0 !important;height: 55px !important;width: 45px !important; float: right; resize: none; text-shadow: none; border: 1px solid black;">
+                    <small
+                        style="font-size: 10px;">Punto(s)</small><br>{{client["Puntos"]}}
                 </div>
-                tiene: <b>{{client["Puntos"]}} puntos</b>
-                {% if client["Puntos"] >= 10 %}
-                <label style="background-color: lightcoral; animation: blinker 3s linear infinite;"><br>
-                    <div class="f fb fn"><span>Café Gratis<br><small>Usa los puntos</small></span>
-                    </div>
-                </label>
-                {% endif %}
-                <label style="background-color: greenyellow; color: black;"><br>
-                    <div class="f fb"><span>
-                            Usar efectivo
-                            <br><small>Se cobra despues</small>
-                        </span><input name="MetodoDePago" type="radio" value="Efectivo" {{"checked" if client["Puntos"]<
-                            10}}>
-                    </div>
-                </label>
-                <label style="background-color: gold; color: black;"><br>
-                    <div class="f fb"><span>
-                            Usar puntos
-                            <br><small>10 puntos = un cafe</small>
-                        </span><input name="MetodoDePago" type="radio" value="Puntos" {{"checked" if client["Puntos"]>=
-                        10}} {{"disabled" if client["Puntos"] < 10}}>
-                    </div>
-                </label>
-                <label style="background-color: red; color: white;"><br>
-                    <div class="f fb"><span>
-                            Poner en deuda
-                            <br><small>No Disponible</small>
-                        </span><input name="MetodoDePago" type="radio" value="Deuda" disabled>
-                    </div>
-                </label>
-                <br><br>
-                <hr>
-                <b>Anilla:</b>
-                <label style="background-color: {{client['SC_Anilla'].split(';')[1]}};color: transparent;"><br>
-                    <div class="f fb fn"><span
-                            style="background-color:  {{client['SC_Anilla'].split(';')[1]}}; display: block; filter: invert(100%); -moz-background-clip: text; -webkit-background-clip: text;">
-                            {{client['SC_Anilla'].split(';')[0]}}
-                        </span>
-                    </div>
-                </label>
-            </fieldset>
-            <fieldset class="milk vertical">
-                <summary>Selección</summary>
-                <label><img height="36px"
-                        src="https://globalsymbols.com/uploads/production/image/imagefile/15368/17_15369_a786017e-af12-491f-846d-0ab3fa955aea.png"><br>
-                    <div class="f"><span>Cafe</span><input name="Tipo" type="radio"
-                            onclick="fsc('show', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('hide', 'fs_infus')"
-                            value="Cafe">
-                    </div>
-                </label>
-                <label><img height="36px"
-                        src="https://globalsymbols.com/uploads/production/image/imagefile/15368/17_15369_a786017e-af12-491f-846d-0ab3fa955aea.png"><br>
-                    <div class="f"><span>C. Soluble</span><input name="Tipo" type="radio"
-                            onclick="fsc('show', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('hide', 'fs_infus')"
-                            value="Cafe Soluble">
-                    </div>
-                </label>
-                <label><img height="36px"
-                        src="https://brandemia.org/sites/default/files/inline/images/colcacao_pack_despues3.jpg"><span
-                        class="ico smallico redtext"><sup>*</sup></span><br>
-                    <div class="f"><span>Colacao</span><input name="Tipo" type="radio"
-                            onclick="fsc('hide', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('hide', 'fs_infus')"
-                            value="Colacao"></div>
-                </label><label><img height="36px"
-                        src="https://globalsymbols.com/uploads/production/image/imagefile/5908/13_5908_86fe156f-7090-4208-8ef7-4870f87bdbec.svg"><br>
-                    <div class="f"><span>Infusión</span><input name="Tipo" type="radio"
-                            onclick="fsc('hide', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('show', 'fs_infus')"
-                            value="Infusión">
-                    </div>
-                </label>
-                <label><i class="ico fas fa-ban redtext"></i><br>
-                    <div class="f"><span>Sin Selección</span><input name="Tipo" type="radio"
-                            onclick="fsc('hide', 'fs_cafeina');fsc('hide', 'fs_size');fsc('hide', 'fs_milk');fsc('hide', 'fs_sugar');fsc('hide', 'fs_temp');fsc('hide', 'fs_infus')"
-                            value="">
-                    </div>
-                </label>
-            </fieldset>
-            <fieldset class="milk vertical" id="fs_cafeina">
-                <summary>Cafeina</summary>
-                {% if "cafe:cafeina" in client["Roles"] %}
-                <label><span class="ico redtext">C<sup>*</sup></span><br>
-                    <div class="f"><span>Con Cafeina</span><input name="Cafeina" type="radio" value="Con Cafeina">
-                    </div>
-                </label>
-                {% else %}
-                <label style="background-color: lightcoral;"><br>
-                    <div class="f fb fn"><span><small>Sin Autorización</small><br>Cafeina</span>
-                    </div>
-                </label>
-                {% endif %}
-                <label><span class="ico" style="color: blue;">D</span><br>
-                    <div class="f"><span>Descafeinado</span><input name="Cafeina" type="radio" value="Descafeinado">
-                    </div>
-                </label>
-                <input name="Cafeina" type="radio" value="Sin Elegir" id="fs_cafeina_default" style="display: none;">
-            </fieldset>
-            <fieldset class="milk vertical">
-                <summary>Complementos</summary>
-                <label id="receta"><img height="36px"
-                        src="https://globalsymbols.com/uploads/production/image/imagefile/15428/17_15429_4eb0ef42-0045-4019-ab20-a76fd2d43cec.png"
-                        width="36px"><br>
-                    <div class="f"><span>Receta<br><small class="nop" id="receta_name">
-                                {{Receta}}
-                            </small></span><input name="Complementos" type="checkbox" value="Receta del dia"></div>
-                </label>
-                <br>
-            </fieldset>
-            <fieldset class="milk vertical" id="fs_size">
-                <summary>Tamaño</summary><label><img height="36px"
-                        src="{{url_for('static', filename='cafe-ico/tamano-grande.png')}}"><br>
-                    <div class="f"><span>Grande</span><input name="Tama_o" type="radio" value="Grande"></div>
-                </label><label><img height="36px"
-                        src="{{url_for('static', filename='cafe-ico/tamano-pequeno.png')}}"><br>
-                    <div class="f"><span>Pequeño</span><input name="Tama_o" type="radio" value="Pequena"></div>
-                </label>
-                <input name="Tama_o" id="fs_size_default" type="radio" value="Sin Elegir" style="display: none;">
-            </fieldset>
-            <fieldset class="milk vertical" id="fs_milk">
-                <summary>Leche</summary>
-                {% if "cafe:nolact" in client["Roles"] %}
-                <label
-                    style="background-color: rgb(255, 0, 0); color: white; animation: blinker 1s linear infinite;"><br>
-                    <div class="f fb fn"><span><small>Alerta de Intolerancia</small><br>No Lactosa</span>
-                    </div>
-                </label>
-                {% else %}
-                <label><img height="36px" src="{{url_for('static', filename='cafe-ico/leche-vaca.png')}}"><br>
-                    <div class="f"><span>De vaca</span><input name="Leche" type="radio" value="Leche de vaca"></div>
-                </label><label><img height="36px" src="{{url_for('static', filename='cafe-ico/leche-avena.png')}}"><br>
-                    <div class="f"><span>Vegetal</span><input name="Leche" type="radio" value="Leche Vegetal"></div>
+            </div>
+        </label>
 
-                    {% endif %}
-                </label><label><img height="36px"
-                        src="{{url_for('static', filename='cafe-ico/leche-sinlactosa.png')}}"><br>
-                    <div class="f"><span>Sin Lactosa</span><input name="Leche" type="radio" value="Leche Sin Lactosa">
-                    </div>
-                </label><label><img height="36px" src="{{url_for('static', filename='cafe-ico/leche-agua.png')}}"><br>
-                    <div class="f"><span>Agua</span><input name="Leche" type="radio" value="Agua">
-                    </div>
-                </label>
-                <hr class="dotted"><label><i class="ico fa-solid fa-ban" style="color:red"></i><br>
-                    <div class="f"><span>Sin Leche</span><input type="radio" name="Leche" id="fs_milk_default"
-                            value="Sin Leche" id="cbox1">
-                    </div>
-                </label><br>
-            </fieldset>
-            <fieldset class="milk vertical" id="fs_temp">
-                <summary>Temperatura</summary><label><img height="36px"
-                        src="{{url_for('static', filename='cafe-ico/temperatura-frio.png')}}"><br>
-                    <div class="f"><span>Frio</span><input name="Temperatura" type="radio" value="Fria"></div>
-                </label><label><img height="36px"
-                        src="{{url_for('static', filename='cafe-ico/temperatura-templado.png')}}"><br>
-                    <div class="f"><span>Templado</span><input name="Temperatura" type="radio" value="Templada"></div>
-                </label><label><img height="36px"
-                        src="{{url_for('static', filename='cafe-ico/temperatura-caliente.png')}}"><br>
-                    <div class="f"><span>Caliente</span><input name="Temperatura" type="radio" value="Caliente"></div>
-                </label><br>
-                <input name="Temperatura" id="fs_temp_default" type="radio" value="Sin Elegir" style="display: none;">
-            </fieldset>
+        {% if client["Puntos"] >= 10 %}
+        <label style="background-color: lightcoral; animation: blinker 3s linear infinite;">
+            <div class="f fb fn"><span>Café Gratis<br><small>Usa los puntos</small></span>
+            </div>
+        </label>
+        {% endif %}
+        <label style="background-color: greenyellow; color: black;">
+            <div class="f fb"><span>
+                    Usar efectivo
+                    <br><small>Se cobra despues</small>
+                </span><input name="MetodoDePago" type="radio" value="Efectivo" {{"checked" if client["Puntos"]< 10}}>
+            </div>
+        </label>
+        <label style="background-color: gold; color: black;">
+            <div class="f fb"><span>
+                    Usar puntos
+                    <br><small>10 puntos = un cafe</small>
+                </span><input name="MetodoDePago" type="radio" value="Puntos" {{"checked" if client["Puntos"]>=
+                10}} {{"disabled" if client["Puntos"] < 10}}>
+            </div>
+        </label>
+        <label style="background-color: red; color: white;">
+            <div class="f fb"><span>
+                    Poner en deuda
+                    <br><small>No Disponible</small>
+                </span><input name="MetodoDePago" type="radio" value="Deuda" disabled>
+            </div>
+        </label>
+    </fieldset>
+    <fieldset class="milk vertical">
+        <summary>Selección</summary>
+        <label><img
+                src="https://globalsymbols.com/uploads/production/image/imagefile/15368/17_15369_a786017e-af12-491f-846d-0ab3fa955aea.png">
+            <div class="f"><span>Cafe</span><input name="Tipo" type="radio"
+                    onclick="fsc('show', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('hide', 'fs_infus')"
+                    value="Cafe">
+            </div>
+        </label>
+        <label><img
+                src="https://globalsymbols.com/uploads/production/image/imagefile/15368/17_15369_a786017e-af12-491f-846d-0ab3fa955aea.png">
+            <div class="f"><span>C. Soluble</span><input name="Tipo" type="radio"
+                    onclick="fsc('show', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('hide', 'fs_infus')"
+                    value="Cafe Soluble">
+            </div>
+        </label>
+        <label><img src="https://brandemia.org/sites/default/files/inline/images/colcacao_pack_despues3.jpg">
+            <div class="f"><span>Colacao</span><input name="Tipo" type="radio"
+                    onclick="fsc('hide', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('hide', 'fs_infus')"
+                    value="Colacao"></div>
+        </label><label><img
+                src="https://globalsymbols.com/uploads/production/image/imagefile/5908/13_5908_86fe156f-7090-4208-8ef7-4870f87bdbec.svg">
+            <div class="f"><span>Infusión</span><input name="Tipo" type="radio"
+                    onclick="fsc('hide', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('show', 'fs_infus')"
+                    value="Infusión">
+            </div>
+        </label>
+        <label><i class="ico fas fa-ban redtext"></i>
+            <div class="f"><span>Sin Selección</span><input name="Tipo" type="radio"
+                    onclick="fsc('hide', 'fs_cafeina');fsc('hide', 'fs_size');fsc('hide', 'fs_milk');fsc('hide', 'fs_sugar');fsc('hide', 'fs_temp');fsc('hide', 'fs_infus')"
+                    value="">
+            </div>
+        </label>
+    </fieldset>
+    <fieldset class="milk vertical" id="fs_cafeina">
+        <summary>Cafeina</summary>
+        {% if "cafe:cafeina" in client["Roles"] %}
+        <label><span class="ico redtext">C<sub>*</sub></span>
+            <div class="f"><span>Con Cafeina</span><input name="Cafeina" type="radio" value="Con Cafeina">
+            </div>
+        </label>
+        {% else %}
+        <label style="background-color: lightcoral;">
+            <div class="f fb fn"><span><small>Sin Autorización</small>Cafeina</span>
+            </div>
+        </label>
+        {% endif %}
+        <label><span class="ico" style="color: blue;">D</span>
+            <div class="f"><span>Descafeinado</span><input name="Cafeina" type="radio" value="Descafeinado">
+            </div>
+        </label>
+        <input name="Cafeina" type="radio" value="Sin Elegir" id="fs_cafeina_default" style="display: none;">
+    </fieldset>
+    <fieldset class="milk vertical">
+        <summary>Complementos</summary>
+        <label id="receta"><img
+                src="https://globalsymbols.com/uploads/production/image/imagefile/15428/17_15429_4eb0ef42-0045-4019-ab20-a76fd2d43cec.png"
+                width="36px">
+            <div class="f"><span>Receta<br><small class="nop" id="receta_name">
+                        {{Receta}}
+                    </small></span><input name="Complementos" type="checkbox" value="Receta del dia"></div>
+        </label>
+        <br>
+    </fieldset>
+    <fieldset class="milk vertical" id="fs_size">
+        <summary>Tamaño</summary><label><img src="{{url_for('static', filename='cafe-ico/tamano-grande.png')}}">
+            <div class="f"><span>Grande</span><input name="Tama_o" type="radio" value="Grande"></div>
+        </label><label><img src="{{url_for('static', filename='cafe-ico/tamano-pequeno.png')}}">
+            <div class="f"><span>Pequeño</span><input name="Tama_o" type="radio" value="Pequena"></div>
+        </label>
+        <input name="Tama_o" id="fs_size_default" type="radio" value="Sin Elegir" style="display: none;">
+    </fieldset>
+    <fieldset class="milk vertical" id="fs_milk">
+        <summary>Leche</summary>
+        {% if "cafe:nolact" in client["Roles"] %}
+        <label style="background-color: rgb(255, 0, 0); color: white; animation: blinker 1s linear infinite;">
+            <div class="f fb fn"><span><small>Alerta de Intolerancia</small><br>No Lactosa</span>
+            </div>
+        </label>
+        {% else %}
+        <label><img src="{{url_for('static', filename='cafe-ico/leche-vaca.png')}}">
+            <div class="f"><span>De vaca</span><input name="Leche" type="radio" value="Leche de vaca"></div>
+        </label><label><img src="{{url_for('static', filename='cafe-ico/leche-avena.png')}}">
+            <div class="f"><span>Vegetal</span><input name="Leche" type="radio" value="Leche Vegetal"></div>
 
-            <fieldset class="milk vertical" id="fs_sugar">
-                <summary>Endulzantes</summary>
-                <label><img height="36px" src="{{url_for('static', filename='cafe-ico/extra-azucarblanco.png')}}"><br>
-                    <div class="f"><span>Azucar Blanco</span><input name="Endulzantes" type="radio"
-                            value="Azucar Blanco">
-                    </div>
-                </label>
-                <label><img height="36px" src="{{url_for('static', filename='cafe-ico/extra-azucarmoreno.png')}}"><br>
-                    <div class="f"><span>Azucar Moreno</span><input name="Endulzantes" type="radio"
-                            value="Azucar Moreno">
-                    </div>
-                </label><label><img height="36px"
-                        src="{{url_for('static', filename='cafe-ico/extra-edulcorante.png')}}"><br>
-                    <div class="f"><span>Edulcorante</span><input name="Endulzantes" type="radio" value="Edulcorante">
-                    </div>
-                </label><label><img height="36px" src="{{url_for('static', filename='cafe-ico/extra-stevia.png')}}"><br>
-                    <div class="f"><span>Stevia</span><input name="Endulzantes" type="radio" value="Stevia"></div>
-                </label><label><img height="36px"
-                        src="{{url_for('static', filename='cafe-ico/extra-stevia-l.jpg')}}"><br>
-                    <div class="f"><span>Stevia Liquido</span><input name="Endulzantes" type="radio"
-                            value="Stevia Liquido">
-                    </div>
-                </label>
-                <label><i class="ico fas fa-ban" style="color: red"></i>
-                    <div class="f"><span>Sin Complemento</span><input name="Endulzantes" type="radio" value=""
-                            id="fs_sugar_default">
-                    </div>
-                </label>
-                </label><label><i class="ico" style="color: red">x2</i><br>
-                    <div class="f"><span>Doble</span><input name="Complementos" type="checkbox"
-                            value="Doble Endulzante"></div>
-                </label>
+            {% endif %}
+        </label><label><img src="{{url_for('static', filename='cafe-ico/leche-sinlactosa.png')}}">
+            <div class="f"><span>Sin Lactosa</span><input name="Leche" type="radio" value="Leche Sin Lactosa">
+            </div>
+        </label><label><img src="{{url_for('static', filename='cafe-ico/leche-agua.png')}}">
+            <div class="f"><span>Agua</span><input name="Leche" type="radio" value="Agua">
+            </div>
+        </label>
+        <label><i class="ico fa-solid fa-ban" style="color:red"></i>
+            <div class="f"><span>Sin Leche</span><input type="radio" name="Leche" id="fs_milk_default" value="Sin Leche"
+                    id="cbox1">
+            </div>
+        </label>
+    </fieldset>
+    <fieldset class="milk vertical" id="fs_temp">
+        <summary>Temperatura</summary><label><img src="{{url_for('static', filename='cafe-ico/temperatura-frio.png')}}">
+            <div class="f"><span>Frio</span><input name="Temperatura" type="radio" value="Fria"></div>
+        </label><label><img src="{{url_for('static', filename='cafe-ico/temperatura-templado.png')}}">
+            <div class="f"><span>Templado</span><input name="Temperatura" type="radio" value="Templada"></div>
+        </label><label><img src="{{url_for('static', filename='cafe-ico/temperatura-caliente.png')}}">
+            <div class="f"><span>Caliente</span><input name="Temperatura" type="radio" value="Caliente"></div>
+        </label>
+        <input name="Temperatura" id="fs_temp_default" type="radio" value="Sin Elegir" style="display: none;">
+    </fieldset>
 
-            </fieldset>
-            <fieldset class="milk vertical" id="fs_infus">
-                <summary>Infusión</summary>
-                <select name="VarInfusion">
-                    <option selected value="">No es infusión</option>
-                    <optgroup label="Te">
-                        <option>Te de Piña</option>
-                        <option>Te de Fresa</option>
-                        <option>Te de Frutos rojos</option>
-                        <option>Te de Chai</option>
-                        <option>Te de Tila</option>
-                        <option>Te de Mango</option>
-                        <option>Te Negro</option>
-                    </optgroup>
-                </select>
-            </fieldset>
-            <fieldset class="milk vertical pp">
-                <summary>Notas</summary><textarea class="nop" name="notas" rows="4"></textarea>
-                <button class="nop" type="submit">Enviar</button>
-                <!-- <button class="nop" type="button" onclick="window.print()">Imprimir</button>
-                <br> -->
-                <br>
-                <button onclick='location.href = "{{url_for("Cafe.index")}}"' type="button" class="np">Volver a
-                    Inicio</button>
-            </fieldset>
-        </main>
-    </form>
-    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-</body>
+    <fieldset class="milk vertical" id="fs_sugar">
+        <summary>Endulzantes</summary>
+        <label><img src="{{url_for('static', filename='cafe-ico/extra-azucarblanco.png')}}">
+            <div class="f"><span>Azucar Blanco</span><input name="Endulzantes" type="radio" value="Azucar Blanco">
+            </div>
+        </label>
+        <label><img src="{{url_for('static', filename='cafe-ico/extra-azucarmoreno.png')}}">
+            <div class="f"><span>Azucar Moreno</span><input name="Endulzantes" type="radio" value="Azucar Moreno">
+            </div>
+        </label><label><img src="{{url_for('static', filename='cafe-ico/extra-edulcorante.png')}}">
+            <div class="f"><span>Edulcorante</span><input name="Endulzantes" type="radio" value="Edulcorante">
+            </div>
+        </label><label><img src="{{url_for('static', filename='cafe-ico/extra-stevia.png')}}">
+            <div class="f"><span>Stevia</span><input name="Endulzantes" type="radio" value="Stevia"></div>
+        </label><label><img src="{{url_for('static', filename='cafe-ico/extra-stevia-l.jpg')}}">
+            <div class="f"><span>Stevia Liquido</span><input name="Endulzantes" type="radio" value="Stevia Liquido">
+            </div>
+        </label>
+        <label><i class="ico fas fa-ban" style="color: red"></i>
+            <div class="f"><span>Sin Complemento</span><input name="Endulzantes" type="radio" value=""
+                    id="fs_sugar_default">
+            </div>
+        </label>
+        </label><label><span class="ico" style="color: red">x2</span>
+            <div class="f"><span>Doble</span><input name="Complementos" type="checkbox" value="Doble Endulzante"></div>
+        </label>
 
-</html>
+    </fieldset>
+    <fieldset class="milk vertical" id="fs_infus">
+        <summary>Infusión</summary>
+        <select name="VarInfusion">
+            <option selected value="">No es infusión</option>
+            <optgroup label="Te">
+                <option>Te de Piña</option>
+                <option>Te de Fresa</option>
+                <option>Te de Frutos rojos</option>
+                <option>Te de Chai</option>
+                <option>Te de Tila</option>
+                <option>Te de Mango</option>
+                <option>Te Negro</option>
+                <option>Roibos</option>
+            </optgroup>
+        </select>
+    </fieldset>
+    <fieldset class="milk vertical pp">
+        <summary>Notas</summary><textarea class="nop" name="notas" rows="4"></textarea>
+        <br>
+        <button class="nop" type="submit">Enviar</button>
+        <button onclick='location.href = "{{url_for("Cafe.index")}}"' type="button" class="np">Volver a
+            Inicio</button>
+    </fieldset>
+
+</form>
+{% endblock %}

@@ -1,24 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends "_layout.html" %}
 
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width,initial-scale=1" name="viewport" />
-  <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
-  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-  <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
-  <title>Galileo</title>
-  <link rel="stylesheet" href="{{url_for('static', filename='vendor/simplemde.min.css')}}" />
-  <link rel="stylesheet" href="{{url_for('static', filename='vendor/font-awesome.min.css')}}" />
-</head>
-
-<body>
-  {% include 'loader.html' %}
-
-  <header style="background-color: #000; color: #fff">
-    <h3>Galileo - Personas</h3>
-  </header>
-  <main>
+{% block container %}
     <center>
       {% if err != None %}
       <h1 style="border: 5px solid red; padding: 15px;">Error: {{err}}</h1>
@@ -59,15 +41,4 @@
         </fieldset>
       </form>
     </center>
-  </main>
-  <script src="{{url_for('static', filename='vendor/simplemde.min.js')}}"></script>
-  <script>
-    new SimpleMDE({
-      element: document.getElementById("contentMD"),
-      spellChecker: false,
-      status: false,
-    });
-  </script>
-</body>
-
-</html>
+{% endblock %}

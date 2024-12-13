@@ -1,26 +1,71 @@
-<!doctype html>
-<html>
+{% extends "_layout.html" %}
 
-<head>
-  <title>Comanda del Cafe</title>
-  <meta charset="utf-8">
-  <meta content="width=device-width,initial-scale=1" name="viewport">
-  <!-- <script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script> -->
-  <link rel="stylesheet" href="{{url_for('static', filename='vendor/font-awesome.min.css')}}" />
-  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-  <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
-  <style>
-    .caf {
-      background-image: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 1.25), rgba(255, 255, 255, 1.25) 1px, transparent 1px, transparent 6px);
-      background-color: red;
-      background-size: 8px 8px;
+{% block container %}
+<style>
+    label {
+        background-color: white;
+        color: black;
+        border: 1px solid black;
+        max-width: 15rem;
+        height: 60px;
+        padding: 5px;
+        border-radius: 15px;
     }
-  </style>
-  <meta http-equiv="refresh" content="30">
-</head>
 
-<body>
-  {% include 'loader.html' %}
+    label span {
+        float: left;
+        text-shadow: none;
+    }
+
+    label input {
+        top: 0 !important;
+        margin-top: 0 !important;
+        position: relative;
+        float: right;
+        height: 32px !important;
+        width: 32px !important;
+    }
+
+    label:has(input:disabled) {
+        background-image: repeating-linear-gradient(-45deg, rgba(0, 0, 0, 1.25), rgba(0, 0, 0, 1.25) 1px, transparent 1px, transparent 6px);
+
+
+    }
+    .caf {
+      background-image: repeating-linear-gradient(-45deg, rgba(255,255,255, 1.25), rgba(255,255,255, 1.25) 1px, transparent 1px, transparent 6px);
+
+    }
+    label img {
+        float: left;
+        max-width: 64px;
+        width: auto;
+        max-height: 64px;
+        height: 100%;
+    }
+
+    .ico {
+        line-height: 64px;
+        font-size: 64px;
+    }
+
+    .smallico {
+        line-height: 32px !important;
+        font-size: 32px !important;
+    }
+
+    .redtext {
+        color: red;
+    }
+
+    input,
+    select,
+    textarea {
+        color: black;
+    }
+    hr {
+      margin: 5px 0 !important;
+    }
+</style>
   <script>
     function chAnilla(l, o) {
       console.log(o), document.getElementById(l).style = "background-color: " + o.split(";")[1] + "; color: " + o.split(";")[2]
@@ -30,11 +75,6 @@
     }
   </script>
   <form method="post">
-    <header style="background-color:#000;color:#fff">
-      <h3>Galileo - SuperCafé - Pantalla {{fase}}
-        <button onclick='location.href="{{url_for("Cafe.index")}}"' type="button" class="np">Inicio</button>
-      </h3>
-    </header>
     <main class="grid"
       data-masonry='{ "itemSelector": ".vertical", "horizontalOrder": false, "gutter": 20, "fitWidth": true, "resize": true}'>
       <!-- <?php foreach ($dirs as $dir): ?>
@@ -88,9 +128,7 @@
       {% endfor %} -->
 
       {% for comanda in comandas %}
-      <fieldset class="milk vertical {{comanda[1]['_grupo'].split(';')[3]}}" style="text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px
-          #fff, -1px 1px #fff; color: black; background-color:
-          {{comanda[1]['_grupo'].split(';')[1]}}">
+      <fieldset class="milk vertical {{comanda[1]['_grupo'].split(';')[3]}}" style="padding: 3px; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff; color: black; background-color: {{comanda[1]['_grupo'].split(';')[1]}}; text-align: left; ">
 
         {% if fase == "Historial" %}
         Fase: <b>{{comanda[1]['_fase']}}</b>
@@ -98,10 +136,22 @@
         <!--<h3 style="color: black !important;">
           {{personas[comanda[1]['_persona']]['Nombre']}} ({{personas[comanda[1]['_persona']]['Region']}})
         </h3>-->
-        <div style="border: 1px solid black; text-align: center;">
-            <img src='{{ personas[comanda[1]["_persona"]]["Foto"] }}' alt="" height="75px"><br>
-            {{personas[comanda[1]['_persona']]["Nombre"]}} ({{personas[comanda[1]['_persona']]["Region"]}})
-        </div>
+        <label style="background-color: {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}};color: transparent;">
+          <img src='{{ personas[comanda[1]['_persona']]["Foto"] }}' style="height: 64px !important;">
+          <div class="f fb fn"><span
+                  style="background-color:  {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}}; display: block; filter: invert(100%); -moz-background-clip: text; -webkit-background-clip: text;">
+                  <b>{{personas[comanda[1]['_persona']]["Nombre"]}} ({{personas[comanda[1]['_persona']]["Region"]}})</b>
+                  <br>
+                  {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[0]}}
+              </span>
+              <!--<div
+                  style="color: #000 !important; background-color: white;text-align: center;font-size: 22.5px; word-wrap: break-word;word-break: break-all;padding: 0 !important;height: 55px !important;width: 45px !important; float: right; resize: none; text-shadow: none; border: 1px solid black;">
+                  <small
+                      style="font-size: 10px;">Punto(s)</small><br>
+                      {{personas[comanda[1]['_persona']]["Puntos"]}}
+              </div>-->
+          </div>
+      </label>
         {% if fase == "Cocina" %}
         <select
           id="group" onchange='ChangeGroup(this, "{{comanda[0]}}")' required>
@@ -137,18 +187,9 @@
         </select>
         {% endif %}
         <br>
-        <label
-          style="background-color: {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}};color: transparent;"><br>
-          <div class="f fb fn"><span
-              style="background-color:  {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}}; display: block; filter: invert(100%); -moz-background-clip: text; -webkit-background-clip: text; text-shadow: none;">
-              {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[0]}}
-            </span>
-          </div>
-        </label>
-        <br>
         <hr>
 
-        <ul style="padding-left: 17px !important;">
+        <ul style="padding-left: 1px !important;">
           <li>{{comanda[1].get("Tipo", "")[0]}}
 
             {% if comanda[1].get("Cafeina", "")[0] != "Sin Elegir" %}
@@ -158,7 +199,7 @@
             {% if "Cafe Soluble" in comanda[1]["Tipo"] or "Cafe" in comanda[1]["Tipo"] %}
             <small style="font-size: 10px">10c</small>
             {% endif %}
-            <ul style="padding-left: 17px !important;">
+            <ul style="padding-left: 1px !important;">
               <li>
                 {% if comanda[1].get("Leche", "")[0] != "Sin Leche" %}
                 {{comanda[1].get("Leche", "")[0]}}
@@ -190,15 +231,11 @@
 
         <hr>
         {{comanda[1].get("notas", "")}}
-        <hr><br>
-        <button class="nop small" type="button"
-          onclick="location.href='{{url_for('Cafe.rdel', rid=comanda[0], ft=ft, fc=fc)}}'">
-          ¡Hecho!</button>
+        <a style="width: calc(100% - 39px);" class="btn btn-large" href="{{url_for('Cafe.rdel', rid=comanda[0], ft=ft, fc=fc)}}">
+          Pasar a {{ft}}</a>
       </fieldset>
       {% endfor %}
     </main>
   </form>
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-</body>
-
-</html>
+  {% endblock %}

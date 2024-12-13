@@ -1,67 +1,44 @@
-<!DOCTYPE html>
-<html>
+{% extends "_layout.html" %}
 
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width,initial-scale=1" name="viewport" />
-  <!--<script crossorigin="anonymous" src="https://kit.fontawesome.com/5020e44799.js"></script>-->
-  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-  <link rel="stylesheet" href="{{url_for('static', filename='icons/style.css')}}" />
-  <title>Galileo</title>
-</head>
+{% block container %}
 
-<body>
-  {% include 'loader.html' %}
-  <header style="background-color: #000; color: #fff">
-    <h3>Galileo</h3>
-  </header>
-  <main>
-    <center>
-      <h2>¡Hola {{USER.u["Nombre"]}}!</h2>
-      <h1>Bienvenidx a Galileo</h1>
-      <h2>Tienes {{USER.u["Puntos"]}} puntos</h2>
-      <a class="actbtn di di-exit" href="{{url_for('Personas.auth_logout')}}">Cerrar Sesión</a>
-      <br>
-      {% if "resumendiario:_module" in USER.u["Roles"] %}
-      <a class="appbtn di di-calendar" href="{{url_for('ResumenDiario.index')}}">
-        <b>Resumen Diario</b>
-        Documento con la información del dia.
-      </a>
-      {% endif %}
-      {% if "cafe:_module" in USER.u["Roles"] %}
-        {% if "cafe:cocina" in USER.u["Roles"] or "cafe:pago" in USER.u["Roles"] %}
-        <a class="appbtn di di-coffebeans" href="{{url_for('Cafe.index')}}">
-          <b>SuperCafé</b>
-          Programa para la gestión de las comandas.
-        </a>
-        {% else %}
-        <a class="appbtn di di-coffebeans" href="{{url_for('Cafe.comanda', rid=USER.rid)}}">
-          <b>Enviar Comanda</b>
-          Enviar una comanda
-        </a>
-        {% endif %}
-      {% endif %}
-      {% if "comedor:_module" in USER.u["Roles"] %}
-      <a class="appbtn di di-cook" href="{{url_for('Comedor.index')}}">
-        <b>Comedor</b>
-        Base de datos de los diferentes menús.
-      </a>
-      {% endif %}
-      {% if "recetas:_module" in USER.u["Roles"] %}
-      <a class="appbtn di dim-food" href="{{url_for('Recetas.index')}}">
-        <b>Recetas</b>
-        Base de datos de las diferentes recetas.
-      </a>
-      {% endif %}
-      {% if "personas:_module" in USER.u["Roles"] %}
-      <a class="appbtn di di-user" href="{{url_for('Personas.index')}}">
-        <b>Personas</b>
-        Base de datos de las personas y sus codigos.
-      </a>
-      {% endif %}
-      <br><br>
-    </center>
-  </main>
-</body>
+<center>
+  <h2>¡Hola {{USER.u["Nombre"]}}!</h2>
+  <h1>Bienvenidx a Galileo</h1>
+  <h2>Tienes {{USER.u["Puntos"]}} puntos</h2>
 
-</html>
+  <br>
+  {% if "resumendiario:_module" in USER.u["Roles"] %}
+  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('ResumenDiario.index')}}">
+    Resumen Diario
+  </a>
+  {% endif %}
+  {% if "cafe:_module" in USER.u["Roles"] %}
+  {% if "cafe:cocina" in USER.u["Roles"] or "cafe:pago" in USER.u["Roles"] %}
+  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('Cafe.index')}}">
+    SuperCafé
+  </a>
+  {% else %}
+  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('Cafe.comanda', rid=USER.rid)}}">
+    Enviar Comanda
+  </a>
+  {% endif %}
+  {% endif %}
+  {% if "comedor:_module" in USER.u["Roles"] %}
+  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('Comedor.index')}}">
+    Comedor
+  </a>
+  {% endif %}
+  {% if "recetas:_module" in USER.u["Roles"] %}
+  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('Recetas.index')}}">
+    Recetas
+  </a>
+  {% endif %}
+  {% if "personas:_module" in USER.u["Roles"] %}
+  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('Personas.index')}}">
+    Personas
+  </a>
+  {% endif %}
+  <br><br>
+</center>
+{% endblock %}
