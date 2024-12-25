@@ -1,22 +1,19 @@
 {% extends "_layout.html" %}
 
 {% block container %}
-      <center>
-        <h2>Establecer configuración</h2>
-        <form method="post">
-          <fieldset style="width: calc(100% - 30px); max-width: 410px; text-align: left;">
-            <legend>configuración</legend>
-            <label>Receta: <input type="text" name="receta" value="{{Receta}}"></label>
-            <br>
-            <input
-              type="submit"
-              class="btn btn-primary"
-              value="Guardar"
-            />
-            <a class="btn" href="{{url_for('Cafe.index')}}"
-              >Salir</a
-            >
-          </fieldset>
-        </form>
-      </center>
+<center>
+  <h2>Establecer configuración</h2>
+  <form method="post">
+    <fieldset style="width: calc(100% - 30px); max-width: 410px; text-align: left;">
+      <summary>Variables</summary>
+      <label for="receta">Receta:</label>
+      <input class="form-control" type="text" id="receta" name="receta" value="{{Receta}}">
+      <br>
+      <div class="input-group">
+        <input type="submit" class="btn btn-primary" value="Guardar" />
+        <a class="btn btn-secondary" href="{{url_for('Cafe.index')}}">Salir</a>
+      </div>
+    </fieldset>
+  </form>
+</center>
 {% endblock %}

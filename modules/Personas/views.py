@@ -5,7 +5,7 @@ from .models import DB_PERSONAS
 from ..Cafe.models import ANILLAS
 from random import randint
 from . import localutils
-from .localutils import PersonAuth, with_auth
+from .localutils import PersonAuth, with_auth, confirm_deletion
 app = Blueprint("Personas", __name__)
 
 
@@ -145,6 +145,7 @@ def edit(user, rid):
 
 
 @app.route("/personas/<rid>/del", methods=["GET", "POST"])
+@confirm_deletion
 @with_auth("personas:delete")
 def rdel(user, rid):
     if request.method == "POST":

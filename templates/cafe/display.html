@@ -136,22 +136,23 @@
         <!--<h3 style="color: black !important;">
           {{personas[comanda[1]['_persona']]['Nombre']}} ({{personas[comanda[1]['_persona']]['Region']}})
         </h3>-->
-        <label style="background-color: {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}};color: transparent;">
-          <img src='{{ personas[comanda[1]['_persona']]["Foto"] }}' style="height: 64px !important;">
-          <div class="f fb fn"><span
-                  style="background-color:  {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}}; display: block; filter: invert(100%); -moz-background-clip: text; -webkit-background-clip: text;">
-                  <b>{{personas[comanda[1]['_persona']]["Nombre"]}} ({{personas[comanda[1]['_persona']]["Region"]}})</b>
-                  <br>
-                  {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[0]}}
-              </span>
-              <!--<div
-                  style="color: #000 !important; background-color: white;text-align: center;font-size: 22.5px; word-wrap: break-word;word-break: break-all;padding: 0 !important;height: 55px !important;width: 45px !important; float: right; resize: none; text-shadow: none; border: 1px solid black;">
-                  <small
-                      style="font-size: 10px;">Punto(s)</small><br>
-                      {{personas[comanda[1]['_persona']]["Puntos"]}}
-              </div>-->
-          </div>
-      </label>
+          <label style="width: 315px; max-width: none; height: 76px;">
+            <img src='{{ personas[comanda[1]["_persona"]]["Foto"] }}' style="height: 64px !important;">
+            <div class="f fb fn"><span>
+                    <b>{{personas[comanda[1]['_persona']]["Nombre"]}} ({{personas[comanda[1]['_persona']]["Region"]}})</b>
+                    <br>
+                    {{personas[comanda[1]['_persona']]['markdown']}}
+                </span>
+                <div
+                    style="border-radius: 7.5px; color: #000 !important; background-color: gold;text-align: center; word-wrap: break-word;word-break: break-all;padding: 0 !important;height: 55px !important;width: 45px !important; float: right; resize: none; text-shadow: none; border: 1px solid black;">
+                    <small style="font-size: 10px;">Punto(s)</small><br>{{personas[comanda[1]['_persona']]["Puntos"]}}
+                </div>
+                <div
+                    style="background-color: {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}}; border-radius: 250px; width: 32px; height: 32px; float: right; margin-right: 5px;">
+                </div>
+            </div>
+        </label>
+        <br>
         {% if fase == "Cocina" %}
         <select
           id="group" onchange='ChangeGroup(this, "{{comanda[0]}}")' required>
@@ -189,7 +190,7 @@
         <br>
         <hr>
 
-        <ul style="padding-left: 1px !important;">
+        <ul style="padding-left: 15px !important;">
           <li>{{comanda[1].get("Tipo", "")[0]}}
 
             {% if comanda[1].get("Cafeina", "")[0] != "Sin Elegir" %}
@@ -199,7 +200,7 @@
             {% if "Cafe Soluble" in comanda[1]["Tipo"] or "Cafe" in comanda[1]["Tipo"] %}
             <small style="font-size: 10px">10c</small>
             {% endif %}
-            <ul style="padding-left: 1px !important;">
+            <ul style="padding-left: 15px !important;">
               <li>
                 {% if comanda[1].get("Leche", "")[0] != "Sin Leche" %}
                 {{comanda[1].get("Leche", "")[0]}}
@@ -231,7 +232,7 @@
 
         <hr>
         {{comanda[1].get("notas", "")}}
-        <a style="width: calc(100% - 39px);" class="btn btn-large" href="{{url_for('Cafe.rdel', rid=comanda[0], ft=ft, fc=fc)}}">
+        <a style="width: 100%;" class="btn btn-success btn-large" href="{{url_for('Cafe.rdel', rid=comanda[0], ft=ft, fc=fc)}}">
           Pasar a {{ft}}</a>
       </fieldset>
       {% endfor %}

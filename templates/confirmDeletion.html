@@ -1,0 +1,19 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+<center>
+    <div class="card text-white bg-danger mb-3" style="max-width: 25rem;">
+        <div class="card-header">Confirmación de eliminado</div>
+        <div class="card-body">
+            <h4 class="card-title">¿Realmente quieres borrarlo?</h4>
+            Escribe <b>ACEPTO</b> para borrarlo
+            <div class="input-group">
+                <input type="text" class="form-control" id="confirmCode" placeholder="Capcha" autocomplete="off">
+                <button type="button" class="btn btn-warning"
+                    onclick="location.search = 'confirmDeletion=' + document.getElementById('confirmCode').value">Confirmar</button>
+                <!-- <button type="button" class="btn btn-primary">Cancelar</button> -->
+            </div>
+        </div>
+    </div>
+</center>
+{% endblock %}

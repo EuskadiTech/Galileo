@@ -1,5 +1,5 @@
 from .models import DB_PERSONAS
-from flask import redirect, url_for, request, g
+from flask import redirect, url_for, request, g, render_template
 from functools import wraps
 
 #region Auth
@@ -54,3 +54,12 @@ def with_auth(role: str = ""):
             return f(user=user, *args, **kwargs)
         return decorated_function
     return decorator
+def confirm_deletion(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if request.args.get("confirmDeletion") is None:
+            return render_template("confirmDeletion.html")
+        if request.args.get("confirmDeletion").upper() != "ACEPTO":
+            return render_template("confirmDeletion.html")
+        return f(*args, **kwargs)
+    return decorated_function

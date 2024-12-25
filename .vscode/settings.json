@@ -1,0 +1,6 @@
+{
+    "yaml.schemas": {
+        "https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml",
+        "https://json.schemastore.org/drone.json": "file:///Users/naiel/Desktop/Galileo-1/.drone.yml"
+    }
+}

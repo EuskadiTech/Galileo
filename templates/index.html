@@ -6,39 +6,6 @@
   <h2>¡Hola {{USER.u["Nombre"]}}!</h2>
   <h1>Bienvenidx a Galileo</h1>
   <h2>Tienes {{USER.u["Puntos"]}} puntos</h2>
-
-  <br>
-  {% if "resumendiario:_module" in USER.u["Roles"] %}
-  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('ResumenDiario.index')}}">
-    Resumen Diario
-  </a>
-  {% endif %}
-  {% if "cafe:_module" in USER.u["Roles"] %}
-  {% if "cafe:cocina" in USER.u["Roles"] or "cafe:pago" in USER.u["Roles"] %}
-  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('Cafe.index')}}">
-    SuperCafé
-  </a>
-  {% else %}
-  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('Cafe.comanda', rid=USER.rid)}}">
-    Enviar Comanda
-  </a>
-  {% endif %}
-  {% endif %}
-  {% if "comedor:_module" in USER.u["Roles"] %}
-  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('Comedor.index')}}">
-    Comedor
-  </a>
-  {% endif %}
-  {% if "recetas:_module" in USER.u["Roles"] %}
-  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('Recetas.index')}}">
-    Recetas
-  </a>
-  {% endif %}
-  {% if "personas:_module" in USER.u["Roles"] %}
-  <a class="btn appbtn di di-calendar btn-large" href="{{url_for('Personas.index')}}">
-    Personas
-  </a>
-  {% endif %}
-  <br><br>
 </center>
+<h3>Tu panel de control:</h3>
 {% endblock %}

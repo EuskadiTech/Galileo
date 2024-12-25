@@ -1,50 +1,49 @@
 {% extends "_layout.html" %}
 
 {% block container %}
-    <center>
-      <h2>Elegir Cliente</h2>
-      <form method="post">
-        <fieldset style="width: calc(100% - 30px); max-width: 410px; text-align: left;">
-          <legend>por codigo</legend>
-          <input type="hidden" name="code" id="reader_output">
-          <div style="width: 400px" id="reader"></div>
-          <a class="actbtn di di-exit" href="{{url_for('Cafe.index')}}">Salir</a>
-        </fieldset>
-      </form>
-      <form method="post">
-        <fieldset style="width: calc(100% - 30px); max-width: 410px; text-align: left;">
-          <legend>por nombre</legend>
-          <select name="code" style="width: 100%; font-size: 25px; font-family: monospace;">
-            <option value="" disabled selected>Elige...</option>
-            {% for key in personas %}
-            {% if "cafe:client" in personas[key]["Roles"] %}
-            <option value='{{personas[key]["Codigo"]}}'>{{personas[key]["Nombre"]}} ({{personas[key]["Region"]}})
-            </option>
-            {% endif %}
-            {% endfor %}
-          </select>
-          <br>
-          <input type="submit" class="actbtn di di-save" value="Elegir..." />
-          <a class="actbtn di di-exit" href="{{url_for('Cafe.index')}}">Salir</a>
-        </fieldset>
-      </form>
-    </center>
-  <script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
-  <script>
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-      "reader", { fps: 10, qrbox: 250 });
+<center>
+  <h2>Realizar Comanda</h2>
+  <form method="post">
+    <fieldset style="width: calc(100% - 30px); max-width: 410px; text-align: left;">
+      <div class="input-group">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <a class="btn btn-warning" href="{{url_for('Cafe.index')}}">Finalizar Comanda</a>
+      <!-- <a class="btn btn-secondary" href="{{url_for('Cafe.index')}}">Cancelar</a> -->
+      </div>
+      <label for="byName">Buscar por nombre:</label>
+        <select name="code" id="byName" class="form-control">
+          <option value="" disabled selected>Por nombre...</option>
+          {% for key in personas %}
+          {% if "cafe:client" in personas[key]["Roles"] %}
+          <option value='{{personas[key]["Codigo"]}}'>{{personas[key]["Nombre"]}} ({{personas[key]["Region"]}})
+          </option>
+          {% endif %}
+          {% endfor %}
+        </select>
+      <br>
+      <label for="reader_output">Buscar por codigo:</label>
+        <input type="text" class="form-control" placeholder="Por codigo..." name="code" id="reader_output">
+      <br>
+      <div style="width: 375px" id="reader"></div>
+    </fieldset>
+  </form>
+</center>
+<script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
+<script>
+  var html5QrcodeScanner = new Html5QrcodeScanner(
+    "reader", { fps: 10, qrbox: 250 });
 
-    function onScanSuccess(decodedText, decodedResult) {
-      // Handle on success condition with the decoded text or result.
-      console.log(`Scan result: ${decodedText}`, decodedResult);
-      // ...
-      html5QrcodeScanner.clear();
-      document.getElementById("reader_output").value = decodedText
-      // ^ this will stop the scanner (video feed) and clear the scan area.
-      document.querySelector("form").submit();
+  function onScanSuccess(decodedText, decodedResult) {
+    // Handle on success condition with the decoded text or result.
+    console.log(`Scan result: ${decodedText}`, decodedResult);
+    // ...
+    html5QrcodeScanner.clear();
+    document.getElementById("reader_output").value = decodedText
+    // ^ this will stop the scanner (video feed) and clear the scan area.
+    document.querySelector("form").submit();
 
-    }
+  }
 
-    html5QrcodeScanner.render(onScanSuccess);
-  </script>
+  html5QrcodeScanner.render(onScanSuccess);
+</script>
 {% endblock %}

@@ -1,4 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    send_from_directory,
+)
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.wrappers import Response
 from os.path import join as path_join
@@ -32,31 +39,87 @@ app = Flask(
     template_folder=path_join(utils.APPDATA_DIR, "templates"),
 )
 
+
+@app.context_processor
+def inject_nav():
+    nav = [
+        {"text": "Inicio", "endpoint": "index"},
+        {"text": "Resumen Diario", "endpoint": "ResumenDiario.index"},
+        {
+            "text": "SuperCafé",
+            "endpoint": "Cafe.index",
+            "subitems": [
+                {"text": "Ajustes", "endpoint": "Cafe.config"},
+                {"text": "Iniciar Comanda", "endpoint": "Cafe.select"},
+                "divider",
+                {"text": "Pant. Cocina", "endpoint": "Cafe.cocina"},
+                {"text": "Pant. Pago", "endpoint": "Cafe.pago"},
+            ],
+        },
+        {
+            "text": "Comedor",
+            "endpoint": "Comedor.index",
+            "subitems": [
+                {"text": "Menús descargados", "endpoint": "Comedor.index"},
+                {"text": "Ver menú", "endpoint": "Comedor.byDayModal"},
+                {"text": "Importar Menú", "endpoint": "Comedor.loadMenuModal"},
+                "divider",
+                {"text": "API: Menú de hoy", "endpoint": "Comedor.api__today"},
+            ],
+        },
+        {
+            "text": "Personas",
+            "endpoint": "Personas.index",
+            "subitems": [
+                {"text": "Personas", "endpoint": "Personas.index"},
+                {"text": "> Crear", "endpoint": "Personas.new"},
+                {"text": "> Buscar por Codigo", "endpoint": "Personas.scan"},
+                "divider",
+                {"text": "Imprimir tarjetas", "endpoint": "Personas.print"},
+            ],
+        },
+        {
+            "text": "Recetas",
+            "endpoint": "Recetas.index",
+            "subitems": [
+                {"text": "Recetas", "endpoint": "Recetas.index"},
+                {"text": "> Crear", "endpoint": "Recetas.new"},
+            ],
+        },
+    ]
+    return dict(G_NAV=nav, G_CNAV=request.endpoint)
+
+
 ## Disable Logging
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.CRITICAL)
 log.disabled = True
 
+
 @app.route("/", methods=["GET"])
 @modules.Personas.localutils.with_auth()
 def index(user):
-    return render_template("index.html", VERSION = get_local_version(), USER = user)
+    return render_template("index.html", VERSION=get_local_version(), USER=user)
 
 
 @app.route("/api/purgecache", methods=["GET"])
 def api__purgecache():
     utils.clear_cache()
     return "Hecho!"
+
+
 @app.route("/status", methods=["GET"])
 def status():
     utils.clear_cache()
     return "G-Serv is online."
+
 
 @app.route("/uploads/<fspath>")
 def get_upload(fspath):
     print("/uploads/" + fspath)
     print("FS " + USERDATA_DIR + "uploads" + "/" + fspath)
     return send_from_directory(USERDATA_DIR + "uploads", fspath)
+
 
 app.register_blueprint(modules.ComedorBlueprint)
 app.register_blueprint(modules.ResumenDiarioBlueprint)

@@ -1,0 +1,13 @@
+kind: pipeline
+name: deploy
+steps:
+- name: publish
+  image: plugins/docker
+  settings:
+    repo: git.tech.eus/EuskadiTech/infra
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    registry: git.tech.eus
+    auto_tag: true

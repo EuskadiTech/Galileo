@@ -8,12 +8,14 @@
       <a class="actbtn di di-barcode" href="{{url_for('Personas.scan')}}">Escanear Codigo</a>
       <a class="actbtn di di-printer2" href="{{url_for('Personas.print')}}">Imprimir tarjetas</a>
 
-      <table border>
+      <table border class="table table-striped">
         <thead>
-          <th>Codigo</th>
-          <th>Nombre</th>
-          <th>Puntos</th>
-          <th>Acciónes</th>
+          <tr class="table-primary">
+            <th>Codigo</th>
+            <th>Nombre</th>
+            <th>Puntos</th>
+            <th>Acciónes</th>
+          </tr>
         </thead>
         <tbody>
           {% for key in personas %}
@@ -22,9 +24,11 @@
             <td><a href="{{url_for('Personas.persona', rid = key)}}">{{personas[key]["Nombre"]}} ({{personas[key]["Region"]}})</a></td>
             <td>{{personas[key]["Puntos"]}} puntos</td>
             <td>
-              <a href="{{url_for('Personas.rdel', rid = key)}}">Borrar</a>
-              <a href="{{url_for('Personas.edit', rid = key)}}">Editar</a>
-              <a href="{{url_for('Personas.persona', rid = key)}}">Abrir</a>
+              <div class="input-group">
+                <a class="btn btn-danger" href="{{url_for('Personas.rdel', rid = key)}}">Borrar</a>
+                <a class="btn btn-warning" href="{{url_for('Personas.edit', rid = key)}}">Editar</a>
+                <a class="btn btn-primary" href="{{url_for('Personas.persona', rid = key)}}">Abrir</a>
+              </div>
             </td>
           </tr>
           {% endfor %}

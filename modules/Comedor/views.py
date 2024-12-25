@@ -12,7 +12,7 @@ from .localutils import (
     fromDay_comedor,
 )
 from utils import get_config
-from ..Personas.localutils import PersonAuth, with_auth
+from ..Personas.localutils import PersonAuth, with_auth, confirm_deletion
 
 app = Blueprint("Comedor", __name__)
 
@@ -69,7 +69,7 @@ def api__loadMenu(user):
 
 @app.route("/api/comedor/reqMenu", methods=["POST"])
 @with_auth("comedor:write")
-def api__reqMenu():
+def api__reqMenu(user):
     config = get_config()
     pid = config["Clave Proxy"]
     f = request.files["file"]
@@ -84,15 +84,16 @@ def api__reqMenu():
 
 
 @app.route("/api/comedor/deleteMenu/<mid>")
+@confirm_deletion
 @with_auth("comedor:delete")
-def api__deleteMenu(mid):
+def api__deleteMenu(user, mid):
     DB_COMEDOR.delete_by_id(str(mid))
     return redirect(url_for("Comedor.index"))
 
 
 @app.route("/api/comedor/downloadMenu/<mid>")
 @with_auth("comedor:read")
-def api__downloadMenu(mid):
+def api__downloadMenu(user, mid):
     bio = BytesIO()
     menu = DB_COMEDOR.get_by_id(str(mid))
     bio.write(menu["source_plain"].encode("utf-8"))
