@@ -98,7 +98,7 @@ class DateParser:
         Returns:
             string: Result in HH:MM
         """
-        result = f"{self.dt.hour}:{self.dt.minute}"
+        result = f"{self.dt.hour:02d}:{self.dt.minute:02d}"
         return result
 
     def pretty_monthCode(self):
@@ -107,7 +107,7 @@ class DateParser:
         Returns:
             string: Result in YYYY-MM
         """
-        result = f"{self.dt.year}-{self.dt.month}"
+        result = f"{self.dt.year}-{self.dt.month:02d}"
         return result
 
     def pretty_dayCode(self):
@@ -116,7 +116,7 @@ class DateParser:
         Returns:
             string: Result in YYYY-MM-DD
         """
-        result = f"{self.dt.year}-{self.dt.month}-{self.dt.day}"
+        result = f"{self.dt.year}-{self.dt.month:02d}-{self.dt.day:02d}"
         return result
 
 
