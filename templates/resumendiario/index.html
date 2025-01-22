@@ -162,8 +162,8 @@
       {% endif %}
       <div class="grid-item card" style="border: 4px solid purple">
         <div class="card-body">
-          <b>🌐 Actualización de Galileo</b><br />
-          {{data["NoticiasEuskadiTech"].replace("\n", "<br>") | safe}}.
+          <b style="font-size: 70%; display: inline-block;">🌐 Actualización de Galileo</b><br />
+          <span style="font-size: 65%; display: inline-block;">{{data["NoticiasEuskadiTech"].replace("\n", "<br>") | safe}}.</span>
         </div>
       </div>
         {% for menu in data["Comedor"] %}

@@ -17,6 +17,7 @@ DEFAULT_CONFIG = {
         "Jokes": {"Enabled": True, "Url": "https://naiel.fyi/chistes.txt"},
     },
     "Clave Proxy": str(uuid.uuid4()),
+    "Receta": "No Disp.",
 }
 
 
@@ -199,8 +200,6 @@ class Tunnel:
         self.thread.join()
     
     def start_ssh_tunnel(self, retries: int = 10):
-#        if os.environ.get("ISDOCKER") != None:
-#            return ["", ""]
         cmd = f"ssh -p 443 -L11129:127.0.0.1:4300 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -t -R0:127.0.0.1:8129 force@a.pinggy.io x:https x:xff x:fullurl"
         print(" > Arrancando Tunel SSH")
         self.TUNNEL = subprocess.Popen(
