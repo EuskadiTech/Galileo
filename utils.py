@@ -175,18 +175,27 @@ class Tunnel:
             TIMER_CACHE += 1
             if self.TRIGGER.is_set():
                 break
+            if self.TUNNEL == None:
+                self.start_ssh_tunnel()
             if TIMER_TUNNEL > self.TIMEOUT_TUNNEL:
                 print(">> Recargando Tunel SSH")
                 self.stop_ssh_tunnel()
                 TIMER_TUNNEL = 0
                 sleep(1)
                 self.start_ssh_tunnel()
+            try:
+                requests.get("http://127.0.0.1:11129/urls").json().get("urls")[-1]
+            except:
+                print(">> Recargando Tunel SSH por fallo")
+                self.stop_ssh_tunnel()
+                TIMER_TUNNEL = 0
+                sleep(1)
+                self.start_ssh_tunnel()
+                sleep(3)
             if TIMER_CACHE > self.TIMEOUT_CACHE:
                 print(">> Vaciando Cache HTTP")
                 TIMER_CACHE = 0
                 clear_cache()
-            if self.TUNNEL == None:
-                self.start_ssh_tunnel()
             sleep(1)
     
     def start(self):
