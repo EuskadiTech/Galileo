@@ -6,28 +6,41 @@
       <form action="{{url_for('Personas.edit', rid=rid)}}" method="POST">
         <fieldset style="width: calc(100% - 30px);max-width: 35rem;text-align: left;float: left;">
           <legend>Añadir receta</legend>
-          <label>Nombre: <input type="text" name="nombre" required value="{{receta['Nombre']}}"></label>
+          <div>
+            <label class="col-form-label" for="formNombre">Nombre</label>
+            <input type="text" class="form-control" placeholder="Nombre" id="formNombre" name="Nombre" value="{{receta['Nombre']}}">
+          </div>
+          <div>
+            <label class="col-form-label" for="formPIN">PIN</label>
+            <input type="text" class="form-control" placeholder="PIN" id="formPIN" name="PIN" value="{{receta['PIN']}}">
+          </div>
+          <div>
+            <label class="col-form-label" for="formRegion">Región</label>
+            <input type="text" class="form-control" placeholder="Región" id="formRegion" name="Region" value="{{receta['Region']}}">
+          </div>
+          <div>
+            <label for="formSelect" class="form-label">Foto (subir en "uploads/personas")</label>
+            <select class="form-select" id="formSelect" name="Foto">
+              {% for avatar in AVATARS %}
+                <option {% if receta['Foto'] == avatar %}selected{% endif %}>{{avatar}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="col-form-label" for="formPuntos">Puntos</label>
+            <input type="number" class="form-control" placeholder="Puntos" id="formPuntos" name="Puntos" value="{{receta['Puntos']}}">
+          </div>
+          <div>
+            <label class="col-form-label" for="formFecha">Fecha de nacimiento</label>
+            <input type="date" class="form-control" placeholder="Fecha de nacimiento" id="formFecha" name="fecha" value="{{receta['F-nac']}}">
+          </div>
+          <div>
+            <label class="col-form-label" for="formMarkdown">Notas</label>
+            <textarea class="form-control" placeholder="..." id="formMarkdown" name="markdown">{{receta['markdown']}}</textarea>
+          </div>
           <br />
-          <label>PIN: <input type="text" autocomplete="off" name="pin" value="{{receta['PIN']}}"></label>
-          <br />
-          <label>Región: <input type="text" name="region" required value="{{receta['Region']}}"></label>
-          <br />
-          <label>Foto (URL): <input type="text" name="foto" required value="{{receta['Foto']}}"></label>
-          <br />
-          <!--<label>Roles: <input type="text" name="roles[]" required value="{{receta['Roles']}}"></label>
-            <br />-->
-          <label>Puntos: <input type="number" name="puntos" required value="{{receta['Puntos']}}"></label>
-          <br />
-          <label>Fecha de Nacimiento: <input type="date" name="fecha" required value="{{receta['F-nac']}}"></label>
-          <br />
-          <br />
-          <textarea name="markdown" id="contentMD" cols="30" rows="10">{{receta['markdown']}}</textarea>
-          <br />
-          <a href="https://axis.tech.eus/naiel.fyi/mdsyntax.html" target="_blank" rel="noopener noreferrer">Manual de
-            Markdown</a>
-          <br />
-          <input type="submit" class="btn btn-primary actbtn di di-save" value="Guardar" />
-          <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
+          <input type="submit" class="btn btn-primary" value="Guardar" />
+          <a class="btn btn-secondary" href="{{url_for('Personas.index')}}">Salir</a>
         </fieldset>
         <fieldset style="width: calc(100% - 30px);max-width: 15rem;text-align: left;float: left;">
           <legend>Anilla SuperCafé</legend>

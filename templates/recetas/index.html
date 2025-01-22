@@ -3,15 +3,17 @@
 {% block container %}
     <center>
       <h1>Recetas descargadas en el servidor</h1>
-      <a class="actbtn di di-exit" href="{{url_for('index')}}">Salir</a>
-      <a class="actbtn di di-add2" href="{{url_for('Recetas.new')}}">Crear Receta</a>
+      <a class="btn btn-primary di di-exit" href="{{url_for('index')}}">Salir</a>
+      <a class="btn btn-primary di di-add2" href="{{url_for('Recetas.new')}}">Crear Receta</a>
 
-      <table border>
+      <table border class="table table-striped">
         <thead>
-          <th>Nombre</th>
-          <th>Fecha</th>
-          <th>Origen</th>
-          <th>Acciónes</th>
+          <tr class="table-primary">
+            <th>Nombre</th>
+            <th>Fecha</th>
+            <th>Origen</th>
+            <th>Acciónes</th>
+          </tr>
         </thead>
         <tbody>
           {% for key in recetas %}

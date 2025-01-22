@@ -3,10 +3,10 @@
 {% block container %}
     <center>
       <h1>Listado de Personas</h1>
-      <a class="actbtn di di-exit" href="{{url_for('index')}}">Salir</a>
-      <a class="actbtn di di-add2" href="{{url_for('Personas.new')}}">Añadir Persona</a>
-      <a class="actbtn di di-barcode" href="{{url_for('Personas.scan')}}">Escanear Codigo</a>
-      <a class="actbtn di di-printer2" href="{{url_for('Personas.print')}}">Imprimir tarjetas</a>
+      <a class="btn btn-primary di di-exit" href="{{url_for('index')}}">Salir</a>
+      <a class="btn btn-primary di di-add2" href="{{url_for('Personas.new')}}">Añadir Persona</a>
+      <a class="btn btn-primary di di-barcode" href="{{url_for('Personas.scan')}}">Escanear Codigo</a>
+      <a class="btn btn-primary di di-printer2" href="{{url_for('Personas.printcards')}}">Imprimir tarjetas</a>
 
       <table border class="table table-striped">
         <thead>

@@ -75,7 +75,7 @@ def inject_nav():
                 {"text": "> Crear", "endpoint": "Personas.new"},
                 {"text": "> Buscar por Codigo", "endpoint": "Personas.scan"},
                 "divider",
-                {"text": "Imprimir tarjetas", "endpoint": "Personas.print"},
+                {"text": "Imprimir tarjetas", "endpoint": "Personas.printcards"},
             ],
         },
         {
@@ -114,12 +114,9 @@ def status():
     return "G-Serv is online."
 
 
-@app.route("/uploads/<fspath>")
-def get_upload(fspath):
-    print("/uploads/" + fspath)
-    print("FS " + USERDATA_DIR + "uploads" + "/" + fspath)
-    return send_from_directory(USERDATA_DIR + "uploads", fspath)
-
+@app.route("/uploads/<path:path>")
+def get_upload(path):
+    return send_from_directory(USERDATA_DIR + "uploads", path)
 
 app.register_blueprint(modules.ComedorBlueprint)
 app.register_blueprint(modules.ResumenDiarioBlueprint)
@@ -151,8 +148,9 @@ No cierres esta ventana.
 ------------------------------------
 """
     )
-    HOST = "127.0.0.1"
-    if utils.os.environ.get("ISDOCKER") != None:
+    if getattr(utils.sys, 'frozen', False):
+        HOST = "127.0.0.1"
+    else:
         HOST = "0.0.0.0"
 
     config = utils.get_config()
@@ -163,7 +161,7 @@ No cierres esta ventana.
         {BASE: app.wsgi_app},
     )
     try:
-        if utils.os.environ.get("ISDOCKER") == None:
+        if getattr(utils.sys, 'frozen', False):
             webbrowser.open_new_tab(TIP)
     except:
         print("[D] No se ha podido iniciar el navegador web.")

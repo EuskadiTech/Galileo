@@ -69,6 +69,7 @@ class DateParser:
             iso (string, optional): Custom datetime, if not now. Defaults to None.
             locale (dict, optional): Custom locale config. Defaults to Spanish.
         """
+        self.locale = locale
         if iso == None:
             self.dt = datetime.now()
         else:
@@ -80,9 +81,9 @@ class DateParser:
         Returns:
             string: Result in locale's format
         """
-        hdow: str = self.LOCALE_DATE["DAY_OF_WEEK"][self.dt.weekday()]
-        hmonth: str = self.LOCALE_DATE["MONTH"][self.dt.month - 1]
-        format: str = self.LOCALE_DATE["FORMATS"]["Day"]
+        hdow: str = self.locale["DAY_OF_WEEK"][self.dt.weekday()]
+        hmonth: str = self.locale["MONTH"][self.dt.month - 1]
+        format: str = self.locale["FORMATS"]["Day"]
         result: str = format.format(
             hdow=hdow,
             hmonth=hmonth,
@@ -151,27 +152,38 @@ def set_config(setconf):
     CONFIG = json.load(open(USERDATA_DIR + "config.json", "r"))
     return CONFIG
 
+def check_path(path):
+    if not os.path.isdir(path):
+        os.mkdir(path)
+
 #region Tunnels
 class Tunnel:
     # TODO: Implement https://ssi.sh/ as a tunnel
     TUNNEL = None
-    TIMEOUT = 3000 # 50 min
+    TIMEOUT_TUNNEL = 3000 # 50 min
+    TIMEOUT_CACHE = 900 # 15 min
     TRIGGER = Event()
     def __init__(self):
         pass
     
     def loop(self):
-        TIMER = 0
+        TIMER_TUNNEL = 0
+        TIMER_CACHE = 0
         while True:
-            TIMER += 1
+            TIMER_TUNNEL += 1
+            TIMER_CACHE += 1
             if self.TRIGGER.is_set():
                 break
-            if TIMER > self.TIMEOUT:
+            if TIMER_TUNNEL > self.TIMEOUT_TUNNEL:
                 print(">> Recargando Tunel SSH")
                 self.stop_ssh_tunnel()
-                TIMER = 0
+                TIMER_TUNNEL = 0
                 sleep(1)
                 self.start_ssh_tunnel()
+            if TIMER_CACHE > self.TIMEOUT_CACHE:
+                print(">> Vaciando Cache HTTP")
+                TIMER_CACHE = 0
+                clear_cache()
             if self.TUNNEL == None:
                 self.start_ssh_tunnel()
             sleep(1)

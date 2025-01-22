@@ -87,8 +87,10 @@ def api__reqMenu(user):
 @confirm_deletion
 @with_auth("comedor:delete")
 def api__deleteMenu(user, mid):
-    DB_COMEDOR.delete_by_id(str(mid))
-    return redirect(url_for("Comedor.index"))
+    if request.method == "POST" and request.form.get("deletecapcha") == "ELIMINAR":
+        DB_COMEDOR.delete_by_id(str(mid))
+        return redirect(url_for("Comedor.index"))
+    return render_template("confirmDeletion.html", USER=user)
 
 
 @app.route("/api/comedor/downloadMenu/<mid>")

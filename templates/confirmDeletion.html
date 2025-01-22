@@ -6,13 +6,14 @@
         <div class="card-header">Confirmación de eliminado</div>
         <div class="card-body">
             <h4 class="card-title">¿Realmente quieres borrarlo?</h4>
-            Escribe <b>ACEPTO</b> para borrarlo
-            <div class="input-group">
-                <input type="text" class="form-control" id="confirmCode" placeholder="Capcha" autocomplete="off">
-                <button type="button" class="btn btn-warning"
-                    onclick="location.search = 'confirmDeletion=' + document.getElementById('confirmCode').value">Confirmar</button>
-                <!-- <button type="button" class="btn btn-primary">Cancelar</button> -->
-            </div>
+            Escribe <b>ELIMINAR</b> para borrarlo
+            <form method="post">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="confirmCode" name="deletecapcha" placeholder="Capcha" autocomplete="off">
+                    <button type="submit" class="btn btn-secondary">Confirmar</button>
+                    <!-- <button type="button" class="btn btn-primary">Cancelar</button> -->
+                </div>
+            </form>
         </div>
     </div>
 </center>
