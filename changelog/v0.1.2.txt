@@ -1,0 +1,11 @@
+- Añadir healthcheck de Docker
+- Añadir confirmación de borrado en Comedor, Personas, y Recetas
+- Arreglar la visualización de archivos subidos
+- Añadido la selección de fotos en Editar Persona
+- Mejorado las condiciones de ejecución en Docker
+- Añadido Bootstrap a Recursos Locales (static)
+- Añadido mejoras para la impresión
+- Arreglado el borde de las tarjetas de personas
+- Mejoras de diseño (Mostrar botones como botones, tablas como tablas, etc.)
+- Borrado automatico de Cache HTTP (usado principalmente en el clima de wttr.in)
+- Añadido un elemento de noticias EuskadiTech al resumen diario
