@@ -1,3 +1,4 @@
+Nueva versión: v0.2.0
 - Añadir healthcheck de Docker
 - Añadir confirmación de borrado en Comedor, Personas, y Recetas
 - Arreglar la visualización de archivos subidos
