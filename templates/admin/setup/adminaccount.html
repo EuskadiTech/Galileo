@@ -4,7 +4,7 @@
     <center>
       <h2>Registra a un Administrador</h2>
       <form action="{{url_for('Admin.setup__adminaccount')}}" method="POST">
-        <fieldset>
+        <fieldset style="width: calc(100% - 30px);max-width: 25rem;text-align: left;">
           <legend>Añadir administrador</legend>
           <label>Nombre: <input type="text" name="nombre" required></label>
           <br />
@@ -21,7 +21,7 @@
             Markdown</a>
           <br />
           <input type="submit" class="btn btn-primary actbtn di di-save" value="Crear" />
-          <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
+          <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
         </fieldset>
       </form>
     </center>

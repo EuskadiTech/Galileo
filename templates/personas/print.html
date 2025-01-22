@@ -5,10 +5,10 @@
       <h2 class="nop">Tarjeta Identificativas</h2>
       {% for key in recetas %}
 
-      <table border style="width: calc(100% - 30px); max-width: 30rem; text-align: left;">
+      <table border style="width: calc(100% - 30px); max-width: 30rem; text-align: left; border: 1px solid black; color: black;">
         <tr>
-          <td style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px;">{{recetas[key]["Nombre"]}} ({{recetas[key]["Region"]}})</td>
-          <td style="width: 150px; text-align: center;" rowspan="2">
+          <td style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px; border: 1px solid black;">{{recetas[key]["Nombre"]}} ({{recetas[key]["Region"]}})</td>
+          <td style="width: 150px; text-align: center; border: 1px solid black;" rowspan="2">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=15&data={{recetas[key]['Codigo']}}"
               width="150px"><br><small>
                 Codigo - {{recetas[key]["Codigo"]}}
@@ -25,12 +25,12 @@
           </td>
         </tr>
         <tr class="nop">
-          <td style="font-size: 75%;">
+          <td style="font-size: 75%; border: 1px solid black;">
             <b>Roles:</b> <code style="font-family: monospace !important;">{{recetas[key]['Roles']}}</code>
             <br />
             <b>Fecha de Nacimiento:</b> {{recetas[key]['F-nac']}}
           </td>
-          <td style="width: 150px; text-align: center;" rowspan="1">
+          <td style="width: 150px; text-align: center; border: 1px solid black;" rowspan="1">
             <code style="font-family: monospace !important;font-size: 20px;">{{recetas[key]['Puntos']}} puntos</code>
           </td>
         </tr>
@@ -42,7 +42,7 @@
         <a href="https://axis.tech.eus/naiel.fyi/mdsyntax.html" target="_blank" rel="noopener noreferrer">Manual de
           Markdown</a>
         <br />
-        <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
+        <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
       </div>
     </center>
 {% endblock %}

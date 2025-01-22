@@ -4,6 +4,7 @@ from random import choice
 from ..Comedor.localutils import fromDay_comedor
 from ..Cafe.views import get_receta
 from ..Personas.localutils import PersonAuth, with_auth
+
 app = Blueprint("ResumenDiario", __name__)
 
 
@@ -21,7 +22,11 @@ def index(user):
         "Joke": "",
         "Comedor": fromDay_comedor(),
         "ComedorOKKO": {"OK": "suficiente", "KO": "poca"},
-        "Receta": get_receta()
+        "Receta": get_receta(),
+        "NoticiasEuskadiTech": cached_request(
+            "resumen-diario:eustech_news",
+            f"https://raw.githubusercontent.com/EuskadiTech/Galileo/refs/heads/main/changelog/latest.txt",
+        ).text,
     }
     config = get_config()
     if "print" in request.args.keys():

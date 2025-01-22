@@ -64,8 +64,7 @@ def edit(user, rid):
 @app.route("/recetas/<rid>/del", methods=["GET", "POST"])
 @with_auth("recetas:delete")
 def receta__del(user, rid):
-    if request.method == "POST":
+    if request.method == "POST" and request.form.get("deletecapcha") == "ELIMINAR":
         DB_RECETAS.delete_by_id(str(rid))
         return redirect(url_for("Recetas.index"))
-    receta = DB_RECETAS.get_by_id(str(rid))
-    return render_template("recetas/del.html", receta=receta, USER=user)
+    return render_template("confirmDeletion.html", USER=user)

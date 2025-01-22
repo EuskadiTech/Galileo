@@ -6,8 +6,8 @@
       {{content | safe }}
     </fieldset>
     <center class="nop">
-      <a class="actbtn di di-exit" href="{{url_for('Recetas.index')}}">Salir</a>
-      <a class="actbtn di di-edit" href="{{url_for('Recetas.edit', rid=rid)}}">Editar</a>
-      <a class="actbtn di di-printer2" onclick="print()">Imprimir</a>
+      <a class="btn btn-primary di di-exit" href="{{url_for('Recetas.index')}}">Salir</a>
+      <a class="btn btn-primary di di-edit" href="{{url_for('Recetas.edit', rid=rid)}}">Editar</a>
+      <a class="btn btn-primary di di-printer2" onclick="print()">Imprimir</a>
     </center>
 {% endblock %}

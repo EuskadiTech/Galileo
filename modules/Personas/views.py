@@ -6,6 +6,7 @@ from ..Cafe.models import ANILLAS
 from random import randint
 from . import localutils
 from .localutils import PersonAuth, with_auth, confirm_deletion
+from utils import USERDATA_DIR, os, check_path
 app = Blueprint("Personas", __name__)
 
 
@@ -57,7 +58,7 @@ def index(user):
 
 @app.route("/personas/print", methods=["GET"])
 @with_auth("personas:read")
-def print(user):
+def printcards(user):
     return render_template("personas/print.html", recetas=DB_PERSONAS.get_all(), USER=user)
 
 
@@ -92,7 +93,11 @@ def new():
         if er:
             return redirect(url_for("Personas.auth_scan", err = "Codigo del usuario creado: " + code))
         return redirect(url_for("Personas.index"))
-    return render_template("personas/new.html", ANILLAS=ANILLAS, USER=user, err=request.args.get("err"))
+    picpath = USERDATA_DIR + "uploads/personas"
+    check_path(USERDATA_DIR + "uploads")
+    check_path(USERDATA_DIR + "uploads/personas")
+    avatars = [f for f in os.listdir(picpath) if os.path.isfile(os.path.join(picpath, f))]
+    return render_template("personas/new.html", ANILLAS=ANILLAS, USER=user, err=request.args.get("err"), AVATARS=avatars)
 
 @app.route("/personas/scan", methods=["GET", "POST"])
 @with_auth("personas:read")
@@ -141,15 +146,18 @@ def edit(user, rid):
         except:
             DB_PERSONAS.add_new_key("Foto", "")
         return redirect(url_for("Personas.index"))
-    return render_template("personas/edit.html", receta=receta, rid=rid, ANILLAS=ANILLAS, USER=user)
+    picpath = USERDATA_DIR + "uploads/personas"
+    check_path(USERDATA_DIR + "uploads")
+    check_path(USERDATA_DIR + "uploads/personas")
+    avatars = [f for f in os.listdir(picpath) if os.path.isfile(os.path.join(picpath, f))]
+    return render_template("personas/edit.html", receta=receta, rid=rid, ANILLAS=ANILLAS, USER=user, AVATARS=avatars)
 
 
 @app.route("/personas/<rid>/del", methods=["GET", "POST"])
 @confirm_deletion
 @with_auth("personas:delete")
 def rdel(user, rid):
-    if request.method == "POST":
+    if request.method == "POST" and request.form.get("deletecapcha") == "ELIMINAR":
         DB_PERSONAS.delete_by_id(str(rid))
         return redirect(url_for("Personas.index"))
-    receta = DB_PERSONAS.get_by_id(str(rid))
-    return render_template("personas/del.html", receta=receta, USER=user)
+    return render_template("confirmDeletion.html", USER=user)

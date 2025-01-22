@@ -3,21 +3,23 @@
 {% block container %}
       <center>
         <h2>Menú del comedor del {{day}}</h2>
-        <a class="actbtn di di-exit" href="{{url_for('Comedor.index')}}"
+        <a class="btn btn-primary di di-exit" href="{{url_for('Comedor.index')}}"
           >Salir</a
         >
         <a
-          class="actbtn di di-calendar"
+          class="btn btn-primary di di-calendar"
           href="{{url_for('Comedor.byDayModal')}}"
           >Ver otra fecha</a
         >
         <!-- <h2>Menús</h2> -->
-        <table border>
+        <table border class="table table-striped">
           <thead>
-            <th>Menú</th>
-            <th>1<sup>er</sup> plato</th>
-            <th>2<sup>er</sup> plato</th>
-            <th>3<sup>er</sup> plato</th>
+            <tr class="table-primary">
+              <th>Menú</th>
+              <th>1<sup>er</sup> plato</th>
+              <th>2<sup>er</sup> plato</th>
+              <th>3<sup>er</sup> plato</th>
+            </tr>
           </thead>
           <tbody>
             {% for result in results %}

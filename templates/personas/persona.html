@@ -3,11 +3,11 @@
 {% block container %}
     <center>
       <h2 class="nop">Tarjeta Identificativa de {{receta["Nombre"]}}</h2>
-        <table border style="width: calc(100% - 30px); max-width: 30rem; text-align: left;">
+        <table style="width: calc(100% - 30px); max-width: 30rem; text-align: left; color: black; border: 1px solid black;">
           <tr>
-            <td colspan="2" style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px;">
+            <td colspan="2" style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px; border: 1px solid black;">
               {{receta["Nombre"]}} ({{receta["Region"]}})</td>
-            <td style="width: 150px; text-align: center;" rowspan="2">
+            <td style="width: 150px; text-align: center; border: 1px solid black;" rowspan="2">
               <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=15&data={{receta['Codigo']}}"
                 width="150px"><br><small>
                   Codigo - {{receta["Codigo"]}}
@@ -19,7 +19,7 @@
             </td>
           </tr>
           <tr>
-            <td style="padding: 0; width: 125px;">
+            <td style="padding: 0; width: 125px; border: 1px solid black;">
               <img src='{{ receta["Foto"] }}' alt="" height="125px">
             </td>
             <td>
@@ -29,22 +29,19 @@
             </td>
           </tr>
           <tr class="nop">
-            <td style="font-size: 75%;" colspan="2">
+            <td style="font-size: 75%; border: 1px solid black;" colspan="2">
               <b>Roles:</b> <code style="font-family: monospace !important;">{{" ".join(receta['Roles'])}}</code>
             </td>
-            <td style="width: 150px; text-align: center;" rowspan="1">
+            <td style="width: 150px; text-align: center; border: 1px solid black;" rowspan="1">
               <code style="font-family: monospace !important;font-size: 20px;">{{receta['Puntos']}} puntos</code>
             </td>
           </tr>
         </table>
       <div class="nop">
         <br>
-        <a href="https://axis.tech.eus/naiel.fyi/mdsyntax.html" target="_blank" rel="noopener noreferrer">Manual de
-          Markdown</a>
-        <br />
-        <a class="actbtn di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
-        <a class="actbtn di di-edit" href="{{url_for('Personas.edit', rid=rid)}}">Editar</a>
-        <a class="actbtn di di-edit" href="{{url_for('Cafe.historial', rid=rid)}}">Historial SuperCafé</a>
+        <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
+        <a class="btn btn-primary di di-edit" href="{{url_for('Personas.edit', rid=rid)}}">Editar</a>
+        <a class="btn btn-primary di di-edit" href="{{url_for('Cafe.historial', rid=rid)}}">Historial SuperCafé</a>
       </div>
     </center>
 {% endblock %}
