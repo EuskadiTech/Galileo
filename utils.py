@@ -180,7 +180,7 @@ class Tunnel:
         config = get_config()
         self.thread = Thread(target=self.loop)
         self.thread.start()
-        return "https://rp.tech.eus/rd/" + config["Clave Proxy"]
+        return "https://grp.naiel.fyi/rd/" + config["Clave Proxy"]
     
     def stop(self):
         self.TRIGGER.set()
@@ -211,7 +211,7 @@ class Tunnel:
         oti = "ETRP No Disp."
         if config.get("Clave Proxy") != None:
             oti = requests.post(
-                "https://rp.tech.eus/__rp/publish",
+                "https://grp.naiel.fyi/__rp/publish",
                 json={"conid": config["Clave Proxy"], "baseurl": TUNNEL_URLS[0]},
             ).json()["url"]
         TUNNEL_URLS.append(oti)

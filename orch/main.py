@@ -4,7 +4,7 @@ import http
 
 app = Flask(__name__)
 URLS = {}
-BASE_URL_RP = "https://rp.tech.eus/"
+BASE_URL_RP = "https://grp.naiel.fyi/"
 KO_TEMPLATE = """<!DOCTYPE html>
 <html>
   <head>

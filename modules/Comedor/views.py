@@ -75,7 +75,7 @@ def api__reqMenu(user):
     f = request.files["file"]
     co = f.read()
     req = requests.post(
-        f"https://rp.tech.eus/creq/{pid}/SuperAI/menu",
+        f"https://grp.naiel.fyi/creq/{pid}/SuperAI/menu",
         files={"file": co},
         data=request.form,
     )
