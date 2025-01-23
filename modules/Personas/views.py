@@ -87,7 +87,7 @@ def new():
                 "Region": request.form.get("region", "Sin Aula"),
                 "SC_lastcomanda": {},
                 "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
-                "Foto": request.form.get("foto", "https://naiel.fyi/static/img/unk.jpg"),
+                "Foto": request.form.get("Foto", "https://naiel.fyi/static/img/unk.jpg"),
             }
         )
         if er:
@@ -140,7 +140,7 @@ def edit(user, rid):
                     "PIN": request.form.get("pin", receta["PIN"]).upper(),
                     "Region": request.form.get("region", receta["Region"]).upper(),
                     "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
-                    "Foto":request.form.get("foto", ""),
+                    "Foto":request.form.get("Foto", ""),
                 }
             )
         except:

@@ -5,7 +5,6 @@
       <h2>Persona: {{receta["Nombre"]}}</h2>
       <form action="{{url_for('Personas.edit', rid=rid)}}" method="POST">
         <fieldset style="width: calc(100% - 30px);max-width: 35rem;text-align: left;float: left;">
-          <legend>Añadir receta</legend>
           <div>
             <label class="col-form-label" for="formNombre">Nombre</label>
             <input type="text" class="form-control" placeholder="Nombre" id="formNombre" name="Nombre" value="{{receta['Nombre']}}">

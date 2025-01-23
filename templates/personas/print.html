@@ -7,7 +7,7 @@
 
       <table border style="width: calc(100% - 30px); max-width: 30rem; text-align: left; border: 1px solid black; color: black;">
         <tr>
-          <td style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px; border: 1px solid black;">{{recetas[key]["Nombre"]}} ({{recetas[key]["Region"]}})</td>
+          <td colspan="2" style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px; border: 1px solid black;">{{recetas[key]["Nombre"]}} ({{recetas[key]["Region"]}})</td>
           <td style="width: 150px; text-align: center; border: 1px solid black;" rowspan="2">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=15&data={{recetas[key]['Codigo']}}"
               width="150px"><br><small>
@@ -20,12 +20,17 @@
           </td>
         </tr>
         <tr>
+          <td style="padding: 0; width: 125px; border: 1px solid black;">
+            <img src='{{url_for("get_upload", path="personas/"+recetas[key]["Foto"]) }}' alt="" height="125px">
+          </td>
           <td>
-            {{recetas[key]["markdown"]}}
+            <center>
+              {{recetas[key]["markdown"]}}
+            </center>
           </td>
         </tr>
         <tr class="nop">
-          <td style="font-size: 75%; border: 1px solid black;">
+          <td colspan="2" style="font-size: 75%; border: 1px solid black;">
             <b>Roles:</b> <code style="font-family: monospace !important;">{{recetas[key]['Roles']}}</code>
             <br />
             <b>Fecha de Nacimiento:</b> {{recetas[key]['F-nac']}}
@@ -39,10 +44,8 @@
       {% endfor %}
       <div class="nop">
         <br>
-        <a href="https://axis.tech.eus/naiel.fyi/mdsyntax.html" target="_blank" rel="noopener noreferrer">Manual de
-          Markdown</a>
-        <br />
-        <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
+        <a class="btn btn-primary" href="{{url_for('Personas.index')}}">Salir</a>
+        <a class="btn btn-primary" onclick="print()">Imprimir</a>
       </div>
     </center>
 {% endblock %}
