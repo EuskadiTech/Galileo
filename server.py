@@ -51,6 +51,7 @@ def inject_nav():
             "subitems": [
                 {"text": "Ajustes", "endpoint": "Cafe.config"},
                 {"text": "Iniciar Comanda", "endpoint": "Cafe.select"},
+                {"text": "Historial del Clientx", "endpoint": "Personas.scan"},
                 "divider",
                 {"text": "Pant. Cocina", "endpoint": "Cafe.cocina"},
                 {"text": "Pant. Pago", "endpoint": "Cafe.pago"},
@@ -84,6 +85,12 @@ def inject_nav():
             "subitems": [
                 {"text": "Recetas", "endpoint": "Recetas.index"},
                 {"text": "> Crear", "endpoint": "Recetas.new"},
+            ],
+        },
+        {
+            "text": "Admin",
+            "subitems": [
+                {"text": "Archivos", "endpoint": "Admin.files"},
             ],
         },
     ]

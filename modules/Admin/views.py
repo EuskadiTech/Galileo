@@ -2,6 +2,7 @@ from flask import Blueprint, request, send_file, render_template, url_for, redir
 from random import randint
 from ..Personas.localutils import PersonAuth, with_auth
 from ..Personas.models import DB_PERSONAS
+from utils import USERDATA_DIR, os, check_path
 app = Blueprint("Admin", __name__)
 
 @app.route("/admin/setup/adminaccount", methods=["GET", "POST"])
@@ -29,8 +30,68 @@ def setup__adminaccount():
                 "Region": request.form.get("region", "Sin Aula"),
                 "SC_lastcomanda": {},
                 "SC_Anilla": "de color ?;#ff00ff",
-                "Foto": "https://www.iconexperience.com/_img/v_collection_png/256x256/shadow/scientist.png",
+                "Foto": "",
             }
         )
         return redirect(url_for("Personas.auth_scan", err = "Codigo del usuario creado: " + code + " - PIN: (" + request.form.get("pin", "").upper() + ")"))
     return render_template("admin/setup/adminaccount.html")
+
+
+@app.route("/admin/files/<path:path>", methods=["GET", "POST"])
+@app.route("/admin/files/", methods=["GET", "POST"], defaults={"path": ""})
+@with_auth("admin")
+def files(user, path):
+    check_path(USERDATA_DIR + "uploads")
+    check_path(USERDATA_DIR + "uploads/personas")
+    files = [f for f in os.listdir(USERDATA_DIR + "uploads/" + path) if os.path.isfile(os.path.join(USERDATA_DIR + "uploads/" + path, f))]
+    folders = [f for f in os.listdir(USERDATA_DIR + "uploads/" + path) if os.path.isdir(os.path.join(USERDATA_DIR + "uploads/" + path, f))]
+    return render_template("admin/files.html", files = files, folders = folders, path = path)
+
+
+@app.route("/admin/files_rm/", methods=["GET", "POST"], defaults={"path": ""})
+@app.route("/admin/files_rm/<path:path>", methods=["GET", "POST"])
+@with_auth("admin")
+def filesrm(user, path):
+    if request.method == "POST" and request.form.get("deletecapcha") == "ELIMINAR":
+        os.unlink(os.path.join(USERDATA_DIR + "uploads/",  path))
+        return redirect(url_for("Admin.files", path = "/".join(path.split("/")[:-1])))
+    return render_template("confirmDeletion.html", USER=user)
+
+@app.route("/admin/files_rmdir/", methods=["GET"], defaults={"path": ""})
+@app.route("/admin/files_rmdir/<path:path>", methods=["GET"])
+@with_auth("admin")
+def filesrmdir(user, path):
+    try:
+        os.rmdir(os.path.join(USERDATA_DIR + "uploads/",  path))
+    except OSError:
+        return render_template("admin/filesrmdir_err.html")
+    return redirect(url_for("Admin.files", path = "/".join(path.split("/")[:-1])))
+
+
+@app.route("/admin/files_up/", methods=["GET", "POST"], defaults={"path": ""})
+@app.route("/admin/files_up/<path:path>", methods=["GET", "POST"])
+@with_auth("admin")
+def filesupload(user, path):
+    if request.method == "POST":
+        folder = os.path.join(USERDATA_DIR + "uploads/", path)
+        file = request.files["Archivo"]
+        file.save(os.path.join(folder, file.filename))
+        return redirect(url_for("Admin.files", path = path))
+    return render_template("admin/filesupload.html", path=path)
+
+@app.route("/admin/files_mkd/", methods=["GET", "POST"], defaults={"path": ""})
+@app.route("/admin/files_mkd/<path:path>", methods=["GET", "POST"])
+@with_auth("admin")
+def filesmkdir(user, path):
+    return redirect(url_for("Admin.files", path = path))
+
+@app.route("/admin/files_mv/", methods=["GET", "POST"], defaults={"path": ""})
+@app.route("/admin/files_mv/<path:path>", methods=["GET", "POST"])
+@with_auth("admin")
+def filesmv(user, path):
+    folder = "/".join(path.split("/")[:-1])
+    if request.method == "POST":
+        os.rename(os.path.join(USERDATA_DIR + "uploads", request.form["Origen"]), os.path.join(USERDATA_DIR + "uploads", request.form["Destino"]))
+        return redirect(url_for("Admin.files", path = folder))
+
+    return render_template("admin/filesmv.html", path=folder, filename = path)

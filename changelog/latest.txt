@@ -1,3 +1,7 @@
+Nueva versión: v0.2.1
+- Añadido administrador de archivos
+- Arreglado algunos fallos
+
 Nueva versión: v0.2.0
 - Añadir healthcheck de Docker
 - Añadir confirmación de borrado en Comedor, Personas, y Recetas

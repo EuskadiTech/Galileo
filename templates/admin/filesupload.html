@@ -1,0 +1,19 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+    <center>
+      <h2>Subir archivo</h2>
+      <form method="POST" enctype="multipart/form-data">
+        <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
+          <legend>Subir archivo</legend>
+          <div>
+            <label class="col-form-label" for="formArchivo">Archivo</label>
+            <input type="file" class="form-control" placeholder="Archivo" id="formArchivo" name="Archivo">
+          </div>
+          <br>
+          <input type="submit" class="btn btn-primary" value="Subir" />
+          <a class="btn btn-primary di di-exit" href="{{url_for('Admin.files', path=path)}}">Salir</a>
+        </fieldset>
+      </form>
+    </center>
+{% endblock %}

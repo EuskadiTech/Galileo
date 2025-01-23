@@ -137,7 +137,7 @@
           {{personas[comanda[1]['_persona']]['Nombre']}} ({{personas[comanda[1]['_persona']]['Region']}})
         </h3>-->
           <label style="width: 315px; max-width: none; height: 76px;">
-            <img src='{{ personas[comanda[1]["_persona"]]["Foto"] }}' style="height: 64px !important;">
+            <img src='{{ url_for("get_upload", path="personas/"+personas[comanda[1]["_persona"]]["Foto"]) }}' style="height: 64px !important;">
             <div class="f fb fn"><span>
                     <b>{{personas[comanda[1]['_persona']]["Nombre"]}} ({{personas[comanda[1]['_persona']]["Region"]}})</b>
                     <br>

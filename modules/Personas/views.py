@@ -7,6 +7,7 @@ from random import randint
 from . import localutils
 from .localutils import PersonAuth, with_auth, confirm_deletion
 from utils import USERDATA_DIR, os, check_path
+from glob import glob
 app = Blueprint("Personas", __name__)
 
 
@@ -87,7 +88,7 @@ def new():
                 "Region": request.form.get("region", "Sin Aula"),
                 "SC_lastcomanda": {},
                 "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
-                "Foto": request.form.get("Foto", "https://naiel.fyi/static/img/unk.jpg"),
+                "Foto": request.form.get("Foto", ""),
             }
         )
         if er:
@@ -96,7 +97,7 @@ def new():
     picpath = USERDATA_DIR + "uploads/personas"
     check_path(USERDATA_DIR + "uploads")
     check_path(USERDATA_DIR + "uploads/personas")
-    avatars = [f for f in os.listdir(picpath) if os.path.isfile(os.path.join(picpath, f))]
+    avatars = glob(USERDATA_DIR + "uploads/personas")
     return render_template("personas/new.html", ANILLAS=ANILLAS, USER=user, err=request.args.get("err"), AVATARS=avatars)
 
 @app.route("/personas/scan", methods=["GET", "POST"])
@@ -149,7 +150,8 @@ def edit(user, rid):
     picpath = USERDATA_DIR + "uploads/personas"
     check_path(USERDATA_DIR + "uploads")
     check_path(USERDATA_DIR + "uploads/personas")
-    avatars = [f for f in os.listdir(picpath) if os.path.isfile(os.path.join(picpath, f))]
+    
+    avatars = [file.removeprefix(USERDATA_DIR + "uploads/personas/") for file in glob(USERDATA_DIR + "uploads/personas/**", recursive=True) if os.path.isfile(file)]
     return render_template("personas/edit.html", receta=receta, rid=rid, ANILLAS=ANILLAS, USER=user, AVATARS=avatars)
 
 

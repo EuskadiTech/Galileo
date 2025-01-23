@@ -59,7 +59,7 @@ def confirm_deletion(f):
     def decorated_function(*args, **kwargs):
         if request.args.get("confirmDeletion") is None:
             return render_template("confirmDeletion.html")
-        if request.args.get("confirmDeletion").upper() != "ACEPTO":
+        if request.args.get("confirmDeletion").upper() != "ELIMINAR":
             return render_template("confirmDeletion.html")
         return f(*args, **kwargs)
     return decorated_function

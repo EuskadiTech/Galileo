@@ -73,7 +73,10 @@
         height: 10rem;
     }
     @keyframes blinker {
-        50% {
+        60% {
+            opacity: 1;
+        }
+        100% {
             opacity: 0;
         }
     }
@@ -98,7 +101,7 @@
 </script>
 <form method="post">
     <label style="width: 300px;">
-        <img src='{{ client["Foto"] }}' style="height: 64px !important;">
+        <img src='{{ url_for("get_upload", path="personas/"+client["Foto"]) }}' style="height: 64px !important;">
         <div class="f fb fn"><span>
                 <b>{{client["Nombre"]}} ({{client["Region"]}})</b>
                 <br>
@@ -221,8 +224,8 @@
             </div>
         </label>
         {% else %}
-        <label style="background-color: lightcoral;">
-            <div class="f fb fn"><span><small>Sin Autorización</small>Cafeina</span>
+        <label style="background-color: rgb(255, 0, 0); color: white; animation: blinker 1s linear infinite;">
+            <div class="f fb fn"><span><small>Sin Autorización</small><br>Cafeina</span>
             </div>
         </label>
         {% endif %}
@@ -370,9 +373,8 @@
         <br>
       <div class="input-group">
 
-        <button class="btn btn-primary" type="submit">Enviar</button>
-        <button class="btn btn-secondary" onclick='location.href = "{{url_for("Cafe.select")}}"' type="button" class="np">Cancelar esta comanda</button>
-        <button class="btn btn-danger" onclick='location.href = "{{url_for("Cafe.index")}}"' type="button" class="np">Salir</button>
+        <button class="btn btn-primary" type="submit">Enviar esta comanda</button>
+        <button class="btn btn-secondary" onclick='location.href = "{{url_for("Cafe.index")}}"' type="button" class="np">Salir</button>
         </div>
     </fieldset>
 
