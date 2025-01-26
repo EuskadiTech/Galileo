@@ -133,13 +133,10 @@ app.register_blueprint(modules.CafeBlueprint)
 app.register_blueprint(modules.AdminBlueprint)
 
 if __name__ == "__main__":
-    # try:
-    #     import pyi_splash
-    #     pyi_splash.update_text('Sistema arrancado.')
-    #     pyi_splash.close()
-    # except:
-    #     pass
-    tunnel = utils.Tunnel()
+    if utils.os.environ.get("GAL_DOCKERTUNNEL_MYURL") != None:
+        tunnel = utils.DirectTunnel(utils.os.environ.get("GAL_DOCKERTUNNEL_MYURL"), utils.os.environ.get("GAL_DOCKERTUNNEL_ORCHURL", "https://grp.naiel.fyi"))
+    else:
+        tunnel = utils.PinggyTunnel()
     TIP = tunnel.start()
     print(
         f"""

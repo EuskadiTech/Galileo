@@ -158,7 +158,7 @@ def check_path(path):
         os.mkdir(path)
 
 #region Tunnels
-class Tunnel:
+class PinggyTunnel:
     # TODO: Implement https://ssi.sh/ as a tunnel
     TUNNEL = None
     TIMEOUT_TUNNEL = 3000 # 50 min
@@ -244,4 +244,51 @@ class Tunnel:
             self.TUNNEL = None
         except:
             pass
+
+class DirectTunnel:
+    """Use this tunnel if Orch can connect to the server directly"""
+    TIMEOUT_TUNNEL = 3000 # 50 min
+    TIMEOUT_CACHE = 900 # 15 min
+    TRIGGER = Event()
+    def __init__(self, myurl: str, orchurl: str):
+        self.orchurl = orchurl
+        self.myurl = myurl
+    
+    def loop(self):
+        TIMER_CACHE = 0
+        self.start_ssh_tunnel()
+        while True:
+            TIMER_CACHE += 1
+            if self.TRIGGER.is_set():
+                break
+            if TIMER_CACHE > self.TIMEOUT_CACHE:
+                print(">> Vaciando Cache HTTP")
+                TIMER_CACHE = 0
+                clear_cache()
+            sleep(1)
+    
+    def start(self):
+        config = get_config()
+        self.thread = Thread(target=self.loop)
+        self.thread.start()
+        return self.orchurl + "/rd/" + config["Clave Proxy"]
+    
+    def stop(self):
+        self.TRIGGER.set()
+        self.thread.join()
+    
+    def start_ssh_tunnel(self, retries: int = 10):
+        TUNNEL_URLS = ["", ""]
+        config = get_config()
+        oti = "ETRP No Disp."
+        if config.get("Clave Proxy") != None:
+            oti = requests.post(
+                self.orchurl + "/__rp/publish",
+                json={"conid": config["Clave Proxy"], "baseurl": self.myurl},
+            ).json()["url"]
+        TUNNEL_URLS.append(oti)
+        return TUNNEL_URLS
+
+    def stop_ssh_tunnel(self):
+        pass
 #endregion
