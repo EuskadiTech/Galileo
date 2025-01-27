@@ -131,16 +131,16 @@ def edit(user, rid):
             DB_PERSONAS.update_by_id(
                 str(rid),
                 {
-                    "Nombre": request.form.get("nombre", receta["Nombre"]),
+                    "Nombre": request.form.get("Nombre", receta["Nombre"]),
                     "Roles": request.form.getlist("roles[]"),
                     "F-nac": request.form.get("fecha", receta["F-nac"]),
-                    "Puntos": int(request.form.get("puntos", receta["Puntos"])),
-                    "Codigo": request.form.get("codigo", receta["Codigo"]),
+                    "Puntos": int(request.form.get("Puntos", receta["Puntos"])),
+                    "Codigo": request.form.get("Codigo", receta["Codigo"]),
                     "markdown": request.form.get("markdown", receta["markdown"]),
-                    "PIN": request.form.get("pin", receta["PIN"]).upper(),
-                    "Region": request.form.get("region", receta["Region"]).upper(),
+                    "PIN": request.form.get("PIN", receta["PIN"]).upper(),
+                    "Region": request.form.get("Region", receta["Region"]).upper(),
                     "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
-                    "Foto":request.form.get("Foto", ""),
+                    "Foto": request.form.get("Foto", ""),
                 }
             )
         except:
