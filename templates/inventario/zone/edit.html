@@ -1,0 +1,30 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+<center>
+  <h2>Modificar elemento</h2>
+  <form method="POST" enctype="multipart/form-data">
+    <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
+      <legend>Modificar elemento</legend>
+      <div>
+        <label class="col-form-label" for="formNombre">Nombre</label>
+        <input type="text" class="form-control" placeholder="Nombre" id="formNombre" name="Nombre"
+          value="{{zone['Nombre']}}" required>
+      </div>
+      <div>
+        <label class="col-form-label" for="formCodigo">Codigo</label>
+        <input type="text" class="form-control" placeholder="Codigo" id="formCodigo" name="Codigo"
+          value="{{zone['Codigo']}}" required>
+      </div>
+      <div>
+        <label class="col-form-label" for="formNotas">Notas</label>
+        <textarea class="form-control" placeholder="Notas" id="formNotas" name="Notas">{{zone['Notas']}}</textarea>
+      </div>
+
+
+      <input type="submit" class="btn btn-primary actbtn di di-save" value="Guardar" />
+      <a class="btn btn-primary di di-exit" href="{{url_for('Recetas.index')}}">Salir</a>
+    </fieldset>
+  </form>
+</center>
+{% endblock %}

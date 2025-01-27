@@ -1,0 +1,21 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+    <center>
+      <h2>Añadir receta</h2>
+      <form action="{{url_for('Recetas.new')}}" method="POST">
+        <div>
+          <label class="col-form-label" for="formNombre">Nombre</label>
+          <input type="text" required class="form-control" placeholder="Nombre" id="formNombre" name="Nombre">
+        </div>
+        <div>
+          <label class="col-form-label" for="formCodigo">Codigo</label>
+          <input type="text" required class="form-control" placeholder="Codigo" id="formCodigo" name="Codigo">
+        </div>
+        <div>
+          <label class="col-form-label" for="formNotas">Notas</label>
+          <textarea class="form-control" placeholder="Notas" id="formNotas" name="Notas"></textarea>
+        </div>
+      </form>
+    </center>
+{% endblock %}

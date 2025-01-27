@@ -78,14 +78,14 @@ def new():
         code = str(randint(100,9999))
         DB_PERSONAS.add(
             {
-                "Nombre": request.form.get("nombre", ""),
+                "Nombre": request.form.get("Nombre", ""),
                 "Roles": request.form.getlist("roles[]"),
                 "Puntos": 0,
-                "F-nac": request.form.get("fecha", ""),
+                "F-nac": request.form.get("Fecha", ""),
                 "markdown": request.form.get("markdown", ""),
                 "Codigo": code,
-                "PIN": request.form.get("pin", "").upper(),
-                "Region": request.form.get("region", "Sin Aula"),
+                "PIN": request.form.get("PIN", "").upper(),
+                "Region": request.form.get("Region", "Sin Aula"),
                 "SC_lastcomanda": {},
                 "SC_Anilla": request.form.get("SC_Anilla_Nombre", "Sin Anilla") + ";" + request.form.get("SC_Anilla_Color", "#ff00ff"),
                 "Foto": request.form.get("Foto", ""),

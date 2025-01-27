@@ -1,0 +1,33 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+<center>
+  <h1>parts descargadas en el servidor</h1>
+  <a class="btn btn-primary" href="{{url_for('index')}}">Salir</a>
+  <a class="btn btn-primary" href="{{url_for('Inventario.part__new')}}">Crear Receta</a>
+
+  <table border class="table table-striped">
+    <thead>
+      <tr class="table-primary">
+        <th>Codigo</th>
+        <th>Nombre</th>
+        <th>Origen</th>
+        <th>Zona</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for key in parts %}
+      <tr>
+        <td>{{parts[key]["Codigo"]}}</td>
+        <td><a href="{{url_for('Inventario.part__edit', rid = key)}}">{{parts[key]["Nombre"]}}</a></td>
+        <td>{{parts[key]["Origen"]}}</td>
+        <td>
+          <a href="{{url_for('Inventario.part__del', rid = key)}}">Borrar</a>
+          <a href="{{url_for('Inventario.part__edit', rid = key)}}">Editar</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</center>
+{% endblock %}

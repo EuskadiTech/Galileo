@@ -1,0 +1,30 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+    <center>
+      <h1>zones descargadas en el servidor</h1>
+      <a class="btn btn-primary" href="{{url_for('index')}}">Salir</a>
+      <a class="btn btn-primary" href="{{url_for('Inventario.zone__new')}}">Crear Receta</a>
+
+      <table border class="table table-striped">
+        <thead>
+          <tr class="table-primary">
+            <th>Codigo</th>
+            <th>Nombre</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for key in zones %}
+          <tr>
+            <td>{{zones[key]["Codigo"]}}</td>
+            <td><a href="{{url_for('Inventario.zone__edit', rid = key)}}">{{zones[key]["Nombre"]}}</a></td>
+            <td>
+              <a href="{{url_for('Inventario.zone__del', rid = key)}}">Borrar</a>
+              <a href="{{url_for('Inventario.zone__edit', rid = key)}}">Editar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </center>
+{% endblock %}
