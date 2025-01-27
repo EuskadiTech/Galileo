@@ -3,6 +3,7 @@ from random import randint
 from ..Personas.localutils import PersonAuth, with_auth
 from ..Personas.models import DB_PERSONAS
 from utils import USERDATA_DIR, os, check_path
+from os.path import join as join_path
 app = Blueprint("Admin", __name__)
 
 @app.route("/admin/setup/adminaccount", methods=["GET", "POST"])
@@ -43,8 +44,8 @@ def setup__adminaccount():
 def files(user, path):
     check_path(USERDATA_DIR + "uploads")
     check_path(USERDATA_DIR + "uploads/personas")
-    files = [f for f in os.listdir(USERDATA_DIR + "uploads/" + path) if os.path.isfile(os.path.join(USERDATA_DIR + "uploads/" + path, f))]
-    folders = [f for f in os.listdir(USERDATA_DIR + "uploads/" + path) if os.path.isdir(os.path.join(USERDATA_DIR + "uploads/" + path, f))]
+    files = [f for f in os.listdir(join_path(USERDATA_DIR + "uploads/", path)) if os.path.isfile(os.path.join(join_path(USERDATA_DIR + "uploads/", path), f))]
+    folders = [f for f in os.listdir(join_path(USERDATA_DIR + "uploads/", path)) if os.path.isdir(os.path.join(join_path(USERDATA_DIR + "uploads/", path), f))]
     return render_template("admin/files.html", files = files, folders = folders, path = path)
 
 
