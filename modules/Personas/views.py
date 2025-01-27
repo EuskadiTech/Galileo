@@ -96,7 +96,7 @@ def new():
         return redirect(url_for("Personas.index"))
     check_path(USERDATA_DIR + "uploads")
     check_path(USERDATA_DIR + "uploads/personas")
-    avatars = glob(os.path.join(USERDATA_DIR, "uploads/personas"))
+    avatars = [file.replace("\\", "/") for file in glob(os.path.join(USERDATA_DIR, "uploads/personas"))]
     return render_template("personas/new.html", ANILLAS=ANILLAS, USER=user, err=request.args.get("err"), AVATARS=avatars)
 
 @app.route("/personas/scan", methods=["GET", "POST"])
@@ -150,7 +150,7 @@ def edit(user, rid):
     check_path(USERDATA_DIR + "uploads")
     check_path(USERDATA_DIR + "uploads/personas")
     
-    avatars = [file.removeprefix(os.path.join(USERDATA_DIR, "uploads/personas/")) for file in glob(os.path.join(USERDATA_DIR, "uploads/personas/**"), recursive=True) if os.path.isfile(file)]
+    avatars = [file.replace("\\", "/").removeprefix(os.path.join(USERDATA_DIR, "uploads/personas/").replace("\\", "/")) for file in glob(os.path.join(USERDATA_DIR, "uploads/personas/**"), recursive=True) if os.path.isfile(file)]
     return render_template("personas/edit.html", receta=receta, rid=rid, ANILLAS=ANILLAS, USER=user, AVATARS=avatars)
 
 
