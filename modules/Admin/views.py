@@ -1,4 +1,5 @@
 from flask import Blueprint, request, send_file, render_template, url_for, redirect, make_response
+from werkzeug.utils import secure_filename
 from random import randint
 from ..Personas.localutils import PersonAuth, with_auth
 from ..Personas.models import DB_PERSONAS
@@ -92,7 +93,8 @@ def filesupload(user, path):
     if request.method == "POST":
         folder = full_path
         file = request.files["Archivo"]
-        file.save(os.path.join(folder, file.filename))
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(folder, filename))
         return redirect(url_for("Admin.files", path = path))
     return render_template("admin/filesupload.html", path=path)
 
