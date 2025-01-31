@@ -44,8 +44,12 @@ def setup__adminaccount():
 def files(user, path):
     check_path(USERDATA_DIR + "uploads")
     check_path(USERDATA_DIR + "uploads/personas")
-    files = [f for f in os.listdir(join_path(USERDATA_DIR + "uploads/", path)) if os.path.isfile(os.path.join(join_path(USERDATA_DIR + "uploads/", path), f))]
-    folders = [f for f in os.listdir(join_path(USERDATA_DIR + "uploads/", path)) if os.path.isdir(os.path.join(join_path(USERDATA_DIR + "uploads/", path), f))]
+    base_path = os.path.join(USERDATA_DIR + "uploads/")
+    full_path = os.path.normpath(os.path.join(base_path, path))
+    if not full_path.startswith(base_path):
+        raise Exception("Invalid path")
+    files = [f for f in os.listdir(full_path) if os.path.isfile(os.path.join(full_path, f))]
+    folders = [f for f in os.listdir(full_path) if os.path.isdir(os.path.join(full_path, f))]
     return render_template("admin/files.html", files = files, folders = folders, path = path)
 
 
@@ -53,8 +57,12 @@ def files(user, path):
 @app.route("/admin/files_rm/<path:path>", methods=["GET", "POST"])
 @with_auth("admin")
 def filesrm(user, path):
+    base_path = os.path.join(USERDATA_DIR + "uploads/")
+    full_path = os.path.normpath(os.path.join(base_path, path))
+    if not full_path.startswith(base_path):
+        raise Exception("Invalid path")
     if request.method == "POST" and request.form.get("deletecapcha") == "ELIMINAR":
-        os.unlink(os.path.join(USERDATA_DIR + "uploads/",  path))
+        os.unlink(full_path)
         return redirect(url_for("Admin.files", path = "/".join(path.split("/")[:-1])))
     return render_template("confirmDeletion.html", USER=user)
 
@@ -62,8 +70,12 @@ def filesrm(user, path):
 @app.route("/admin/files_rmdir/<path:path>", methods=["GET"])
 @with_auth("admin")
 def filesrmdir(user, path):
+    base_path = os.path.join(USERDATA_DIR + "uploads/")
+    full_path = os.path.normpath(os.path.join(base_path, path))
+    if not full_path.startswith(base_path):
+        raise Exception("Invalid path")
     try:
-        os.rmdir(os.path.join(USERDATA_DIR + "uploads/",  path))
+        os.rmdir(full_path)
     except OSError:
         return render_template("admin/filesrmdir_err.html")
     return redirect(url_for("Admin.files", path = "/".join(path.split("/")[:-1])))
@@ -73,8 +85,12 @@ def filesrmdir(user, path):
 @app.route("/admin/files_up/<path:path>", methods=["GET", "POST"])
 @with_auth("admin")
 def filesupload(user, path):
+    base_path = os.path.join(USERDATA_DIR + "uploads/")
+    full_path = os.path.normpath(os.path.join(base_path, path))
+    if not full_path.startswith(base_path):
+        raise Exception("Invalid path")
     if request.method == "POST":
-        folder = os.path.join(USERDATA_DIR + "uploads/", path)
+        folder = full_path
         file = request.files["Archivo"]
         file.save(os.path.join(folder, file.filename))
         return redirect(url_for("Admin.files", path = path))
@@ -90,9 +106,12 @@ def filesmkdir(user, path):
 @app.route("/admin/files_mv/<path:path>", methods=["GET", "POST"])
 @with_auth("admin")
 def filesmv(user, path):
+    base_path = os.path.join(USERDATA_DIR + "uploads/")
+    full_path = os.path.normpath(os.path.join(base_path, path))
+    if not full_path.startswith(base_path):
+        raise Exception("Invalid path")
     folder = "/".join(path.split("/")[:-1])
     if request.method == "POST":
-        os.rename(os.path.join(USERDATA_DIR + "uploads", request.form["Origen"]), os.path.join(USERDATA_DIR + "uploads", request.form["Destino"]))
+        os.rename(os.path.join(base_path, request.form["Origen"]), os.path.join(base_path, request.form["Destino"]))
         return redirect(url_for("Admin.files", path = folder))
-
     return render_template("admin/filesmv.html", path=folder, filename = path)
