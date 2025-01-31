@@ -154,7 +154,7 @@
     <fieldset class="cafeSelect">
         <summary>Metodo de pago</summary>
         {% if client["Puntos"] >= 10 %}
-        <label style="background-color: lightcoral; animation: blinker 3s linear infinite;">
+        <label style="background-color: rgb(255, 0, 0); color: white; animation: blinker 1s linear infinite;">
             <div class="f fb fn"><span>Café Gratis<br><small>Usa los puntos</small></span>
             </div>
         </label>
@@ -174,7 +174,7 @@
                 10}} {{"disabled" if client["Puntos"] < 10}}>
             </div>
         </label>
-        <label style="background-color: red; color: white;">
+        <label style="background-color: lightcoral; color: black;">
             <div class="f fb"><span>
                     Poner en deuda
                     <br><small>No Disponible</small>

@@ -65,14 +65,16 @@ def comanda(user, rid):
             "notas": request.form.get("notas"),
             "_persona": rid,
             "_grupo": "00 Sin Agrupar;white;black;",
-            "_fase": "Cocina"
+            "_fase": "Cocina - " + utils.DateParser().pretty_dayCode(),
         }
         if data["Tama_o"][0] == "Grande" and data["Leche"][0] != "Sin Leche":
             total += 20
         if data["Tama_o"][0] != "Grande" and data["Leche"][0] != "Sin Leche":
             total += 10
         if "Cafe" in data["Tipo"] or "Cafe Soluble" in data["Tipo"]:
-            total += 10
+            total += 20
+        if "Colacao" in data["Tipo"]:
+            total += 20
         if "Receta del dia" in data["Complementos"]:
             total += 10
         data["_precio"] = total
@@ -92,9 +94,9 @@ def comanda(user, rid):
 def cocina(user):
     regiones = {}
     def query(data):
-        if data["_fase"] == "cocina":
+        if "cocina" in data["_fase"]:
             return True
-        if data["_fase"] == "Cocina":
+        if "Cocina" in data["_fase"]:
             return True
     for key, val in  DB_COMANDAS.get_by_query(query).items():
         persona = DB_PERSONAS.get_by_id(val["_persona"])
@@ -115,9 +117,9 @@ def cocina(user):
 def pago(user):
     regiones = {}
     def query(data):
-        if data["_fase"] == "pago":
+        if "pago" in data["_fase"]:
             return True
-        if data["_fase"] == "Pago":
+        if "Pago" in data["_fase"]:
             return True
     for key, val in  DB_COMANDAS.get_by_query(query).items():
         persona = DB_PERSONAS.get_by_id(val["_persona"])
@@ -133,13 +135,18 @@ def pago(user):
         regiones=regiones, USER=user, fc="pago", ft="Historial"
     )
 
-@app.route("/cafe/historial/<rid>", methods=["GET", "POST"])
+@app.route("/cafe/historialfilter", methods=["GET", "POST"])
 @with_auth("cafe:read")
-def historial(user, rid):
+def historial(user):
     regiones = {}
     def query(data):
-        if data["_persona"] == rid:
-            return True
+        if request.args.get("fase") != None:
+            if request.args.get("fase") not in data["_fase"]:
+                return False
+        if request.args.get("rid") != None:
+            if request.args.get("rid") != data["_persona"]:
+                return False
+        return True
     for key, val in  DB_COMANDAS.get_by_query(query).items():
         persona = DB_PERSONAS.get_by_id(val["_persona"])
         if regiones.get(persona["Region"]) == None:
@@ -147,7 +154,7 @@ def historial(user, rid):
         regiones[persona["Region"]].append((key,val))
     return render_template(
         "cafe/display.html",
-        fase = "Historial",
+        fase = "Historial por filtro",
         personas = DB_PERSONAS.get_all(),
         Receta = "Receta del dia",
         comandas = DB_COMANDAS.get_by_query(query).items(),
@@ -163,8 +170,8 @@ def updategrp(user):
 @app.route("/cafe/transfer_fase/<rid>/<ft>/<fc>", methods=["GET"])
 @with_auth("cafe:cocina")
 def rdel(user, rid, ft, fc):
-    DB_COMANDAS.update_by_id(rid, {"_fase": ft})
-    if fc=="pago":
+    DB_COMANDAS.update_by_id(rid, {"_fase": ft + " - " + utils.DateParser().pretty_dayCode()})
+    if "pago" in fc:
         com = DB_COMANDAS.get_by_id(rid)
         puntos = DB_PERSONAS.get_by_id(com["_persona"])["Puntos"]
         if com["MetodoDePago"][0] == "Efectivo":

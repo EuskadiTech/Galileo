@@ -4,7 +4,7 @@ from random import choice
 from ..Comedor.localutils import fromDay_comedor
 from ..Cafe.views import get_receta
 from ..Personas.localutils import PersonAuth, with_auth
-
+from ..Personas.models import DB_PERSONAS
 app = Blueprint("ResumenDiario", __name__)
 
 
@@ -47,6 +47,10 @@ def index(user):
             "resumen-diario:jokes", "http://127.0.0.1:8129/static/jokes.txt"
         ).text.split("\n")
         data["Joke"] = choice(data["Jokes"])
+    def isFree(dat):
+        if dat["Puntos"] >= 10:
+            return True
+    data["CafeFree"] = DB_PERSONAS.get_by_query(isFree).values()
     return render_template(
         "resumendiario/index.html", data=data, config=config["Resumen Diario"]
     )

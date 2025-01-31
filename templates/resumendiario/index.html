@@ -160,10 +160,16 @@
         </div>
         {% endif %}
       {% endif %}
-      <div class="grid-item card" style="border: 4px solid purple">
+      <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
         <div class="card-body">
-          <b style="font-size: 70%; display: inline-block;">🌐 Actualización de Galileo</b><br />
-          <span style="font-size: 65%; display: inline-block;">{{data["NoticiasEuskadiTech"].replace("\n", "<br>") | safe}}.</span>
+          <b>☕️ Café gratis</b><br />
+          Personas con café gratis (10+ puntos): 
+          <ul>
+            {% for persona in data["CafeFree"] %}
+                <li>{{ persona["Nombre"] }} ({{ persona["Region"] }}) <b>{{ persona["Puntos"] }} pts.</b></li>
+            {% endfor %}
+            
+          </ul>
         </div>
       </div>
         {% for menu in data["Comedor"] %}
@@ -175,30 +181,30 @@
             <ol style="padding-left: 25px">
               <li>
                 {{data["Comedor"][menu]["P1 Text"]}}
-                <img
+                <!--<img
                   src='https://naiel.fyi/static/img/{{data["Comedor"][menu]["P1 Img"]}}'
                   style="max-width: 100px; max-height: 50px"
                   alt=""
                   height="50"
-                />
+                />-->
               </li>
               <li>
                 {{data["Comedor"][menu]["P2 Text"]}}
-                <img
+                <!--<img
                   src='https://naiel.fyi/static/img/{{data["Comedor"][menu]["P2 Img"]}}'
                   style="max-width: 100px; max-height: 50px"
                   alt=""
                   height="50"
-                />
+                />-->
               </li>
               <li>
                 {{data["Comedor"][menu]["P3 Text"]}}
-                <img
+                <!--<img
                   src='https://naiel.fyi/static/img/{{data["Comedor"][menu]["P3 Img"]}}'
                   style="max-width: 100px; max-height: 50px"
                   alt=""
                   height="50"
-                />
+                />-->
               </li>
             </ol>
             <small style="font-size: 60%">
@@ -263,6 +269,6 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
     -->
-    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="{{url_for('static', filename='masonry.min.js')}}"></script>
   </body>
 </html>

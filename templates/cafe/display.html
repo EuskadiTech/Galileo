@@ -124,15 +124,13 @@
           </h2>
         </summary>
       </details>
-
+      
       {% endfor %} -->
-
+      
       {% for comanda in comandas %}
       <fieldset class="milk vertical {{comanda[1]['_grupo'].split(';')[3]}}" style="padding: 3px; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff; color: black; background-color: {{comanda[1]['_grupo'].split(';')[1]}}; text-align: left; ">
-
-        {% if fase == "Historial" %}
-        Fase: <b>{{comanda[1]['_fase']}}</b>
-        {% endif %}
+        Ronda: <b>{{comanda[1]['_fase']}}</b>
+        <br>
         <!--<h3 style="color: black !important;">
           {{personas[comanda[1]['_persona']]['Nombre']}} ({{personas[comanda[1]['_persona']]['Region']}})
         </h3>-->
@@ -143,17 +141,20 @@
                     <br>
                     {{personas[comanda[1]['_persona']]['markdown']}}
                 </span>
+                
+                {% if "Historial" not in fase %}
                 <div
                     style="border-radius: 7.5px; color: #000 !important; background-color: gold;text-align: center; word-wrap: break-word;word-break: break-all;padding: 0 !important;height: 55px !important;width: 45px !important; float: right; resize: none; text-shadow: none; border: 1px solid black;">
                     <small style="font-size: 10px;">Punto(s)</small><br>{{personas[comanda[1]['_persona']]["Puntos"]}}
                 </div>
+                {% endif %}
                 <div
                     style="background-color: {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}}; border-radius: 250px; width: 32px; height: 32px; float: right; margin-right: 5px;">
                 </div>
             </div>
         </label>
         <br>
-        {% if fase == "Cocina" %}
+        {% if "Cocina" in fase %}
         <select
           id="group" onchange='ChangeGroup(this, "{{comanda[0]}}")' required>
           <option disabled selected>
@@ -196,19 +197,24 @@
             {% if comanda[1].get("Cafeina", "")[0] != "Sin Elegir" %}
             {{comanda[1].get("Cafeina", "")[0]}}
             {% endif %}
+            {% if comanda[1].get("VarInfusion", "") != None %}
+            {{comanda[1].get("VarInfusion", "")}}
+            {% endif %}
 
-            {% if "Cafe Soluble" in comanda[1]["Tipo"] or "Cafe" in comanda[1]["Tipo"] %}
-            <small style="font-size: 10px">10c</small>
+            {% if "Cafe Soluble" in comanda[1]["Tipo"] or "Cafe" in comanda[1]["Tipo"] or "Colacao" in comanda[1]["Tipo"] %}
+            <small style="font-size: 10px">20c</small>
             {% endif %}
             <ul style="padding-left: 15px !important;">
               <li>
                 {% if comanda[1].get("Leche", "")[0] != "Sin Leche" %}
                 {{comanda[1].get("Leche", "")[0]}}
                 {% endif %}
+                {% if comanda[1].get("Leche", "")[0] != "Agua" %}
                 {% if "Grande" in comanda[1]["Tama_o"] %}
                 Grande <small style="font-size: 10px">20c</small>
                 {% else %}
                 Pequeña <small style="font-size: 10px">10c</small>
+                {% endif %}
                 {% endif %}
               </li>
               <li>{{comanda[1].get("Temperatura", "")[0]}}</li>
@@ -216,21 +222,22 @@
             </ul>
           </li>
           {% if "Receta del dia" in comanda[1].get("Complementos", "") %}
-          <li>{{Receta}} <small style="font-size: 10px">10c</small></li>
-          <li>Servicio <small style="font-size: 10px">10c</small></li>
+          <li>Receta ({{Receta}}) <small style="font-size: 10px">10c</small></li>
           {% endif %}
+          <li>Servicio <small style="font-size: 10px">10c</small></li>
 
         </ul>
 
         <hr>
+        {% if "Cocina" not in fase %}
         {% if "Puntos" not in comanda[1].get("MetodoDePago", "") %}
         Total: <b>{{comanda[1].get("_precio", "?")}}c</b><br>
         {% else %}
         Total: <b>Gratis</b><br>
         {% endif %}
         Metodo de pago: <b>{{comanda[1].get("MetodoDePago", "")[0]}}</b>
-
         <hr>
+        {% endif %}
         {{comanda[1].get("notas", "")}}
         <a style="width: 100%;" class="btn btn-success btn-large" href="{{url_for('Cafe.rdel', rid=comanda[0], ft=ft, fc=fc)}}">
           Pasar a {{ft}}</a>
@@ -238,5 +245,5 @@
       {% endfor %}
     </main>
   </form>
-  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <script src="{{url_for('static', filename='masonry.min.js')}}"></script>
   {% endblock %}

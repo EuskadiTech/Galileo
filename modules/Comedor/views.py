@@ -111,4 +111,6 @@ def api__downloadMenu(user, mid):
 @app.route("/api/comedor/today")
 def api__today():
     # GUEST ACCESS API
-    return fromDay_comedor()
+    day = DateParser(request.args.get("day")).pretty_dayCode()
+    results = fromDay_comedor(day=day, menu=request.args.get("menu", "*"))
+    return results
