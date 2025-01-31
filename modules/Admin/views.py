@@ -112,6 +112,10 @@ def filesmv(user, path):
         raise Exception("Invalid path")
     folder = "/".join(path.split("/")[:-1])
     if request.method == "POST":
-        os.rename(os.path.join(base_path, request.form["Origen"]), os.path.join(base_path, request.form["Destino"]))
+        origen_path = os.path.normpath(os.path.join(base_path, request.form["Origen"]))
+        destino_path = os.path.normpath(os.path.join(base_path, request.form["Destino"]))
+        if not origen_path.startswith(base_path) or not destino_path.startswith(base_path):
+            raise Exception("Invalid path")
+        os.rename(origen_path, destino_path)
         return redirect(url_for("Admin.files", path = folder))
     return render_template("admin/filesmv.html", path=folder, filename = path)
