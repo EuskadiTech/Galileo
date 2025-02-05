@@ -63,6 +63,12 @@ def printcards(user):
     return render_template("personas/print.html", recetas=DB_PERSONAS.get_all(), USER=user)
 
 
+@app.route("/personas/print_stickers", methods=["GET"])
+@with_auth("personas:read")
+def printstickers(user):
+    return render_template("personas/printstickers.html", recetas=DB_PERSONAS.get_all(), USER=user)
+
+
 @app.route("/personas/new", methods=["GET", "POST"])
 def new():
     er = True
@@ -120,6 +126,19 @@ def persona(user, rid):
         content=markdown(receta["markdown"]),
         rid=rid, USER=user
     )
+
+
+@app.route("/personas/<rid>/pointop", methods=["GET"])
+@with_auth("personas:write")
+def pointop(user, rid):
+    receta = DB_PERSONAS.get_by_id(str(rid))
+    DB_PERSONAS.update_by_id(
+        str(rid),
+        {
+            "Puntos": int(receta["Puntos"] + int(request.args["val"])),
+        }
+    )
+    return "OK"
 
 
 @app.route("/personas/<rid>/edit", methods=["GET", "POST"])

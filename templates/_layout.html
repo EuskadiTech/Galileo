@@ -10,17 +10,20 @@
         html {
             color-scheme: only light;
         }
+
         fieldset {
             border: 1px solid black;
             padding: 15px;
             border-radius: 15px;
             margin-bottom: 15px;
         }
-        fieldset summary{
+
+        fieldset summary {
             text-align: center;
             list-style: none;
             font-weight: bold;
         }
+
         @media print {
             .nop {
                 display: none;
@@ -41,13 +44,14 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav me-auto">
-                    {% for nav in G_NAV %}
+                    {% if "user" in g %}
+                    {% for nav in G_NAV if nav.get("role") in g.user.r %}
                     {% if nav.get("subitems") != None %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                             aria-haspopup="true" aria-expanded="false">{{nav["text"]}}</a>
                         <div class="dropdown-menu">
-                            {% for sub in nav["subitems"] %}
+                            {% for sub in nav["subitems"] if sub == "divider" or sub.get("role", "*") in g.user.r %}
                             {% if sub == "divider" %}
                             <div class="dropdown-divider"></div>
                             {% else %}
@@ -63,6 +67,8 @@
                     </li>
                     {% endif %}
                     {% endfor %}
+                    {% endif %}
+
                 </ul>
                 <!-- <form class="d-flex">
                     <input class="form-control me-sm-2" type="search" placeholder="Search">

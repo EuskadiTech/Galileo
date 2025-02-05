@@ -10,6 +10,11 @@ def set_receta(receta):
     conf["Receta"] = receta
     utils.set_config(conf)
 
+def set_mode(mode):
+    conf = utils.get_config()
+    conf["SC_CanClientSendComanda"] = mode
+    utils.set_config(conf)
+
 def get_receta():
     conf: dict = utils.get_config()
     return conf.get("Receta", "No Disp.")
@@ -26,10 +31,12 @@ def index(user):
 def config(user):
     if request.method == "POST":
         set_receta(request.form["receta"])
+        set_mode(request.form["SC_CanClientSendComanda"])
         return redirect(url_for("Cafe.index"))
     return render_template(
         "cafe/config.html",
-        Receta = get_receta(), USER=user
+        Receta = get_receta(), USER=user,
+        SC_CanClientSendComanda = utils.get_config().get("SC_CanClientSendComanda", "Desactivar")
     )
 
 @app.route("/cafe/select", methods=["GET", "POST"])
@@ -41,9 +48,10 @@ def select(user):
                 return True
         keys = list(DB_PERSONAS.get_by_query(query).keys())[0]
         return redirect(url_for("Cafe.comanda", rid=keys))
+    CAN_CLIENT_SEND = utils.get_config().get("SC_CanClientSendComanda") == "Activar"
     return render_template(
         "cafe/select.html",
-        personas = DB_PERSONAS.get_all(), USER=user
+        personas = DB_PERSONAS.get_all(), USER=user, CAN_CLIENT_SEND=CAN_CLIENT_SEND
     )
 
 @app.route("/cafe/comanda/<rid>", methods=["GET", "POST"])
@@ -116,6 +124,7 @@ def cocina(user):
 @with_auth("cafe:pago")
 def pago(user):
     regiones = {}
+    total = 0
     def query(data):
         if "pago" in data["_fase"]:
             return True
@@ -126,9 +135,13 @@ def pago(user):
         if regiones.get(persona["Region"]) == None:
             regiones[persona["Region"]] = []
         regiones[persona["Region"]].append((key,val))
+        print(val)
+        if "Efectivo" in val["MetodoDePago"]:
+            total += val["_precio"]
     return render_template(
         "cafe/display.html",
         fase = "Pago",
+        total = total,
         personas = DB_PERSONAS.get_all(),
         Receta = get_receta(),
         comandas = DB_COMANDAS.get_by_query(query).items(),

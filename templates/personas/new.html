@@ -23,6 +23,7 @@
           <div>
             <label for="formSelect" class="form-label">Foto (subir en "uploads/personas")</label>
             <select class="form-select" id="formSelect" name="Foto">
+              <option value="">Ninguno</option>
               {% for avatar in AVATARS %}
                 <option>{{avatar}}</option>
               {% endfor %}

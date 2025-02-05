@@ -75,6 +75,10 @@
     }
   </script>
   <form method="post">
+    {% if fase == "Pago" %}
+       <h1>Puntos restantes: {{total}}c</h1> 
+    {% endif %}
+    
     <main class="grid"
       data-masonry='{ "itemSelector": ".vertical", "horizontalOrder": false, "gutter": 20, "fitWidth": true, "resize": true}'>
       <!-- <?php foreach ($dirs as $dir): ?>

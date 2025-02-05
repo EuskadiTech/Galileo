@@ -1,0 +1,15 @@
+
+      <h2 class="nop">Pegatinas Identificativas</h2>
+      <button onclick="print()">Imprimir</button>
+      <br>
+      {% for key in recetas %}
+
+      <div border style="font-family: Arial, Helvetica, sans-serif; display: inline-block;width: 150px; text-align: left; border: 1px solid black; color: black; margin: 15px; padding: 75px 0 0 0;">
+        <center>{{recetas[key]["Nombre"]}}<br><small>{{recetas[key]["Region"]}}</small>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=15&data={{recetas[key]['Codigo']}}"
+          width="148px"><br><small>
+            {{recetas[key]["Codigo"]}}
+          </small>
+        </center>
+      </div>
+      {% endfor %}

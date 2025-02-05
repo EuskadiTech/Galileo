@@ -63,19 +63,23 @@
     .cafeSelect label {
         width: 200px;
     }
+
     .cS_Notes {
         max-width: 22.525rem;
         margin: 0 auto;
         text-align: center;
     }
-    .cS_Notes textarea{
+
+    .cS_Notes textarea {
         width: 100%;
         height: 10rem;
     }
+
     @keyframes blinker {
         60% {
             opacity: 1;
         }
+
         100% {
             opacity: 0;
         }
@@ -116,40 +120,40 @@
             </div>
         </div>
     </label>
-    
+
     {% if client["SC_lastcomanda"] != {} %}
     <fieldset class="cafeSelect" style="width: 300px;">
         <summary>Comanda anterior</summary>
-    <ul style="padding-left: 1px !important;">
-        <li>{{client["SC_lastcomanda"].get("Tipo", "")[0]}}
+        <ul style="padding-left: 1px !important;">
+            <li>{{client["SC_lastcomanda"].get("Tipo", "")[0]}}
 
-            {% if client["SC_lastcomanda"].get("Cafeina", "")[0] != "Sin Elegir" %}
-            {{client["SC_lastcomanda"].get("Cafeina", "")[0]}}
+                {% if client["SC_lastcomanda"].get("Cafeina", "")[0] != "Sin Elegir" %}
+                {{client["SC_lastcomanda"].get("Cafeina", "")[0]}}
+                {% endif %}
+                <ul style="padding-left: 27.5px !important;">
+                    <li>Leche:
+                        {% if client["SC_lastcomanda"].get("Leche", "")[0] != "Sin Leche" %}
+                        {{client["SC_lastcomanda"].get("Leche", "")[0]}}
+                        {% endif %}
+                        {% if "Grande" in client["SC_lastcomanda"]["Tama_o"] %}
+                        Grande
+                        {% else %}
+                        Pequeña
+                        {% endif %}
+                    </li>
+                    <li>Temperatura: {{client["SC_lastcomanda"].get("Temperatura", "")[0]}}</li>
+                    <li>Endulzante: {{client["SC_lastcomanda"].get("Endulzantes", "")[0]}}</li>
+                </ul>
+            </li>
+
+
+            {% if "Receta del dia" in client["SC_lastcomanda"].get("Complementos", "") %}
+            <li>Receta del dia</li>
             {% endif %}
-            <ul style="padding-left: 27.5px !important;">
-              <li>Leche: 
-                {% if client["SC_lastcomanda"].get("Leche", "")[0] != "Sin Leche" %}
-                {{client["SC_lastcomanda"].get("Leche", "")[0]}}
-                {% endif %}
-                {% if "Grande" in client["SC_lastcomanda"]["Tama_o"] %}
-                Grande
-                {% else %}
-                Pequeña
-                {% endif %}
-              </li>
-              <li>Temperatura: {{client["SC_lastcomanda"].get("Temperatura", "")[0]}}</li>
-              <li>Endulzante: {{client["SC_lastcomanda"].get("Endulzantes", "")[0]}}</li>
-            </ul>
-          </li>
-        
-       
-        {% if "Receta del dia" in client["SC_lastcomanda"].get("Complementos", "") %}
-        <li>Receta del dia</li>
-        {% endif %}
 
-      </ul>
+        </ul>
     </fieldset>
-      {% endif %}
+    {% endif %}
     <h1>Comanda:</h1>
     <fieldset class="cafeSelect">
         <summary>Metodo de pago</summary>
@@ -163,15 +167,14 @@
             <div class="f fb"><span>
                     Usar efectivo
                     <br><small>Se cobra despues</small>
-                </span><input name="MetodoDePago" type="radio" value="Efectivo" {{"checked" if client["Puntos"]< 10}}>
+                </span><input name="MetodoDePago" type="radio" value="Efectivo" checked>
             </div>
         </label>
         <label style="background-color: gold; color: black;">
             <div class="f fb"><span>
                     Usar puntos
                     <br><small>10 puntos = un cafe</small>
-                </span><input name="MetodoDePago" type="radio" value="Puntos" {{"checked" if client["Puntos"]>=
-                10}} {{"disabled" if client["Puntos"] < 10}}>
+                </span><input name="MetodoDePago" type="radio" value="Puntos" {{"disabled" if client["Puntos"] < 10}}>
             </div>
         </label>
         <label style="background-color: lightcoral; color: black;">
@@ -179,6 +182,52 @@
                     Poner en deuda
                     <br><small>No Disponible</small>
                 </span><input name="MetodoDePago" type="radio" value="Deuda" disabled>
+            </div>
+        </label>
+    </fieldset>
+    <fieldset class="cafeSelect" id="fs_size">
+        <summary>Tamaño</summary><label><img src="{{url_for('static', filename='cafe-ico/tamano-grande.png')}}">
+            <div class="f"><span>Grande</span><input name="Tama_o" type="radio" value="Grande"></div>
+        </label> <label><img src="{{url_for('static', filename='cafe-ico/tamano-pequeno.png')}}">
+            <div class="f"><span>Pequeño</span><input name="Tama_o" type="radio" value="Pequena"></div>
+        </label>
+        <input name="Tama_o" id="fs_size_default" type="radio" value="Sin Elegir" style="display: none;">
+    </fieldset>
+    <fieldset class="cafeSelect" id="fs_temp">
+        <summary>Temperatura</summary><label><img src="{{url_for('static', filename='cafe-ico/temperatura-frio.png')}}">
+            <div class="f"><span>Frio</span><input name="Temperatura" type="radio" value="Fria"></div>
+        </label> <label><img src="{{url_for('static', filename='cafe-ico/temperatura-templado.png')}}">
+            <div class="f"><span>Templado</span><input name="Temperatura" type="radio" value="Templada"></div>
+        </label> <label><img src="{{url_for('static', filename='cafe-ico/temperatura-caliente.png')}}">
+            <div class="f"><span>Caliente</span><input name="Temperatura" type="radio" value="Caliente"></div>
+        </label>
+        <input name="Temperatura" id="fs_temp_default" type="radio" value="Sin Elegir" style="display: none;">
+    </fieldset>
+
+    <fieldset class="cafeSelect" id="fs_milk">
+        <summary>Leche</summary>
+        {% if "cafe:nolact" in client["Roles"] %}
+        <label style="background-color: rgb(255, 0, 0); color: white; animation: blinker 1s linear infinite;">
+            <div class="f fb fn"><span><small>Alerta de Intolerancia</small><br>No Lactosa</span>
+            </div>
+        </label>
+        {% else %}
+        <label><img src="{{url_for('static', filename='cafe-ico/leche-vaca.png')}}">
+            <div class="f"><span>De vaca</span><input name="Leche" type="radio" value="Leche de vaca"></div>
+        </label> <label><img src="{{url_for('static', filename='cafe-ico/leche-avena.png')}}">
+            <div class="f"><span>Vegetal</span><input name="Leche" type="radio" value="Leche Vegetal"></div>
+
+            {% endif %}
+        </label> <label><img src="{{url_for('static', filename='cafe-ico/leche-sinlactosa.png')}}">
+            <div class="f"><span>Sin Lactosa</span><input name="Leche" type="radio" value="Leche Sin Lactosa">
+            </div>
+        </label> <label><img src="{{url_for('static', filename='cafe-ico/leche-agua.png')}}">
+            <div class="f"><span>Agua</span><input name="Leche" type="radio" value="Agua">
+            </div>
+        </label>
+        <label><i class="ico fa-solid fa-ban" style="color:red"></i>
+            <div class="f"><span class="ico redtext">X</span><span>Sin Leche</span><input type="radio" name="Leche"
+                    id="fs_milk_default" value="Sin Leche" id="cbox1">
             </div>
         </label>
     </fieldset>
@@ -225,7 +274,7 @@
         </label>
         {% else %}
         <label style="background-color: rgb(255, 0, 0); color: white; animation: blinker 1s linear infinite;">
-            <div class="f fb fn"><span><small>Sin Autorización</small><br>Cafeina</span>
+            <div class="f fb fn"><span><small>Sin Autorización</small><br>No Cafeina</span>
             </div>
         </label>
         {% endif %}
@@ -246,52 +295,6 @@
         </label>
         <br>
     </fieldset>
-    <fieldset class="cafeSelect" id="fs_size">
-        <summary>Tamaño</summary><label><img src="{{url_for('static', filename='cafe-ico/tamano-grande.png')}}">
-            <div class="f"><span>Grande</span><input name="Tama_o" type="radio" value="Grande"></div>
-        </label> <label><img src="{{url_for('static', filename='cafe-ico/tamano-pequeno.png')}}">
-            <div class="f"><span>Pequeño</span><input name="Tama_o" type="radio" value="Pequena"></div>
-        </label>
-        <input name="Tama_o" id="fs_size_default" type="radio" value="Sin Elegir" style="display: none;">
-    </fieldset>
-    <fieldset class="cafeSelect" id="fs_milk">
-        <summary>Leche</summary>
-        {% if "cafe:nolact" in client["Roles"] %}
-        <label style="background-color: rgb(255, 0, 0); color: white; animation: blinker 1s linear infinite;">
-            <div class="f fb fn"><span><small>Alerta de Intolerancia</small><br>No Lactosa</span>
-            </div>
-        </label>
-        {% else %}
-        <label><img src="{{url_for('static', filename='cafe-ico/leche-vaca.png')}}">
-            <div class="f"><span>De vaca</span><input name="Leche" type="radio" value="Leche de vaca"></div>
-        </label> <label><img src="{{url_for('static', filename='cafe-ico/leche-avena.png')}}">
-            <div class="f"><span>Vegetal</span><input name="Leche" type="radio" value="Leche Vegetal"></div>
-
-            {% endif %}
-        </label> <label><img src="{{url_for('static', filename='cafe-ico/leche-sinlactosa.png')}}">
-            <div class="f"><span>Sin Lactosa</span><input name="Leche" type="radio" value="Leche Sin Lactosa">
-            </div>
-        </label> <label><img src="{{url_for('static', filename='cafe-ico/leche-agua.png')}}">
-            <div class="f"><span>Agua</span><input name="Leche" type="radio" value="Agua">
-            </div>
-        </label>
-        <label><i class="ico fa-solid fa-ban" style="color:red"></i>
-            <div class="f"><span class="ico redtext">X</span><span>Sin Leche</span><input type="radio" name="Leche" id="fs_milk_default" value="Sin Leche"
-                    id="cbox1">
-            </div>
-        </label>
-    </fieldset>
-    <fieldset class="cafeSelect" id="fs_temp">
-        <summary>Temperatura</summary><label><img src="{{url_for('static', filename='cafe-ico/temperatura-frio.png')}}">
-            <div class="f"><span>Frio</span><input name="Temperatura" type="radio" value="Fria"></div>
-        </label> <label><img src="{{url_for('static', filename='cafe-ico/temperatura-templado.png')}}">
-            <div class="f"><span>Templado</span><input name="Temperatura" type="radio" value="Templada"></div>
-        </label> <label><img src="{{url_for('static', filename='cafe-ico/temperatura-caliente.png')}}">
-            <div class="f"><span>Caliente</span><input name="Temperatura" type="radio" value="Caliente"></div>
-        </label>
-        <input name="Temperatura" id="fs_temp_default" type="radio" value="Sin Elegir" style="display: none;">
-    </fieldset>
-
     <fieldset class="cafeSelect" id="fs_sugar">
         <summary>Endulzantes</summary>
         <label><img src="{{url_for('static', filename='cafe-ico/extra-azucarblanco.png')}}">
@@ -314,8 +317,8 @@
             </div>
         </label>
         <label><i class="ico fas fa-ban" style="color: red"></i>
-            <div class="f"><span class="ico redtext">X</span><span>Sin Complemento</span><input name="Endulzantes" type="radio" value=""
-                    id="fs_sugar_default">
+            <div class="f"><span class="ico redtext">X</span><span>Sin Complemento</span><input name="Endulzantes"
+                    type="radio" value="" id="fs_sugar_default">
             </div>
         </label>
         </label>
@@ -327,11 +330,13 @@
     <fieldset class="cafeSelect" id="fs_infus">
         <summary>Infusión</summary>
         <label>
-            <div class="f"><span class="ico redtext">X</span><span>No es infusión</span><input name="VarInfusion" type="radio" value="">
+            <div class="f"><span class="ico redtext">X</span><span>No es infusión</span><input name="VarInfusion"
+                    type="radio" value="">
             </div>
         </label>
         <label>
-            <div class="f"><span class="ico" style="color: blue;">?</span><span>Otra infusión<br><i>Poner en notas</i></span><input name="VarInfusion" type="radio" value="Ver notas">
+            <div class="f"><span class="ico" style="color: blue;">?</span><span>Otra infusión<br><i>Poner en
+                        notas</i></span><input name="VarInfusion" type="radio" value="Ver notas">
             </div>
         </label>
         <label><img src="{{url_for('static', filename='cafe-ico/opt-infusion.png')}}">
@@ -343,7 +348,8 @@
             </div>
         </label>
         <label><img src="{{url_for('static', filename='cafe-ico/opt-infusion.png')}}">
-            <div class="f"><span>Te de <br> Frutos rojos</span><input name="VarInfusion" type="radio" value="Te de Frutos rojos">
+            <div class="f"><span>Te de <br> Frutos rojos</span><input name="VarInfusion" type="radio"
+                    value="Te de Frutos rojos">
             </div>
         </label>
         <label><img src="{{url_for('static', filename='cafe-ico/opt-infusion.png')}}">
@@ -371,10 +377,11 @@
     <fieldset class="cafeSelect cS_Notes">
         <summary>Notas</summary><textarea class="nop" name="notas" rows="4"></textarea>
         <br>
-      <div class="input-group">
+        <div class="input-group">
 
-        <button class="btn btn-primary" type="submit">Enviar esta comanda</button>
-        <button class="btn btn-secondary" onclick='location.href = "{{url_for("Cafe.index")}}"' type="button" class="np">Salir</button>
+            <button class="btn btn-primary" type="submit">Enviar esta comanda</button>
+            <button class="btn btn-secondary" onclick='location.href = "{{url_for("Cafe.index")}}"' type="button"
+                class="np">Salir</button>
         </div>
     </fieldset>
 

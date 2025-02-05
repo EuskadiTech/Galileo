@@ -45,9 +45,9 @@ def setup__adminaccount():
 def files(user, path):
     check_path(USERDATA_DIR + "uploads")
     check_path(USERDATA_DIR + "uploads/personas")
-    base_path = os.path.join(USERDATA_DIR + "uploads/")
+    base_path = os.path.join(USERDATA_DIR, "uploads/")
     full_path = os.path.normpath(os.path.join(base_path, path))
-    if not full_path.startswith(base_path):
+    if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
         raise Exception("Invalid path")
     files = [f for f in os.listdir(full_path) if os.path.isfile(os.path.join(full_path, f))]
     folders = [f for f in os.listdir(full_path) if os.path.isdir(os.path.join(full_path, f))]
@@ -58,9 +58,9 @@ def files(user, path):
 @app.route("/admin/files_rm/<path:path>", methods=["GET", "POST"])
 @with_auth("admin")
 def filesrm(user, path):
-    base_path = os.path.join(USERDATA_DIR + "uploads/")
+    base_path = os.path.join(USERDATA_DIR, "uploads/")
     full_path = os.path.normpath(os.path.join(base_path, path))
-    if not full_path.startswith(base_path):
+    if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
         raise Exception("Invalid path")
     if request.method == "POST" and request.form.get("deletecapcha") == "ELIMINAR":
         os.unlink(full_path)
@@ -71,9 +71,9 @@ def filesrm(user, path):
 @app.route("/admin/files_rmdir/<path:path>", methods=["GET"])
 @with_auth("admin")
 def filesrmdir(user, path):
-    base_path = os.path.join(USERDATA_DIR + "uploads/")
+    base_path = os.path.join(USERDATA_DIR, "uploads/")
     full_path = os.path.normpath(os.path.join(base_path, path))
-    if not full_path.startswith(base_path):
+    if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
         raise Exception("Invalid path")
     try:
         os.rmdir(full_path)
@@ -86,9 +86,9 @@ def filesrmdir(user, path):
 @app.route("/admin/files_up/<path:path>", methods=["GET", "POST"])
 @with_auth("admin")
 def filesupload(user, path):
-    base_path = os.path.join(USERDATA_DIR + "uploads/")
+    base_path = os.path.join(USERDATA_DIR, "uploads/")
     full_path = os.path.normpath(os.path.join(base_path, path))
-    if not full_path.startswith(base_path):
+    if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
         raise Exception("Invalid path")
     if request.method == "POST":
         folder = full_path
@@ -108,9 +108,9 @@ def filesmkdir(user, path):
 @app.route("/admin/files_mv/<path:path>", methods=["GET", "POST"])
 @with_auth("admin")
 def filesmv(user, path):
-    base_path = os.path.join(USERDATA_DIR + "uploads/")
+    base_path = os.path.join(USERDATA_DIR, "uploads/")
     full_path = os.path.normpath(os.path.join(base_path, path))
-    if not full_path.startswith(base_path):
+    if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
         raise Exception("Invalid path")
     folder = "/".join(path.split("/")[:-1])
     if request.method == "POST":

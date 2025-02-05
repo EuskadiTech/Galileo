@@ -36,6 +36,8 @@ class PersonAuth:
             if "admin" not in person["Roles"]:
                 raise NotAllowed("No estas autorizado; Te falta el rol " + needsRole)
         self.u = person
+        self.r = person["Roles"]
+        self.r.append("*")
         return True
 #endregion
 
@@ -50,7 +52,7 @@ def with_auth(role: str = ""):
                 user.isLoggedIn(role)
             except Exception as e:
                 return redirect(url_for("Personas.auth_scan", err=e.args))
-            
+            g.user = user
             return f(user=user, *args, **kwargs)
         return decorated_function
     return decorator

@@ -9,6 +9,12 @@
       <label for="receta">Receta:</label>
       <input class="form-control" type="text" id="receta" name="receta" value="{{Receta}}">
       <br>
+      <label for="SC_CanClientSendComanda">Comandas publicas:</label>
+      <select class="form-control" id="SC_CanClientSendComanda" name="SC_CanClientSendComanda" value="{{SC_CanClientSendComanda}}">
+        <option value="Desactivar" {{"selected" if SC_CanClientSendComanda == "Desactivar"}}>Desactivar comandas externas</option>
+        <option value="Activar" {{"selected" if SC_CanClientSendComanda == "Activar"}}>Activar comandas externas</option>
+      </select>
+      <br>
       <div class="input-group">
         <input type="submit" class="btn btn-primary" value="Guardar" />
         <a class="btn btn-secondary" href="{{url_for('Cafe.index')}}">Salir</a>

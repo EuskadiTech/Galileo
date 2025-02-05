@@ -43,56 +43,71 @@ app = Flask(
 @app.context_processor
 def inject_nav():
     nav = [
-        {"text": "Inicio", "endpoint": "index"},
-        {"text": "Resumen Diario", "endpoint": "ResumenDiario.index"},
+        {"text": "Inicio", "endpoint": "index", "role": "*"},
+        {"text": "Resumen Diario", "endpoint": "ResumenDiario.index", "role": "ResumenDiario:_module"},
         {
             "text": "SuperCafé",
             "endpoint": "Cafe.index",
             "subitems": [
-                {"text": "Ajustes", "endpoint": "Cafe.config"},
-                {"text": "Iniciar Comanda", "endpoint": "Cafe.select"},
-                {"text": "Historial del Clientx", "endpoint": "Personas.scan"},
+                {"text": "Ajustes", "endpoint": "Cafe.config", "role": "cafe:write"},
+                {"text": "Iniciar Comanda", "endpoint": "Cafe.select", "role": "cafe:send"},
+                {
+                    "text": "Historial del Clientx",
+                    "endpoint": "Personas.scan",
+                    "role":  "personas:read",
+                },
                 "divider",
-                {"text": "Pant. Cocina", "endpoint": "Cafe.cocina"},
-                {"text": "Pant. Pago", "endpoint": "Cafe.pago"},
+                {"text": "Pant. Cocina", "endpoint": "Cafe.cocina", "role": "cafe:cocina"},
+                {"text": "Pant. Pago", "endpoint": "Cafe.pago", "role": "cafe:pago"},
             ],
+            "role": "cafe:_module",
         },
         {
             "text": "Comedor",
             "endpoint": "Comedor.index",
             "subitems": [
-                {"text": "Menús descargados", "endpoint": "Comedor.index"},
-                {"text": "Ver menú", "endpoint": "Comedor.byDayModal"},
-                {"text": "Importar Menú", "endpoint": "Comedor.loadMenuModal"},
+                {"text": "Menús descargados", "endpoint": "Comedor.index", "role": "comedor:read"},
+                {"text": "Ver menú", "endpoint": "Comedor.byDayModal", "role": "comedor:read"},
+                {"text": "Importar Menú", "endpoint": "Comedor.loadMenuModal", "role": "comedor:write"},
                 "divider",
-                {"text": "API: Menú de hoy", "endpoint": "Comedor.api__today"},
+                {"text": "API: Menú de hoy", "endpoint": "Comedor.api__today", "role": "*"},
             ],
+            "role": "comedor:_module",
         },
         {
             "text": "Personas",
             "endpoint": "Personas.index",
             "subitems": [
-                {"text": "Personas", "endpoint": "Personas.index"},
-                {"text": "> Crear", "endpoint": "Personas.new"},
-                {"text": "> Buscar por Codigo", "endpoint": "Personas.scan"},
+                {"text": "Personas", "endpoint": "Personas.index", "role": "personas:read"},
+                {"text": "> Crear", "endpoint": "Personas.new", "role": "personas:write"},
+                {"text": "> Buscar por Codigo", "endpoint": "Personas.scan", "role": "personas:read"},
                 "divider",
-                {"text": "Imprimir tarjetas", "endpoint": "Personas.printcards"},
+                {"text": "Imprimir tarjetas", "endpoint": "Personas.printcards", "role": "personas:read"},
+                {"text": "Imprimir pegatinas", "endpoint": "Personas.printstickers", "role": "personas:read"},
             ],
+            "role": "personas:_module",
         },
         {
             "text": "Recetas",
             "endpoint": "Recetas.index",
             "subitems": [
-                {"text": "Recetas", "endpoint": "Recetas.index"},
-                {"text": "> Crear", "endpoint": "Recetas.new"},
+                {
+                    "text": "Recetas",
+                    "endpoint": "Recetas.index",
+                    "role": "recetas:read",
+                },
+                {"text": "> Crear", "endpoint": "Recetas.new", "role": "recetas:write"},
             ],
+            "role": "recetas:_module",
         },
         {
             "text": "Admin",
             "subitems": [
-                {"text": "Archivos", "endpoint": "Admin.files"},
+                {"text": "Archivos", "endpoint": "Admin.files", "role": "admin"},
             ],
+            "role": "admin",
         },
+        {"text": "Cerrar sesión", "endpoint": "Personas.auth_logout", "role": "*"},
     ]
     return dict(G_NAV=nav, G_CNAV=request.endpoint)
 
@@ -125,6 +140,7 @@ def status():
 def get_upload(path):
     return send_from_directory(USERDATA_DIR + "uploads", path)
 
+
 app.register_blueprint(modules.ComedorBlueprint)
 app.register_blueprint(modules.ResumenDiarioBlueprint)
 app.register_blueprint(modules.RecetasBlueprint)
@@ -134,7 +150,10 @@ app.register_blueprint(modules.AdminBlueprint)
 
 if __name__ == "__main__":
     if utils.os.environ.get("GAL_DOCKERTUNNEL_MYURL") != None:
-        tunnel = utils.DirectTunnel(utils.os.environ.get("GAL_DOCKERTUNNEL_MYURL"), utils.os.environ.get("GAL_DOCKERTUNNEL_ORCHURL", "https://grp.naiel.fyi"))
+        tunnel = utils.DirectTunnel(
+            utils.os.environ.get("GAL_DOCKERTUNNEL_MYURL"),
+            utils.os.environ.get("GAL_DOCKERTUNNEL_ORCHURL", "https://grp.naiel.fyi"),
+        )
     else:
         tunnel = utils.PinggyTunnel()
     TIP = tunnel.start()
@@ -152,7 +171,7 @@ No cierres esta ventana.
 ------------------------------------
 """
     )
-    if getattr(utils.sys, 'frozen', False):
+    if getattr(utils.sys, "frozen", False):
         HOST = "127.0.0.1"
     else:
         HOST = "0.0.0.0"
@@ -165,8 +184,8 @@ No cierres esta ventana.
         {BASE: app.wsgi_app},
     )
     try:
-        if getattr(utils.sys, 'frozen', False):
-            webbrowser.open_new_tab(TIP)
+        if getattr(utils.sys, "frozen", False):
+            webbrowser.open_new_tab("http://127.0.0.1:8129")
     except:
         print("[D] No se ha podido iniciar el navegador web.")
     app.run(HOST, 8129, False)
