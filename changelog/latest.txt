@@ -1,2 +1,0 @@
-Nueva versión: v0.2.2
-- Arreglar avatares

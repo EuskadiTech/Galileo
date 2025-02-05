@@ -1,3 +1,0 @@
-Nueva versión: v0.2.1
-- Añadido administrador de archivos
-- Arreglado algunos fallos

@@ -2,4 +2,5 @@ requests
 Flask
 pysondb-v2
 markdown
+flask-qrcode
 sentry-sdk[flask]

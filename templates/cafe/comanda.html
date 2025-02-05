@@ -107,7 +107,7 @@
     <label style="width: 300px;">
         <img src='{{ url_for("get_upload", path="personas/"+client["Foto"]) }}' style="height: 64px !important;">
         <div class="f fb fn"><span>
-                <b>{{client["Nombre"]}} ({{client["Region"]}})</b>
+                <b>{{client["Nombre"]}} ({{client["Region"].split(";")[0]}})</b>
                 <br>
                 {{client['markdown']}}
             </span>
@@ -233,26 +233,23 @@
     </fieldset>
     <fieldset class="cafeSelect">
         <summary>Selección</summary>
-        <label><img
-                src="https://globalsymbols.com/uploads/production/image/imagefile/15368/17_15369_a786017e-af12-491f-846d-0ab3fa955aea.png">
+        <label><img src="{{url_for('static', filename='cafe-ico/sel-cafe.png')}}">
             <div class="f"><span>Cafe</span><input name="Tipo" type="radio"
                     onclick="fsc('show', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('hide', 'fs_infus')"
                     value="Cafe">
             </div>
         </label>
-        <label><img
-                src="https://globalsymbols.com/uploads/production/image/imagefile/15368/17_15369_a786017e-af12-491f-846d-0ab3fa955aea.png">
+        <label><img src="{{url_for('static', filename='cafe-ico/sel-cafe.png')}}">
             <div class="f"><span>C. Soluble</span><input name="Tipo" type="radio"
                     onclick="fsc('show', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('hide', 'fs_infus')"
                     value="Cafe Soluble">
             </div>
         </label>
-        <label><img src="https://brandemia.org/sites/default/files/inline/images/colcacao_pack_despues3.jpg">
+        <label><img src="{{url_for('static', filename='cafe-ico/sel-colacao.jpg')}}">
             <div class="f"><span>Colacao</span><input name="Tipo" type="radio"
                     onclick="fsc('hide', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('hide', 'fs_infus')"
                     value="Colacao"></div>
-        </label> <label><img
-                src="https://globalsymbols.com/uploads/production/image/imagefile/5908/13_5908_86fe156f-7090-4208-8ef7-4870f87bdbec.svg">
+        </label> <label><img src="{{url_for('static', filename='cafe-ico/sel-infusion.svg')}}">
             <div class="f"><span>Infusión</span><input name="Tipo" type="radio"
                     onclick="fsc('hide', 'fs_cafeina');fsc('show', 'fs_size');fsc('show', 'fs_milk');fsc('show', 'fs_sugar');fsc('show', 'fs_temp');fsc('show', 'fs_infus')"
                     value="Infusión">
@@ -283,17 +280,6 @@
             </div>
         </label>
         <input name="Cafeina" type="radio" value="Sin Elegir" id="fs_cafeina_default" style="display: none;">
-    </fieldset>
-    <fieldset class="cafeSelect">
-        <summary>Complementos</summary>
-        <label id="receta"><img
-                src="https://globalsymbols.com/uploads/production/image/imagefile/15428/17_15429_4eb0ef42-0045-4019-ab20-a76fd2d43cec.png"
-                width="36px">
-            <div class="f"><span>Receta<br><small class="nop" id="receta_name">
-                        {{Receta}}
-                    </small></span><input name="Complementos" type="checkbox" value="Receta del dia"></div>
-        </label>
-        <br>
     </fieldset>
     <fieldset class="cafeSelect" id="fs_sugar">
         <summary>Endulzantes</summary>
@@ -326,6 +312,15 @@
             <div class="f"><span>Doble</span><input name="Complementos" type="checkbox" value="Doble Endulzante"></div>
         </label>
 
+    </fieldset>
+    <fieldset class="cafeSelect">
+        <summary>Complementos</summary>
+        <label id="receta"><img src="{{url_for('static', filename='cafe-ico/receta.png')}}" width="36px">
+            <div class="f"><span>Receta<br><small class="nop" id="receta_name">
+                        {{Receta}}
+                    </small></span><input name="Complementos" type="checkbox" value="Receta del dia"></div>
+        </label>
+        <br>
     </fieldset>
     <fieldset class="cafeSelect" id="fs_infus">
         <summary>Infusión</summary>
@@ -372,16 +367,18 @@
             <div class="f"><span>Roibos</span><input name="VarInfusion" type="radio" value="Roibos">
             </div>
         </label>
+        <label><img src="{{url_for('static', filename='cafe-ico/opt-infusion.png')}}">
+            <div class="f"><span>Maca</span><input name="VarInfusion" type="radio" value="Maca">
+            </div>
+        </label>
 
     </fieldset>
     <fieldset class="cafeSelect cS_Notes">
         <summary>Notas</summary><textarea class="nop" name="notas" rows="4"></textarea>
         <br>
         <div class="input-group">
-
             <button class="btn btn-primary" type="submit">Enviar esta comanda</button>
-            <button class="btn btn-secondary" onclick='location.href = "{{url_for("Cafe.index")}}"' type="button"
-                class="np">Salir</button>
+            <a class="btn btn-secondary" href='{{url_for("Cafe.index")}}' class="np">Salir</a>
         </div>
     </fieldset>
 

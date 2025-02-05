@@ -45,28 +45,28 @@
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav me-auto">
                     {% if "user" in g %}
-                    {% for nav in G_NAV if nav.get("role") in g.user.r %}
-                    {% if nav.get("subitems") != None %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                            aria-haspopup="true" aria-expanded="false">{{nav["text"]}}</a>
-                        <div class="dropdown-menu">
-                            {% for sub in nav["subitems"] if sub == "divider" or sub.get("role", "*") in g.user.r %}
-                            {% if sub == "divider" %}
-                            <div class="dropdown-divider"></div>
+                        {% for nav in G_NAV if nav.get("role") in g.user.r or "admin" in g.user.r %}
+                            {% if nav.get("subitems") != None %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                                        aria-haspopup="true" aria-expanded="false">{{nav["text"]}}</a>
+                                    <div class="dropdown-menu">
+                                        {% for sub in nav["subitems"] if sub == "divider" or sub.get("role", "*") in g.user.r or "admin" in g.user.r %}
+                                        {% if sub == "divider" %}
+                                        <div class="dropdown-divider"></div>
+                                        {% else %}
+                                        <a class="dropdown-item" href="{{url_for(sub['endpoint'])}}">{{sub["text"]}}</a>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </li>
                             {% else %}
-                            <a class="dropdown-item" href="{{url_for(sub['endpoint'])}}">{{sub["text"]}}</a>
+                                <li class='nav-item'>
+                                    <a class="nav-link {% if G_CNAV == nav['endpoint'] %}active{% endif %}"
+                                        href="{{url_for(nav['endpoint'])}}">{{nav["text"]}}</a>
+                                </li>
                             {% endif %}
-                            {% endfor %}
-                        </div>
-                    </li>
-                    {% else %}
-                    <li class='nav-item'>
-                        <a class="nav-link {% if G_CNAV == nav['endpoint'] %}active{% endif %}"
-                            href="{{url_for(nav['endpoint'])}}">{{nav["text"]}}</a>
-                    </li>
-                    {% endif %}
-                    {% endfor %}
+                        {% endfor %}
                     {% endif %}
 
                 </ul>

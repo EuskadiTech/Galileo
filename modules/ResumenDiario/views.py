@@ -25,7 +25,7 @@ def index(user):
         "Receta": get_receta(),
         "NoticiasEuskadiTech": cached_request(
             "resumen-diario:eustech_news",
-            f"https://raw.githubusercontent.com/EuskadiTech/Galileo/refs/heads/main/changelog/latest.txt",
+            f"https://naiel.fyi/_cdn/galileo-news/latest.html",
         ).text,
     }
     config = get_config()

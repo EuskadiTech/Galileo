@@ -1,148 +1,131 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <!-- Required meta tags -->
-    <meta name="color-scheme" content="light dark" />
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
 
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='style.css')}}"
-    />
+<head>
+  <!-- Required meta tags -->
+  <meta name="color-scheme" content="light dark" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <title>{{data["Today"]}}</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
 
-    <style>
-      body {
-        font-size: 25px;
-      }
+  <title>{{data["Today"]}}</title>
 
-      html {
-        color-scheme: light dark;
-      }
+  <style>
+    body {
+      font-size: 25px;
+    }
 
-      pre {
-        border: 0 !important;
-      }
+    html {
+      color-scheme: light dark;
+    }
 
-      button {
-        cursor: pointer;
-      }
+    pre {
+      border: 0 !important;
+    }
 
-      small {
-        display: block;
-      }
+    button {
+      cursor: pointer;
+    }
 
-      .card-body {
-        padding: 10px;
-      }
+    small {
+      display: block;
+    }
 
-      .card-header {
-        border: none !important;
-        border-radius: 0 0 0 0 !important;
-      }
+    .card-body {
+      padding: 10px;
+    }
 
-      .grid-item {
-        width: 20rem;
-        /* height: 20rem; */
-        float: left;
-        margin-bottom: 10px;
-        border-radius: 10px;
-        background: floralwhite;
-      }
+    .card-header {
+      border: none !important;
+      border-radius: 0 0 0 0 !important;
+    }
 
-      /* .grid {
+    .grid-item {
+      width: 20rem;
+      /* height: 20rem; */
+      float: left;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      background: floralwhite;
+    }
+
+    /* .grid {
 
             display: grid;
   grid-template-columns: repeat(auto-fill, calc(20rem + 8px));
   grid-template-rows: masonry;
         } */
-      .grid {
-        position: relative;
-        max-width: calc(350px * 3) !important;
+    .grid {
+      position: relative;
+      max-width: calc(350px * 3) !important;
+    }
+
+    .printonly,
+    .printonly * {
+      display: none !important;
+    }
+
+    @media print {
+
+      .noprint,
+      .noprint * {
+        display: none !important;
       }
 
       .printonly,
       .printonly * {
-        display: none !important;
+        display: block !important;
       }
+    }
+  </style>
+</head>
 
-      @media print {
-        .noprint,
-        .noprint * {
-          display: none !important;
-        }
+<body style="margin: 15px">
+  {% include 'loader.html' %}
+  <script>
+    function printThis() {
+      // var URL = "?print";
+      // var W = window.open(URL);
+      window.print();
+    }
+  </script>
 
-        .printonly,
-        .printonly * {
-          display: block !important;
-        }
-      }
-    </style>
-  </head>
-
-  <body style="margin: 15px">
-    {% include 'loader.html' %}
-    <script>
-      function printThis() {
-        // var URL = "?print";
-        // var W = window.open(URL);
-        window.print();
-      }
-    </script>
-
-    {% if data["Print"] %}
-    <script>
-      onload = () => {
-        window.print();
-        // window.close()
-      };
-    </script>
-    {% endif %}
-    <div>
-      <header
-        style="
+  {% if data["Print"] %}
+  <script>
+    onload = () => {
+      window.print();
+      // window.close()
+    };
+  </script>
+  {% endif %}
+  <div>
+    <header style="
           font-size: 18px !important;
           background-color: #000;
           color: #fff;
           border: 1px solid #000;
           margin-bottom: 5px;
-        "
-        class="noprint"
-      >
-        <b
-          >Galileo - Resumen Diario -
-          <a
-            style="color: white; text-decoration: underline"
-            href="{{url_for('index')}}"
-            >Volver a Inicio</a
-          ></b
-        >
-      </header>
-      <div>
-        <h1 style="font-size: 47.5px">
-          {{data["Today"]}} - {{data["Weather"]["Icon"]}}
-          <span class="noprint"
-            ><button class="noprint" onclick="printThis()" type="button">
-              🖨️
-            </button></span
-          >
-        </h1>
-        <small style="font-size: 12px">
-          <i> Creado por EuskadiTech&trade;, clima por wttr.in</i>
-        </small>
-      </div>
-      <!-- <h1 style="border: 16px solid red">NO IMPRIMIR</h1> -->
-      <!--- INICIO TARJETAS --->
-      <div
-        class="grid"
-        data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 319, "horizontalOrder": false, "gutter": 20, "fitWidth": false, "resize": false}'
-      >
+        " class="noprint">
+      <b>Galileo - Resumen Diario -
+        <a style="color: white; text-decoration: underline" href="{{url_for('index')}}">Volver a Inicio</a></b>
+    </header>
+    <div>
+      <h1 style="font-size: 47.5px">
+        {{data["Today"]}} - {{data["Weather"]["Icon"]}}
+        <span class="noprint"><button class="noprint" onclick="printThis()" type="button">
+            🖨️
+          </button></span>
+      </h1>
+      <small style="font-size: 12px">
+        <i> Creado por EuskadiTech&trade;, clima por wttr.in</i>
+      </small>
+    </div>
+    <!-- <h1 style="border: 16px solid red">NO IMPRIMIR</h1> -->
+    <!--- INICIO TARJETAS --->
+    <div class="grid"
+      data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 319, "horizontalOrder": false, "gutter": 20, "fitWidth": false, "resize": false}'>
       <!-- <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
         <div class="card-body">
           <b>¡Aviso importante!</b><br />
@@ -150,96 +133,86 @@
           disponibles.
         </div>
       </div> -->
-      {% if data["Receta"] != None %}
-        {% if data["Receta"] != "No Disp." %}
-        <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
-          <div class="card-body">
-            <b>☕️ Receta del café</b><br />
-            Hoy con el café tenemos <br><b>{{data["Receta"]}}</b>.
-          </div>
+      {% if data["Receta"] != None and data["Receta"] != "No Disp." %}
+      <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
+        <div class="card-body">
+          <b>☕️ Receta del café</b><br />
+          Hoy con el café tenemos <br><b>{{data["Receta"]}}</b>.
         </div>
-        {% endif %}
+      </div>
       {% endif %}
+      {% if data["CafeFree"] | length > 0 %}
       <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
         <div class="card-body">
           <b>☕️ Café gratis</b><br />
-          Personas con café gratis (10+ puntos): 
+          Personas con café gratis (10+ puntos):
           <ul>
             {% for persona in data["CafeFree"] %}
-                <li>{{ persona["Nombre"] }} ({{ persona["Region"] }}) <b>{{ persona["Puntos"] }} pts.</b></li>
+            <li>{{ persona["Nombre"] }} ({{ persona["Region"].split(";")[0] }}) <b>{{ persona["Puntos"] }} pts.</b></li>
             {% endfor %}
-            
+
           </ul>
         </div>
       </div>
-        {% for menu in data["Comedor"] %}
-        <!--- Menu del comedor Basal --->
-        <div class="grid-item card" style="border: 4px solid rgb(0, 123, 255); min-height: 306;">
-          <div class="card-body">
-            <b>🍽️ Menú {{menu}}</b><br />
+      {% endif %}
+      <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
+        <div class="card-body">
+          {{data["NoticiasEuskadiTech"] | safe}}
+        </div>
+      </div>
+      {% for menu in data["Comedor"] %}
+      <!--- Menu del comedor Basal --->
+      <div class="grid-item card" style="border: 4px solid rgb(0, 123, 255); min-height: 306;">
+        <div class="card-body">
+          <b>🍽️ Menú {{menu}}</b><br />
 
-            <ol style="padding-left: 25px">
-              <li>
-                {{data["Comedor"][menu]["P1 Text"]}}
-                <!--<img
-                  src='https://naiel.fyi/static/img/{{data["Comedor"][menu]["P1 Img"]}}'
-                  style="max-width: 100px; max-height: 50px"
-                  alt=""
-                  height="50"
-                />-->
-              </li>
-              <li>
-                {{data["Comedor"][menu]["P2 Text"]}}
-                <!--<img
-                  src='https://naiel.fyi/static/img/{{data["Comedor"][menu]["P2 Img"]}}'
-                  style="max-width: 100px; max-height: 50px"
-                  alt=""
-                  height="50"
-                />-->
-              </li>
-              <li>
-                {{data["Comedor"][menu]["P3 Text"]}}
-                <!--<img
-                  src='https://naiel.fyi/static/img/{{data["Comedor"][menu]["P3 Img"]}}'
-                  style="max-width: 100px; max-height: 50px"
-                  alt=""
-                  height="50"
-                />-->
-              </li>
-            </ol>
-            <small style="font-size: 60%">
-              <i>Puede ser incorrecto.</i>
-              <i
-                >Hay {{data["ComedorOKKO"][data["Comedor"][menu]["IsEnought"]]}}
-                cantidad de comida.
-              </i>
-            </small>
-          </div>
+          <ol style="padding-left: 25px">
+            <li>
+              {{data["Comedor"][menu]["P1 Text"]}}
+              <img src='{{url_for("static", filename="comedorico/" + data["Comedor"][menu]["P1 Img"])}}'
+                style="max-width: 100px; max-height: 50px" alt="" height="50" />
+            </li>
+            <li>
+              {{data["Comedor"][menu]["P2 Text"]}}
+              <img src='{{url_for("static", filename="comedorico/" + data["Comedor"][menu]["P2 Img"])}}'
+                style="max-width: 100px; max-height: 50px" alt="" height="50" />
+            </li>
+            <li>
+              {{data["Comedor"][menu]["P3 Text"]}}
+              <img src='{{url_for("static", filename="comedorico/" + data["Comedor"][menu]["P3 Img"])}}'
+                style="max-width: 100px; max-height: 50px" alt="" height="50" />
+            </li>
+          </ol>
+          <small style="font-size: 60%">
+            <i>Puede ser incorrecto.</i>
+            <i>Hay {{data["ComedorOKKO"][data["Comedor"][menu]["IsEnought"]]}}
+              cantidad de comida.
+            </i>
+          </small>
         </div>
-        {% endfor %}
-        {% if config["Weather"]["Enabled"] %}
-        <!--- Clima de hoy --->
-        <div class="grid-item card" style="border: 4px solid rgb(23, 162, 184)">
-          <div class="card-body">
-            <b
-              >{{data["Weather"]["Icon"]}} El Tiempo en
-              {{config["Weather"]["Location"]}}</b
-            ><br />
-            {{data["Weather"]["Text"] | safe}}
-            <i>Calculado a las {{data["Time"]}} </i>
-          </div>
+      </div>
+      {% endfor %}
+      {% if config["Weather"]["Enabled"] %}
+      <!--- Clima de hoy --->
+      <div class="grid-item card" style="border: 4px solid rgb(23, 162, 184)">
+        <div class="card-body">
+          <b>{{data["Weather"]["Icon"]}} El Tiempo en
+            {{config["Weather"]["Location"]}}</b><br />
+          {{data["Weather"]["Text"] | safe}}
+          <i>Calculado a las {{data["Time"]}} </i>
         </div>
-        {% endif %} {% if config["Jokes"]["Enabled"] %}
-        <!--- Chiste diario --->
-        <div class="grid-item card" style="border: 4px solid rgb(40, 167, 69)">
-          <div class="card-body">
-            <b>🤣 Chiste diario</b><br />
-            {{data["Joke"] | safe}}
-          </div>
+      </div>
+      {% endif %} {% if config["Jokes"]["Enabled"] %}
+      <!--- Chiste diario --->
+      <div class="grid-item card" style="border: 4px solid rgb(40, 167, 69)">
+        <div class="card-body">
+          <b>🤣 Chiste diario</b><br />
+          {{data["Joke"] | safe}}
         </div>
-        {% endif %}
-        <!--- Encargos --->
-        <!-- <div class="grid-item card" style="border: 4px solid rgb(52, 58, 64);">
+      </div>
+      {% endif %}
+      <!--- Encargos --->
+      <!-- <div class="grid-item card" style="border: 4px solid rgb(52, 58, 64);">
                 <div class="card-body">
                     <b>⚙️ Encargos</b><br>
                     Finalizado Hoy:
@@ -254,21 +227,9 @@
                 </div>
             </div> -->
 
-      </div>
     </div>
+  </div>
+  <script src="{{url_for('static', filename='masonry.min.js')}}"></script>
+</body>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-    -->
-    <script src="{{url_for('static', filename='masonry.min.js')}}"></script>
-  </body>
 </html>

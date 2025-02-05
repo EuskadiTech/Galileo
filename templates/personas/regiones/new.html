@@ -1,0 +1,22 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+    <center>
+      <h2>Añadir región</h2>
+      <form method="POST">
+        <fieldset style="max-width: 35rem;text-align: left;float: left;">
+          <div>
+            <label class="col-form-label" for="formNombre">Nombre</label>
+            <input type="text" class="form-control" placeholder="Nombre" id="formNombre" name="Nombre">
+          </div>
+          <div>
+            <label class="col-form-label" for="formColor">Color</label>
+            <input type="color" class="form-control" placeholder="Color" id="formColor" name="Color">
+          </div>
+          <br>
+          <input type="submit" class="btn btn-primary" value="Guardar" />
+          <a class="btn btn-secondary" href="{{url_for('Personas.regiones')}}">Salir</a>
+        </fieldset>
+      </form>
+    </center>
+{% endblock %}

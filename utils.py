@@ -157,6 +157,9 @@ def check_path(path):
     if not os.path.isdir(path):
         os.mkdir(path)
 
+def pysonsort(dic: dict, keyToSort: str, reverse: bool = False):
+    r = sorted(dic.items(), key=lambda x:x[1][keyToSort], reverse=reverse)
+    return dict(r)
 #region Tunnels
 class PinggyTunnel:
     # TODO: Implement https://ssi.sh/ as a tunnel

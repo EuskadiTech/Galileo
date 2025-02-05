@@ -1,7 +1,7 @@
 from flask import Blueprint, request, send_file, render_template, url_for, redirect, make_response
 from io import BytesIO
 from markdown import markdown
-from .models import DB_PERSONAS
+from .models import DB_PERSONAS, DB_REGIONES
 from ..Cafe.models import ANILLAS
 from random import randint
 from . import localutils
@@ -70,16 +70,9 @@ def printstickers(user):
 
 
 @app.route("/personas/new", methods=["GET", "POST"])
-def new():
-    er = True
-    if DB_PERSONAS.get_all() != {}:
-        er = False
-        try:
-            user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
-            user.isLoggedIn("personas:write")
-        except Exception as e:
-            return redirect(url_for("Personas.auth_scan", err=e.args))
-    user = {}
+@with_auth("personas:write")
+def new(user):
+    regioness = DB_REGIONES.get_all()
     if request.method == "POST":
         code = str(randint(100,9999))
         DB_PERSONAS.add(
@@ -97,13 +90,11 @@ def new():
                 "Foto": request.form.get("Foto", ""),
             }
         )
-        if er:
-            return redirect(url_for("Personas.auth_scan", err = "Codigo del usuario creado: " + code))
         return redirect(url_for("Personas.index"))
     check_path(USERDATA_DIR + "uploads")
     check_path(USERDATA_DIR + "uploads/personas")
     avatars = [file.replace("\\", "/") for file in glob(os.path.join(USERDATA_DIR, "uploads/personas"))]
-    return render_template("personas/new.html", ANILLAS=ANILLAS, USER=user, err=request.args.get("err"), AVATARS=avatars)
+    return render_template("personas/new.html", AVATARS=avatars, regiones=regioness)
 
 @app.route("/personas/scan", methods=["GET", "POST"])
 @with_auth("personas:read")
@@ -145,6 +136,7 @@ def pointop(user, rid):
 @with_auth("personas:write")
 def edit(user, rid):
     receta = DB_PERSONAS.get_by_id(str(rid))
+    regioness = DB_REGIONES.get_all()
     if request.method == "POST":
         try:
             DB_PERSONAS.update_by_id(
@@ -170,7 +162,7 @@ def edit(user, rid):
     check_path(USERDATA_DIR + "uploads/personas")
     
     avatars = [file.replace("\\", "/").removeprefix(os.path.join(USERDATA_DIR, "uploads/personas/").replace("\\", "/")) for file in glob(os.path.join(USERDATA_DIR, "uploads/personas/**"), recursive=True) if os.path.isfile(file)]
-    return render_template("personas/edit.html", receta=receta, rid=rid, ANILLAS=ANILLAS, USER=user, AVATARS=avatars)
+    return render_template("personas/edit.html", receta=receta, rid=rid, ANILLAS=ANILLAS, USER=user, AVATARS=avatars, regiones=regioness)
 
 
 @app.route("/personas/<rid>/del", methods=["GET", "POST"])
@@ -181,3 +173,57 @@ def rdel(user, rid):
         DB_PERSONAS.delete_by_id(str(rid))
         return redirect(url_for("Personas.index"))
     return render_template("confirmDeletion.html", USER=user)
+
+@app.route('/personas_regiones')
+@with_auth("personas:read")
+def regiones(user):
+    return render_template('personas/regiones/index.html', regiones = DB_REGIONES.get_all())
+
+@app.route('/personas_regiones/new', methods=["GET", "POST"])
+@with_auth("personas:write")
+def regiones_new(user):
+    if request.method == "POST":
+        code = str(randint(100,9999))
+        DB_REGIONES.add(
+            {
+                "Nombre": request.form.get("Nombre", ""),
+                "Color": request.form.get("Color", "lightblue"),
+            }
+        )
+        return redirect(url_for("Personas.regiones"))
+    return render_template("personas/regiones/new.html", USER=user)
+
+@app.route('/personas_regiones/<rid>/del', methods=["GET", "POST"])
+@with_auth("personas:delete")
+def regiones_rdel(user, rid):
+    if request.method == "POST" and request.form.get("deletecapcha") == "ELIMINAR":
+        DB_REGIONES.delete_by_id(str(rid))
+        return redirect(url_for("Personas.regiones"))
+    return render_template("confirmDeletion.html", USER=user)
+
+@app.route('/personas_regiones/<rid>/edit', methods=["GET", "POST"])
+@with_auth("personas:write")
+def regiones_edit(user, rid):
+    region = DB_REGIONES.get_by_id(str(rid))
+    if request.method == "POST":
+        DB_REGIONES.update_by_id(
+            str(rid),
+            {
+                "Nombre": request.form.get("Nombre", region["Nombre"]),
+                "Color": request.form.get("Color", region["Color"]),
+            }
+        )
+        return redirect(url_for("Personas.index"))
+    
+    return render_template("personas/regiones/edit.html", region=region, rid=rid, USER=user)
+
+
+@app.route('/personas_regiones/<rid>')
+@with_auth("personas:read")
+def regiones_region(user, rid):
+    region = DB_REGIONES.get_by_id(str(rid))
+    return render_template(
+        "personas/regiones/region.html",
+        region=region,
+        rid=rid, USER=user
+    )

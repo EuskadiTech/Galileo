@@ -7,9 +7,9 @@
 
       <table border style="width: calc(100% - 30px); max-width: 30rem; text-align: left; border: 1px solid black; color: black;">
         <tr>
-          <td colspan="2" style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px; border: 1px solid black;">{{recetas[key]["Nombre"]}} ({{recetas[key]["Region"]}})</td>
+          <td colspan="2" style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px; border: 1px solid black;">{{recetas[key]["Nombre"]}} ({{recetas[key]["Region"].split(";")[0]}})</td>
           <td style="width: 150px; text-align: center; border: 1px solid black;" rowspan="2">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=15&data={{recetas[key]['Codigo']}}"
+            <img src="{{ qrcode(recetas[key]['Codigo'], border=3) }}"
               width="150px"><br><small>
                 Codigo - {{recetas[key]["Codigo"]}}
                 

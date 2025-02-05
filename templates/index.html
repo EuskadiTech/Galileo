@@ -3,9 +3,9 @@
 {% block container %}
 
 <center>
-  <h2>¡Hola {{USER.u["Nombre"]}}!</h2>
+  <h2>¡Hola {{g.user.u["Nombre"]}}!</h2>
   <h1>Bienvenidx a Galileo</h1>
-  <h2>Tienes {{USER.u["Puntos"]}} puntos</h2>
-  <em>Utiliza el menú superior para acceder a los modulos</em>
+  <h2>Tienes {{g.user.u["Puntos"]}} puntos</h2>
+  <em>Utiliza el menú superior para acceder a los modulos a los que tienes acceso</em>
 </center>
 {% endblock %}

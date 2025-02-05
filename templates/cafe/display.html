@@ -79,175 +79,130 @@
        <h1>Puntos restantes: {{total}}c</h1> 
     {% endif %}
     
-    <main class="grid"
-      data-masonry='{ "itemSelector": ".vertical", "horizontalOrder": false, "gutter": 20, "fitWidth": true, "resize": true}'>
-      <!-- <?php foreach ($dirs as $dir): ?>
-      <?php
-        $L_ThisAulaResults = array();
-        $files = glob($dir . "/*.json", GLOB_BRACE);
-        $fname = end(explode("/", $dir));
-        foreach ($files as $file) {
-          $POSTT = json_decode(file_get_contents($file), true);
-          if (is_array($POSTT['Aula'])) {
-            $POSTT['Aula'] = implode(" ", $POSTT['Aula']);
-          }
-          ;
-          if (is_array($POSTT['Anilla'])) {
-            $POSTT['Anilla'] = implode(" ", $POSTT['Anilla']);
-          }
-          ;
-          if (is_array($POSTT['Tamaño'])) {
-            $POSTT['Tamaño'] = implode(" ", $POSTT['Tamaño']);
-          }
-          ;
-          if (is_array($POSTT['Leche'])) {
-            $POSTT['Leche'] = implode(" ", $POSTT['Leche']);
-          }
-          ;
-          if (is_array($POSTT['Temperatura'])) {
-            $POSTT['Temperatura'] = implode(" ", $POSTT['Temperatura']);
-          }
-          ;
-          if (is_array($POSTT['Selección'])) {
-            $POSTT['Selección'] = implode(" ", $POSTT['Selección']);
-          }
-          ;
-          if (is_array($POSTT['Complementos'])) {
-            $POSTT['Complementos'] = implode(" ", $POSTT['Complementos']);
-          }
-          $L_ThisAulaResults[$file] = $POSTT;
-
-        }
-        $sort = array_column($L_ThisAulaResults, "group");
-        array_multisort($sort, SORT_DESC, $L_ThisAulaResults);
-        ?> -->
-      <!-- {% for aula in regiones %}
-      <details style="float: left; background-color: yellow; margin: 5px; border: 1px dashed black; padding: 0 25px;">
-        <summary>
-          <h2 style="margin: 0;">Aula: {{aula}}
-          </h2>
-        </summary>
-      </details>
+    {% for region in regiones %}
+        <details open style="background-color: {{region.split(';')[1]}}; padding: 15px; display: inline-block; border: 2px solid black; border-radius: 5px; width: 100%; margin: 5px;">
+          <summary style="font-size: 30px; color: black; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;">{{region.split(";")[0]}}</summary>
+          <div class="grid"
+            data-masonry='{ "itemSelector": ".vertical", "horizontalOrder": false, "gutter": 20, "fitWidth": true, "resize": true}'>
+            {% for comanda in regiones[region] %}
+            <fieldset class="milk vertical {{comanda[1]['_grupo'].split(';')[3]}}" style="padding: 3px; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff; color: black; background-color: {{comanda[1]['_grupo'].split(';')[1]}}; text-align: left; border-radius: 5px;">
+              Ronda: <b>{{comanda[1]['_fase']}}</b>
+              <br>
+              <!--<h3 style="color: black !important;">
+                {{personas[comanda[1]['_persona']]['Nombre']}} ({{personas[comanda[1]['_persona']]['Region']}})
+              </h3>-->
+                <label style="width: 315px; max-width: none; height: 76px;">
+                  <img src='{{ url_for("get_upload", path="personas/"+personas[comanda[1]["_persona"]]["Foto"]) }}' style="height: 64px !important;">
+                  <div class="f fb fn"><span>
+                          <b>{{personas[comanda[1]['_persona']]["Nombre"]}} ({{personas[comanda[1]['_persona']]["Region"].split(";")[0]}})</b>
+                          <br>
+                          {{personas[comanda[1]['_persona']]['markdown']}}
+                      </span>
+                      
+                      {% if "Historial" not in fase %}
+                      <div
+                          style="border-radius: 7.5px; color: #000 !important; background-color: gold;text-align: center; word-wrap: break-word;word-break: break-all;padding: 0 !important;height: 55px !important;width: 45px !important; float: right; resize: none; text-shadow: none; border: 1px solid black;">
+                          <small style="font-size: 10px;">Punto(s)</small><br>{{personas[comanda[1]['_persona']]["Puntos"]}}
+                      </div>
+                      {% endif %}
+                      <div
+                          style="background-color: {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}}; border-radius: 250px; width: 32px; height: 32px; float: right; margin-right: 5px;">
+                      </div>
+                  </div>
+              </label>
+              <br>
+              {% if "Cocina" in fase %}
+              <select
+                id="group" onchange='ChangeGroup(this, "{{comanda[0]}}")' required>
+                <option disabled selected>
+                  {{comanda[1]['_grupo'].split(';')[0]}}
+                </option>
+                <option value="00 Sin Agrupar;white;black;">00 Sin Agrupar</option>
+                <!-- The CSS class "caf" is set at the 4th CSV key -->
+                <optgroup label="Sin Cafeina">
+                <optgroup label="Sin Cafeina, Pequeño">
+                  <option value="A1 Peq, Descaf;lightgreen;black;">A1 Peq, Descaf</option>
+                  <option value="A2 Peq, Descaf;OliveDrab;white">A2 Peq, Descaf</option>
+                  <option value="A3 Peq, Descaf;darkgreen;white;">A3 Peq, Descaf</option>
+                </optgroup>
+                <optgroup label="Sin Cafeina, Grande">
+                  <option value="B1 Grande, Descaf;red;white;">B1 Grande, Descaf</option>
+                  <option value="B2 Grande, Descaf;orange;white;">B2 Grande, Descaf</option>
+                  <option value="B3 Grande, Descaf;yellow;black;">B3 Grande, Descaf</option>
+                </optgroup>
+                </optgroup>
+                <optgroup label="Con Cafeina">
+                <optgroup label="Con Cafeina, Pequeño">
+                  <option value="C1 Peq, Con Caf;lightgreen;black;caf">C1 Peq, Con Caf</option>
+                  <option value="C2 Peq, Con Caf;OliveDrab;white;caf">C2 Peq, Con Caf</option>
+                  <option value="C3 Peq, Con Caf;darkgreen;white;caf">C3 Peq, Con Caf</option>
+                </optgroup>
+                <optgroup label="Con Cafeina, Grande">
+                  <option value="D1 Grande, Con Caf;red;white;caf">D1 Grande, Con Caf</option>
+                  <option value="D2 Grande, Con Caf;orange;white;caf">D2 Grande, Con Caf</option>
+                  <option value="D3 Grande, Con Caf;yellow;black;caf">D3 Grande, Con Caf</option>
+                </optgroup>
+                </optgroup>
+              </select>
+              {% endif %}
+              <br>
+              <hr>
       
-      {% endfor %} -->
+              <ul style="padding-left: 15px !important;">
+                <li>{{comanda[1].get("Tipo", "")[0]}}
       
-      {% for comanda in comandas %}
-      <fieldset class="milk vertical {{comanda[1]['_grupo'].split(';')[3]}}" style="padding: 3px; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff; color: black; background-color: {{comanda[1]['_grupo'].split(';')[1]}}; text-align: left; ">
-        Ronda: <b>{{comanda[1]['_fase']}}</b>
-        <br>
-        <!--<h3 style="color: black !important;">
-          {{personas[comanda[1]['_persona']]['Nombre']}} ({{personas[comanda[1]['_persona']]['Region']}})
-        </h3>-->
-          <label style="width: 315px; max-width: none; height: 76px;">
-            <img src='{{ url_for("get_upload", path="personas/"+personas[comanda[1]["_persona"]]["Foto"]) }}' style="height: 64px !important;">
-            <div class="f fb fn"><span>
-                    <b>{{personas[comanda[1]['_persona']]["Nombre"]}} ({{personas[comanda[1]['_persona']]["Region"]}})</b>
-                    <br>
-                    {{personas[comanda[1]['_persona']]['markdown']}}
-                </span>
-                
-                {% if "Historial" not in fase %}
-                <div
-                    style="border-radius: 7.5px; color: #000 !important; background-color: gold;text-align: center; word-wrap: break-word;word-break: break-all;padding: 0 !important;height: 55px !important;width: 45px !important; float: right; resize: none; text-shadow: none; border: 1px solid black;">
-                    <small style="font-size: 10px;">Punto(s)</small><br>{{personas[comanda[1]['_persona']]["Puntos"]}}
-                </div>
+                  {% if comanda[1].get("Cafeina", "")[0] != "Sin Elegir" %}
+                  {{comanda[1].get("Cafeina", "")[0]}}
+                  {% endif %}
+                  {% if comanda[1].get("VarInfusion", "") != None %}
+                  {{comanda[1].get("VarInfusion", "")}}
+                  {% endif %}
+      
+                  {% if "Cafe Soluble" in comanda[1]["Tipo"] or "Cafe" in comanda[1]["Tipo"] or "Colacao" in comanda[1]["Tipo"] %}
+                  <small style="font-size: 10px">20c</small>
+                  {% endif %}
+                  <ul style="padding-left: 15px !important;">
+                    <li>
+                      {% if comanda[1].get("Leche", "")[0] != "Sin Leche" %}
+                      {{comanda[1].get("Leche", "")[0]}}
+                      {% endif %}
+                      {% if comanda[1].get("Leche", "")[0] != "Agua" %}
+                      {% if "Grande" in comanda[1]["Tama_o"] %}
+                      Grande <small style="font-size: 10px">20c</small>
+                      {% else %}
+                      Pequeña <small style="font-size: 10px">10c</small>
+                      {% endif %}
+                      {% endif %}
+                    </li>
+                    <li>{{comanda[1].get("Temperatura", "")[0]}}</li>
+                    <li>{{comanda[1].get("Endulzantes", "")[0]}}</li>
+                  </ul>
+                </li>
+                {% if "Receta del dia" in comanda[1].get("Complementos", "") %}
+                <li>Receta ({{Receta}}) <small style="font-size: 10px">10c</small></li>
                 {% endif %}
-                <div
-                    style="background-color: {{personas[comanda[1]['_persona']]['SC_Anilla'].split(';')[1]}}; border-radius: 250px; width: 32px; height: 32px; float: right; margin-right: 5px;">
-                </div>
-            </div>
-        </label>
-        <br>
-        {% if "Cocina" in fase %}
-        <select
-          id="group" onchange='ChangeGroup(this, "{{comanda[0]}}")' required>
-          <option disabled selected>
-            {{comanda[1]['_grupo'].split(';')[0]}}
-          </option>
-          <option value="00 Sin Agrupar;white;black;">00 Sin Agrupar</option>
-          <!-- The CSS class "caf" is set at the 4th CSV key -->
-          <optgroup label="Sin Cafeina">
-          <optgroup label="Sin Cafeina, Pequeño">
-            <option value="A1 Peq, Descaf;lightgreen;black;">A1 Peq, Descaf</option>
-            <option value="A2 Peq, Descaf;OliveDrab;white">A2 Peq, Descaf</option>
-            <option value="A3 Peq, Descaf;darkgreen;white;">A3 Peq, Descaf</option>
-          </optgroup>
-          <optgroup label="Sin Cafeina, Grande">
-            <option value="B1 Grande, Descaf;red;white;">B1 Grande, Descaf</option>
-            <option value="B2 Grande, Descaf;orange;white;">B2 Grande, Descaf</option>
-            <option value="B3 Grande, Descaf;yellow;black;">B3 Grande, Descaf</option>
-          </optgroup>
-          </optgroup>
-          <optgroup label="Con Cafeina">
-          <optgroup label="Con Cafeina, Pequeño">
-            <option value="C1 Peq, Con Caf;lightgreen;black;caf">C1 Peq, Con Caf</option>
-            <option value="C2 Peq, Con Caf;OliveDrab;white;caf">C2 Peq, Con Caf</option>
-            <option value="C3 Peq, Con Caf;darkgreen;white;caf">C3 Peq, Con Caf</option>
-          </optgroup>
-          <optgroup label="Con Cafeina, Grande">
-            <option value="D1 Grande, Con Caf;red;white;caf">D1 Grande, Con Caf</option>
-            <option value="D2 Grande, Con Caf;orange;white;caf">D2 Grande, Con Caf</option>
-            <option value="D3 Grande, Con Caf;yellow;black;caf">D3 Grande, Con Caf</option>
-          </optgroup>
-          </optgroup>
-        </select>
-        {% endif %}
-        <br>
-        <hr>
-
-        <ul style="padding-left: 15px !important;">
-          <li>{{comanda[1].get("Tipo", "")[0]}}
-
-            {% if comanda[1].get("Cafeina", "")[0] != "Sin Elegir" %}
-            {{comanda[1].get("Cafeina", "")[0]}}
-            {% endif %}
-            {% if comanda[1].get("VarInfusion", "") != None %}
-            {{comanda[1].get("VarInfusion", "")}}
-            {% endif %}
-
-            {% if "Cafe Soluble" in comanda[1]["Tipo"] or "Cafe" in comanda[1]["Tipo"] or "Colacao" in comanda[1]["Tipo"] %}
-            <small style="font-size: 10px">20c</small>
-            {% endif %}
-            <ul style="padding-left: 15px !important;">
-              <li>
-                {% if comanda[1].get("Leche", "")[0] != "Sin Leche" %}
-                {{comanda[1].get("Leche", "")[0]}}
-                {% endif %}
-                {% if comanda[1].get("Leche", "")[0] != "Agua" %}
-                {% if "Grande" in comanda[1]["Tama_o"] %}
-                Grande <small style="font-size: 10px">20c</small>
-                {% else %}
-                Pequeña <small style="font-size: 10px">10c</small>
-                {% endif %}
-                {% endif %}
-              </li>
-              <li>{{comanda[1].get("Temperatura", "")[0]}}</li>
-              <li>{{comanda[1].get("Endulzantes", "")[0]}}</li>
-            </ul>
-          </li>
-          {% if "Receta del dia" in comanda[1].get("Complementos", "") %}
-          <li>Receta ({{Receta}}) <small style="font-size: 10px">10c</small></li>
-          {% endif %}
-          <li>Servicio <small style="font-size: 10px">10c</small></li>
-
-        </ul>
-
-        <hr>
-        {% if "Cocina" not in fase %}
-        {% if "Puntos" not in comanda[1].get("MetodoDePago", "") %}
-        Total: <b>{{comanda[1].get("_precio", "?")}}c</b><br>
-        {% else %}
-        Total: <b>Gratis</b><br>
-        {% endif %}
-        Metodo de pago: <b>{{comanda[1].get("MetodoDePago", "")[0]}}</b>
-        <hr>
-        {% endif %}
-        {{comanda[1].get("notas", "")}}
-        <a style="width: 100%;" class="btn btn-success btn-large" href="{{url_for('Cafe.rdel', rid=comanda[0], ft=ft, fc=fc)}}">
-          Pasar a {{ft}}</a>
-      </fieldset>
-      {% endfor %}
-    </main>
+                <li>Servicio <small style="font-size: 10px">10c</small></li>
+      
+              </ul>
+      
+              <hr>
+              {% if "Cocina" not in fase %}
+              {% if "Puntos" not in comanda[1].get("MetodoDePago", "") %}
+              Total: <b>{{comanda[1].get("_precio", "?")}}c</b><br>
+              {% else %}
+              Total: <b>Gratis</b><br>
+              {% endif %}
+              Metodo de pago: <b>{{comanda[1].get("MetodoDePago", "")[0]}}</b>
+              <hr>
+              {% endif %}
+              {{comanda[1].get("notas", "")}}
+              <a style="width: 100%;" class="btn btn-success btn-large" href="{{url_for('Cafe.rdel', rid=comanda[0], ft=ft, fc=fc)}}">
+                Pasar a {{ft}}</a>
+            </fieldset>
+            {% endfor %}
+          </div>
+        </details>
+    {% endfor %}
   </form>
   <script src="{{url_for('static', filename='masonry.min.js')}}"></script>
   {% endblock %}

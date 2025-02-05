@@ -75,9 +75,9 @@ def comanda(user, rid):
             "_grupo": "00 Sin Agrupar;white;black;",
             "_fase": "Cocina - " + utils.DateParser().pretty_dayCode(),
         }
-        if data["Tama_o"][0] == "Grande" and data["Leche"][0] != "Sin Leche":
+        if data["Tama_o"][0] == "Grande" and data["Leche"][0] != "Sin Leche" and data["Leche"][0] != "Agua":
             total += 20
-        if data["Tama_o"][0] != "Grande" and data["Leche"][0] != "Sin Leche":
+        if data["Tama_o"][0] != "Grande" and data["Leche"][0] != "Sin Leche" and data["Leche"][0] != "Agua":
             total += 10
         if "Cafe" in data["Tipo"] or "Cafe Soluble" in data["Tipo"]:
             total += 20
@@ -106,7 +106,7 @@ def cocina(user):
             return True
         if "Cocina" in data["_fase"]:
             return True
-    for key, val in  DB_COMANDAS.get_by_query(query).items():
+    for key, val in DB_COMANDAS.get_by_query(query).items():
         persona = DB_PERSONAS.get_by_id(val["_persona"])
         if regiones.get(persona["Region"]) == None:
             regiones[persona["Region"]] = []
@@ -117,7 +117,7 @@ def cocina(user):
         personas = DB_PERSONAS.get_all(),
         Receta = get_receta(),
         comandas = DB_COMANDAS.get_by_query(query).items(),
-        regiones=regiones, USER=user, fc="cocina", ft="Pago"
+        regiones=dict(sorted(regiones.items(), key=lambda x:x[0], reverse=True)), USER=user, fc="cocina", ft="Pago"
     )
 
 @app.route("/cafe/pago", methods=["GET", "POST"])

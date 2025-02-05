@@ -67,22 +67,6 @@ def api__loadMenu(user):
     return redirect(url_for("Comedor.index"))
 
 
-@app.route("/api/comedor/reqMenu", methods=["POST"])
-@with_auth("comedor:write")
-def api__reqMenu(user):
-    config = get_config()
-    pid = config["Clave Proxy"]
-    f = request.files["file"]
-    co = f.read()
-    req = requests.post(
-        f"https://grp.naiel.fyi/creq/{pid}/SuperAI/menu",
-        files={"file": co},
-        data=request.form,
-    )
-    load_comedor(req.text)
-    return redirect(url_for("Comedor.index"))
-
-
 @app.route("/api/comedor/deleteMenu/<mid>")
 @confirm_deletion
 @with_auth("comedor:delete")

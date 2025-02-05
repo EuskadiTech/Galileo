@@ -9,7 +9,7 @@
       {% if "cafe:client" in g.user.r and "cafe:send" in g.user.r %}
         <details style="border: 2px solid #36587c; border-radius: 10px;">
           <summary class="btn btn-lg btn-primary" style="width: 100%;">Para mí ({{g.user.u["Nombre"]}} -
-            {{g.user.u["Region"]}})</summary>
+            {{g.user.u["Region"].split(";")[0]}})</summary>
             <b>Aviso: Si pides para tí, tienes que pedir el dia anterior despues del cobro.</b>
             <br><br>
             {% if CAN_CLIENT_SEND %}
@@ -27,7 +27,7 @@
             <option value="" disabled selected>Por nombre...</option>
             {% for key in personas %}
             {% if "cafe:client" in personas[key]["Roles"] %}
-            <option value='{{personas[key]["Codigo"]}}'>{{personas[key]["Nombre"]}} ({{personas[key]["Region"]}})
+            <option value='{{personas[key]["Codigo"]}}'>{{personas[key]["Nombre"]}} ({{personas[key]["Region"].split(";")[0].split(";")[0]}})
             </option>
             {% endif %}
             {% endfor %}

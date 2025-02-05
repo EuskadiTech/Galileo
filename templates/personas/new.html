@@ -2,9 +2,6 @@
 
 {% block container %}
     <center>
-      {% if err != None %}
-      <h1 style="border: 5px solid red; padding: 15px;">Error: {{err}}</h1>
-      {% endif %}
       <h2>Añadir persona</h2>
       <form action="{{url_for('Personas.new')}}" method="POST">
         <fieldset style="width: calc(100% - 30px);max-width: 35rem;text-align: left;float: left;">
@@ -18,7 +15,12 @@
           </div>
           <div>
             <label class="col-form-label" for="formRegion">Región</label>
-            <input type="text" class="form-control" placeholder="Región" id="formRegion" name="Region">
+            <select class="form-control" placeholder="Región" id="formRegion" name="Region">
+              <option value="Ninguno;black">Ninguno</option>
+              {% for region in regiones %}
+                <option value="{{ regiones[region]['Nombre'] }};{{ regiones[region]['Color'] }}">{{ regiones[region]['Nombre'] }}</option>
+              {% endfor %}
+            </select>
           </div>
           <div>
             <label for="formSelect" class="form-label">Foto (subir en "uploads/personas")</label>

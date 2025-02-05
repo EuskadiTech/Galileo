@@ -7,7 +7,10 @@
           <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
             <legend>Introducir PIN</legend>
             <input type="hidden" name="code" value="{{code}}">
-            <label style="font-size: 30px;">PIN: <input type="text" name="pin" style="font-family: monospace;font-size: 30px;"></label>
+            <label>
+              <b>PIN:</b><br>
+              <input autofocus type="text" name="pin" style="font-family: monospace; font-size: 30px; max-width: 375px; width: 100%;">
+            </label>
             <br>
             <input
               type="submit"

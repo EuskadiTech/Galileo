@@ -15,7 +15,12 @@
           </div>
           <div>
             <label class="col-form-label" for="formRegion">Región</label>
-            <input type="text" class="form-control" placeholder="Región" id="formRegion" name="Region" value="{{receta['Region']}}">
+            <select class="form-control" placeholder="Región" id="formRegion" name="Region">
+              <option value="Ninguno;black">Ninguno</option>
+              {% for region in regiones %}
+                <option {{"selected" if receta["Region"] == regiones[region]['Nombre'] + ";" + regiones[region]['Color']}} value="{{ regiones[region]['Nombre'] }};{{ regiones[region]['Color'] }}">{{ regiones[region]['Nombre'] }}</option>
+              {% endfor %}
+            </select>
           </div>
           <div>
             <label for="formSelect" class="form-label">Foto (subir en "uploads/personas")</label>
