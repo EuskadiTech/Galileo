@@ -22,14 +22,6 @@ jobs:
           spec: "G-Serv.spec"
           requirements: "requirements.txt"
           upload_exe_with_name: "G-Serv_Windows"
-      - name: Create Launcher
-        uses: sayyid5416/pyinstaller@v1
-        with:
-          python_ver: "3.11"
-          spec: "Launcher.spec"
-          requirements: "requirements_launcher.txt"
-          upload_exe_with_name: "Launcher_Windows"
-  
 
   build-docker:
     env:
@@ -100,14 +92,9 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: G-Serv_Windows
-      - uses: actions/download-artifact@v4
-        with:
-          name: Launcher_Windows
-      - run: ls -lah .
-      - run: echo "${{github.ref_name}}" > version.txt
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "G-Serv.exe,version.txt,Launcher.exe"
+          artifacts: "G-Serv.exe"
           prerelease: true
           allowUpdates: true
           omitBodyDuringUpdate: true
