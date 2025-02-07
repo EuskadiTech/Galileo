@@ -15,6 +15,12 @@
         <option value="Activar" {{"selected" if SC_CanClientSendComanda == "Activar"}}>Activar comandas externas</option>
       </select>
       <br>
+      <label for="SC_DisplayMode">Modo de pantalla:</label>
+      <select class="form-control" id="SC_DisplayMode" name="SC_DisplayMode" value="{{SC_DisplayMode}}">
+        <option value="cafe/display.html" {{"selected" if SC_DisplayMode == "cafe/display.html"}}>Agrupar por Aula</option>
+        <option value="cafe/display-nogroup.html" {{"selected" if SC_DisplayMode == "cafe/display-nogroup.html"}}>Sin agrupar</option>
+      </select>
+      <br>
       <div class="input-group">
         <input type="submit" class="btn btn-primary" value="Guardar" />
         <a class="btn btn-secondary" href="{{url_for('Cafe.index')}}">Salir</a>

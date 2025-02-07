@@ -7,6 +7,7 @@ from time import sleep
 import subprocess
 import uuid
 from threading import Event, Thread
+import webbrowser
 
 APPDATA_DIR = "."
 USERDATA_DIR = "./"
@@ -182,19 +183,25 @@ class PinggyTunnel:
                 self.start_ssh_tunnel()
             if TIMER_TUNNEL > self.TIMEOUT_TUNNEL:
                 print(">> Recargando Tunel SSH")
-                self.stop_ssh_tunnel()
-                TIMER_TUNNEL = 0
-                sleep(1)
-                self.start_ssh_tunnel()
+                try:
+                    self.stop_ssh_tunnel()
+                    TIMER_TUNNEL = 0
+                    sleep(1)
+                    self.start_ssh_tunnel()
+                except:
+                    print("D] No se ha podido recargar el Tunel SSH")
             try:
                 requests.get("http://127.0.0.1:11129/urls").json().get("urls")[-1]
             except:
-                print(">> Recargando Tunel SSH por fallo")
-                self.stop_ssh_tunnel()
-                TIMER_TUNNEL = 0
-                sleep(1)
-                self.start_ssh_tunnel()
-                sleep(3)
+                try:
+                    print(">> Recargando Tunel SSH por fallo")
+                    self.stop_ssh_tunnel()
+                    TIMER_TUNNEL = 0
+                    sleep(1)
+                    self.start_ssh_tunnel()
+                    sleep(3)
+                except:
+                    print("D] No se ha podido recargar el Tunel SSH")
             if TIMER_CACHE > self.TIMEOUT_CACHE:
                 print(">> Vaciando Cache HTTP")
                 TIMER_CACHE = 0
@@ -205,6 +212,11 @@ class PinggyTunnel:
         config = get_config()
         self.thread = Thread(target=self.loop)
         self.thread.start()
+        try:
+            if getattr(sys, "frozen", False):
+                webbrowser.open_new_tab("http://127.0.0.1:8129")
+        except:
+            print("[D] No se ha podido iniciar el navegador web.")
         return "https://grp.naiel.fyi/rd/" + config["Clave Proxy"]
     
     def stop(self):
@@ -274,6 +286,11 @@ class DirectTunnel:
         config = get_config()
         self.thread = Thread(target=self.loop)
         self.thread.start()
+        try:
+            if getattr(sys, "frozen", False):
+                webbrowser.open_new_tab("http://127.0.0.1:8129")
+        except:
+            print("[D] No se ha podido iniciar el navegador web.")
         return self.orchurl + "/rd/" + config["Clave Proxy"]
     
     def stop(self):

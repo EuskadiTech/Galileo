@@ -1,0 +1,20 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+      <center>
+        <h2>Borrar receta</h2>
+        <form method="POST">
+          <fieldset
+            style="width: calc(100% - 30px); max-width: 35rem; text-align: left"
+          >
+            <legend>Borrar receta: {{receta["Nombre"]}}</legend>
+            <h1>¿Estas segurx de que quieres borrar la receta?</h1>
+            <br />
+            <input type="submit" class="btn btn-primary actbtn di di-save" value="Borrar" />
+            <a class="btn btn-primary di di-exit" href="{{url_for('Recetas.index')}}"
+              >Cancelar</a
+            >
+          </fieldset>
+        </form>
+      </center>
+{% endblock %}

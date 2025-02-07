@@ -11,8 +11,6 @@ from werkzeug.wrappers import Response
 from os.path import join as path_join
 import logging
 import sentry_sdk
-import webbrowser
-
 import modules.Personas
 import modules.Personas.localutils
 import utils
@@ -116,10 +114,5 @@ No cierres esta ventana.
         app.wsgi_app,
         {BASE: app.wsgi_app},
     )
-    try:
-        if getattr(utils.sys, "frozen", False):
-            webbrowser.open_new_tab("http://127.0.0.1:8129")
-    except:
-        print("[D] No se ha podido iniciar el navegador web.")
     app.run(HOST, 8129, False)
     tunnel.stop()
