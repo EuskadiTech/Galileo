@@ -3,11 +3,11 @@
 {% block container %}
       <center>
         <h2>Menú del comedor del {{day}}</h2>
-        <a class="btn btn-primary di di-exit" href="{{url_for('Comedor.index')}}"
+        <a class="btn btn-primary" href="{{url_for('Comedor.index')}}"
           >Salir</a
         >
         <a
-          class="btn btn-primary di di-calendar"
+          class="btn btn-primary"
           href="{{url_for('Comedor.byDayModal')}}"
           >Ver otra fecha</a
         >
@@ -32,7 +32,7 @@
               <td>
                 {{results[result]["P1 Text"]}}
                 <img
-                  src='https://naiel.fyi/static/img/{{results[result]["P1 Img"]}}'
+                  src='{{url_for("static", filename="comedorico/" + results[result]["P1 Img"])}}'
                   style="max-width: 80px; max-height: 40px"
                   alt=""
                 />
@@ -40,7 +40,7 @@
               <td>
                 {{results[result]["P2 Text"]}}
                 <img
-                  src='https://naiel.fyi/static/img/{{results[result]["P2 Img"]}}'
+                  src='{{url_for("static", filename="comedorico/" + results[result]["P2 Img"])}}'
                   style="max-width: 80px; max-height: 40px"
                   alt=""
                 />
@@ -48,7 +48,7 @@
               <td>
                 {{results[result]["P3 Text"]}}
                 <img
-                  src='https://naiel.fyi/static/img/{{results[result]["P3 Img"]}}'
+                  src='{{url_for("static", filename="comedorico/" + results[result]["P3 Img"])}}'
                   style="max-width: 80px; max-height: 40px"
                   alt=""
                 />

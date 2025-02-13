@@ -1,37 +1,20 @@
 {% extends "_layout.html" %}
 
 {% block container %}
-      <center>
-        <h2>Solicitar Menu</h2>
-        <form
-          action="{{url_for('Comedor.api__reqMenu')}}"
-          method="POST"
-          enctype="multipart/form-data"
-        >
-          <fieldset>
-            <legend>Generar menú desde una foto</legend>
-            <input
-              type="file"
-              name="file"
-              accept="image/png, image/jpeg"
-              required
-            />
-            <br />
-            <label>Menú: <input type="text" name="menu" id="Menu" /></label>
-            <br />
-            <label
-              >Mes YYYY-MM: <input type="text" name="mes" id="Mes"
-            /></label>
-            <br />
-            <input
-              type="submit"
-              class="btn btn-primary actbtn di di-datainto"
-              value="Generar Menú"
-            />
-            <a class="btn btn-primary di di-exit" href="{{url_for('Comedor.index')}}"
-              >Salir</a
-            >
-          </fieldset>
-        </form>
-      </center>
+<center>
+  <h2>Solicitar Menu</h2>
+  <form action="{{url_for('Comedor.api__reqMenu')}}" method="POST" enctype="multipart/form-data">
+    <fieldset>
+      <legend>Generar menú desde una foto</legend>
+      <input type="file" name="file" accept="image/png, image/jpeg" required />
+      <br />
+      <label>Menú: <input type="text" name="menu" id="Menu" /></label>
+      <br />
+      <label>Mes YYYY-MM: <input type="text" name="mes" id="Mes" /></label>
+      <br />
+      <input type="submit" class="btn btn-primary" value="Generar Menú" />
+      <a class="btn btn-primary" href="{{url_for('Comedor.index')}}">Salir</a>
+    </fieldset>
+  </form>
+</center>
 {% endblock %}

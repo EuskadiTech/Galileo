@@ -1,26 +1,16 @@
 {% extends "_layout.html" %}
 
 {% block container %}
-      <center>
-        <h2>Añadir menú</h2>
-        <form
-          action="{{url_for('Comedor.api__loadMenu')}}"
-          method="POST"
-          enctype="multipart/form-data"
-        >
-          <fieldset>
-            <legend>Añadir menú</legend>
-            <input type="file" name="file" accept=".axl" required />
-            <br />
-            <input
-              type="submit"
-              class="btn btn-primary actbtn di di-save"
-              value="Importar Menú"
-            />
-            <a class="btn btn-primary di di-exit" href="{{url_for('Comedor.index')}}"
-              >Salir</a
-            >
-          </fieldset>
-        </form>
-      </center>
+<center>
+  <h2>Añadir menú</h2>
+  <form action="{{url_for('Comedor.api__loadMenu')}}" method="POST" enctype="multipart/form-data">
+    <fieldset>
+      <legend>Añadir menú</legend>
+      <input type="file" name="file" accept=".axl" required />
+      <br />
+      <input type="submit" class="btn btn-primary" value="Importar Menú" />
+      <a class="btn btn-primary" href="{{url_for('Comedor.index')}}">Salir</a>
+    </fieldset>
+  </form>
+</center>
 {% endblock %}

@@ -20,6 +20,38 @@
         <option value="cafe/display.html" {{"selected" if SC_DisplayMode == "cafe/display.html"}}>Agrupar por Aula</option>
         <option value="cafe/display-nogroup.html" {{"selected" if SC_DisplayMode == "cafe/display-nogroup.html"}}>Sin agrupar</option>
       </select>
+      <div class="input-group">
+        <input type="submit" class="btn btn-primary" value="Guardar" />
+        <a class="btn btn-secondary" href="{{url_for('Cafe.index')}}">Salir</a>
+      </div>
+    </fieldset>
+
+    <fieldset style="width: calc(100% - 30px); max-width: 410px; text-align: left;">
+      <summary>Precios</summary>
+      <div>
+        <label class="col-form-label mt-4" for="PRECIO_SERVICIO">Precio Receta</label>
+        <input type="text" class="form-control" placeholder="Precio en centimos" id="PRECIO_SERVICIO" value="{{CONFIG.get('SC_PRECIO_SERVICIO', 10)}}" name="PRECIO_SERVICIO">
+      </div>
+      <div>
+        <label class="col-form-label mt-4" for="PRECIO_LECHE_G">Precio leche grande</label>
+        <input type="text" class="form-control" placeholder="Precio en centimos" id="PRECIO_LECHE_G" value="{{CONFIG.get('SC_PRECIO_LECHE_G', 20)}}" name="PRECIO_LECHE_G">
+      </div>
+      <div>
+        <label class="col-form-label mt-4" for="PRECIO_LECHE_P">Precio leche pequeña</label>
+        <input type="text" class="form-control" placeholder="Precio en centimos" id="PRECIO_LECHE_P" value="{{CONFIG.get('SC_PRECIO_LECHE_P', 10)}}" name="PRECIO_LECHE_P">
+      </div>
+      <div>
+        <label class="col-form-label mt-4" for="PRECIO_CAFE">Precio Café</label>
+        <input type="text" class="form-control" placeholder="Precio en centimos" id="PRECIO_CAFE" value="{{CONFIG.get('SC_PRECIO_CAFE', 20)}}" name="PRECIO_CAFE">
+      </div>
+      <div>
+        <label class="col-form-label mt-4" for="PRECIO_COLACAO">Precio Colacao</label>
+        <input type="text" class="form-control" placeholder="Precio en centimos" id="PRECIO_COLACAO" value="{{CONFIG.get('SC_PRECIO_COLACAO', 20)}}" name="PRECIO_COLACAO">
+      </div>
+      <div>
+        <label class="col-form-label mt-4" for="PRECIO_RECETA">Precio Receta</label>
+        <input type="text" class="form-control" placeholder="Precio en centimos" id="PRECIO_RECETA" value="{{CONFIG.get('SC_PRECIO_RECETA', 10)}}" name="PRECIO_RECETA">
+      </div>
       <br>
       <div class="input-group">
         <input type="submit" class="btn btn-primary" value="Guardar" />

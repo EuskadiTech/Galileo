@@ -150,16 +150,21 @@
       
               <ul style="padding-left: 15px !important;">
                 <li>{{comanda[1].get("Tipo", "")[0]}}
-      
+        
                   {% if comanda[1].get("Cafeina", "")[0] != "Sin Elegir" %}
                   {{comanda[1].get("Cafeina", "")[0]}}
                   {% endif %}
                   {% if comanda[1].get("VarInfusion", "") != None %}
                   {{comanda[1].get("VarInfusion", "")}}
                   {% endif %}
-      
-                  {% if "Cafe Soluble" in comanda[1]["Tipo"] or "Cafe" in comanda[1]["Tipo"] or "Colacao" in comanda[1]["Tipo"] %}
-                  <small style="font-size: 10px">20c</small>
+        
+                  {% if "Cafe Soluble" in comanda[1]["Tipo"] or "Cafe" in comanda[1]["Tipo"]
+                  %}
+                  <small style="font-size: 10px">{{CONFIG.get('SC_PRECIO_CAFE', 20)}}c</small>
+                  {% endif %}
+                  {% if "Colacao" in comanda[1]["Tipo"]
+                  %}
+                  <small style="font-size: 10px">{{CONFIG.get('SC_PRECIO_COLACAO', 20)}}c</small>
                   {% endif %}
                   <ul style="padding-left: 15px !important;">
                     <li>
@@ -168,9 +173,9 @@
                       {% endif %}
                       {% if comanda[1].get("Leche", "")[0] != "Agua" %}
                       {% if "Grande" in comanda[1]["Tama_o"] %}
-                      Grande <small style="font-size: 10px">20c</small>
+                      Grande <small style="font-size: 10px">{{CONFIG.get('SC_PRECIO_LECHE_G', 20)}}c</small>
                       {% else %}
-                      Pequeña <small style="font-size: 10px">10c</small>
+                      Pequeña <small style="font-size: 10px">{{CONFIG.get('SC_PRECIO_LECHE_P', 10)}}c</small>
                       {% endif %}
                       {% endif %}
                     </li>
@@ -179,11 +184,12 @@
                   </ul>
                 </li>
                 {% if "Receta del dia" in comanda[1].get("Complementos", "") %}
-                <li>Receta ({{Receta}}) <small style="font-size: 10px">10c</small></li>
+                <li>Receta ({{Receta}}) <small style="font-size: 10px">{{CONFIG.get('SC_PRECIO_RECETA', 10)}}c</small></li>
                 {% endif %}
-                <li>Servicio <small style="font-size: 10px">10c</small></li>
-      
+                <li>Servicio <small style="font-size: 10px">{{CONFIG.get('SC_PRECIO_SERVICIO', 10)}}c</small></li>
+        
               </ul>
+        
       
               <hr>
               {% if "Cocina" not in fase %}

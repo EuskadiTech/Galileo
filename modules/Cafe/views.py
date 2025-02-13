@@ -7,21 +7,9 @@ from ..Personas.localutils import PersonAuth, with_auth
 app = Blueprint("Cafe", __name__)
 
 
-def set_receta(receta):
+def set_cfg(key, value):
     conf = utils.get_config()
-    conf["Receta"] = receta
-    utils.set_config(conf)
-
-
-def set_mode(mode):
-    conf = utils.get_config()
-    conf["SC_CanClientSendComanda"] = mode
-    utils.set_config(conf)
-
-
-def set_dmode(mode):
-    conf = utils.get_config()
-    conf["SC_DisplayMode"] = mode
+    conf[key] = value
     utils.set_config(conf)
 
 
@@ -40,16 +28,25 @@ def index(user):
 @with_auth("cafe:write")
 def config(user):
     if request.method == "POST":
-        set_receta(request.form["receta"])
-        set_mode(request.form["SC_CanClientSendComanda"])
-        set_dmode(request.form["SC_DisplayMode"])
+        set_cfg("Receta", request.form["receta"])
+        set_cfg("SC_CanClientSendComanda", request.form["SC_CanClientSendComanda"])
+        set_cfg("SC_DisplayMode", request.form["SC_DisplayMode"])
+        set_cfg("SC_PRECIO_SERVICIO", int(request.form["PRECIO_SERVICIO"]))
+        set_cfg("SC_PRECIO_LECHE_G", int(request.form["PRECIO_LECHE_G"]))
+        set_cfg("SC_PRECIO_LECHE_P", int(request.form["PRECIO_LECHE_P"]))
+        set_cfg("SC_PRECIO_CAFE", int(request.form["PRECIO_CAFE"]))
+        set_cfg("SC_PRECIO_COLACAO", int(request.form["PRECIO_COLACAO"]))
+        set_cfg("SC_PRECIO_RECETA", int(request.form["PRECIO_RECETA"]))
         return redirect(url_for("Cafe.index"))
     return render_template(
         "cafe/config.html",
         Receta=get_receta(),
         USER=user,
-        SC_CanClientSendComanda=utils.get_config().get("SC_CanClientSendComanda", "Desactivar"),
+        SC_CanClientSendComanda=utils.get_config().get(
+            "SC_CanClientSendComanda", "Desactivar"
+        ),
         SC_DisplayMode=utils.get_config().get("SC_DisplayMode", "cafe/display.html"),
+        CONFIG=utils.get_config(),
     )
 
 
@@ -70,6 +67,7 @@ def select(user):
         personas=DB_PERSONAS.get_all(),
         USER=user,
         CAN_CLIENT_SEND=CAN_CLIENT_SEND,
+        CONFIG=utils.get_config(),
     )
 
 
@@ -77,7 +75,7 @@ def select(user):
 @with_auth("cafe:send")
 def comanda(user, rid):
     if request.method == "POST":
-        total = 10
+        total = utils.get_config().get("SC_PRECIO_SERVICIO", 10)
         data = {
             "MetodoDePago": request.form.getlist("MetodoDePago"),
             "Anilla": request.form.getlist("Anilla"),
@@ -99,19 +97,19 @@ def comanda(user, rid):
             and data["Leche"][0] != "Sin Leche"
             and data["Leche"][0] != "Agua"
         ):
-            total += 20
+            total += utils.get_config().get("SC_PRECIO_LECHE_G", 20)
         if (
             data["Tama_o"][0] != "Grande"
             and data["Leche"][0] != "Sin Leche"
             and data["Leche"][0] != "Agua"
         ):
-            total += 10
+            total += utils.get_config().get("SC_PRECIO_LECHE_P", 10)
         if "Cafe" in data["Tipo"] or "Cafe Soluble" in data["Tipo"]:
-            total += 20
+            total += utils.get_config().get("SC_PRECIO_CAFE", 20)
         if "Colacao" in data["Tipo"]:
-            total += 20
+            total += utils.get_config().get("SC_PRECIO_COLACAO", 20)
         if "Receta del dia" in data["Complementos"]:
-            total += 10
+            total += utils.get_config().get("SC_PRECIO_RECETA", 10)
         data["_precio"] = total
         DB_COMANDAS.add(data)
         return redirect(url_for("Cafe.select"))
@@ -123,6 +121,7 @@ def comanda(user, rid):
         Receta=get_receta(),
         last_comanda={},
         USER=user,
+        CONFIG=utils.get_config(),
     )
 
 
@@ -152,6 +151,7 @@ def cocina(user):
         USER=user,
         fc="cocina",
         ft="Pago",
+        CONFIG=utils.get_config(),
     )
 
 
@@ -186,6 +186,7 @@ def pago(user):
         USER=user,
         fc="pago",
         ft="Historial",
+        CONFIG=utils.get_config(),
     )
 
 
@@ -216,6 +217,7 @@ def historial(user):
         comandas=DB_COMANDAS.get_by_query(query).items(),
         regiones=regiones,
         USER=user,
+        CONFIG=utils.get_config(),
     )
 
 
