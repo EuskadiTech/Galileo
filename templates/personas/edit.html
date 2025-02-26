@@ -144,6 +144,21 @@
                   {{"checked" if "recetas:delete" in receta["Roles"] }}>
                 Borrar </label></li>
           </ul>
+          <b>Inventario</b>
+          <ul style="list-style-type: none; padding-left: 15px; margin: 5px 0;">
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="inventario:_module"
+                  {{"checked" if "inventario:_module" in receta["Roles"] }}>
+                Acceder </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="inventario:read"
+                  {{"checked" if "inventario:read" in receta["Roles"] }}>
+                Leer </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="inventario:write"
+                  {{"checked" if "inventario:write" in receta["Roles"] }}>
+                Escribir </label></li>
+            <li><label><input type="checkbox" style="display: inline-block;" name="roles[]" value="inventario:delete"
+                  {{"checked" if "inventario:delete" in receta["Roles"] }}>
+                Borrar </label></li>
+          </ul>
         </fieldset>
       </form>
     </center>

@@ -1,0 +1,27 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+<center>
+  <h2>Modificar parte</h2>
+  <form action="{{url_for('Inventario.new')}}" method="POST">
+    <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
+      <legend>Modificar parte</legend>
+      <label><b>Codigo:</b><br> <input type="text" name="Codigo" value="{{part['Codigo']}}" required></label>
+      <br />
+
+      <label><b>Nombre:</b><br> <input type="text" name="Nombre" value="{{part['Nombre']}}" required></label>
+      <br />
+
+      <label><b>Lugar:</b><br> <input type="text" name="Lugar" value="{{part['Lugar']}}" required></label>
+      <br />
+      <br>
+      <label><b>Notas:</b><br>
+        <textarea name="Notas" cols="30" rows="10">{{part["Notas"]}}</textarea>
+      </label>
+      <br />
+      <input type="submit" class="btn btn-primary" value="Crear" />
+      <a class="btn btn-primary" href="{{url_for('Inventario.index')}}">Salir</a>
+    </fieldset>
+  </form>
+</center>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+    <center>
+      <h1>Partes del inventario</h1>
+      <a class="btn btn-primary di di-exit" href="{{url_for('index')}}">Salir</a>
+      <a class="btn btn-primary di di-add2" href="{{url_for('Inventario.new')}}">Crear parte</a>
+
+      <table border class="table table-striped">
+        <thead>
+          <tr class="table-primary">
+            <th>Codigo</th>
+            <th>Nombre</th>
+            <th>Lugar</th>
+            <th>Acciónes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for key in parts %}
+          <tr>
+            <td><a href="{{url_for('Inventario.part', rid = key)}}">{{parts[key]["Codigo"]}}</a></td>
+            <td>{{parts[key]["Nombre"]}}</td>
+            <td>{{parts[key]["Lugar"]}}</td>
+            <td>
+              <a href="{{url_for('Inventario.part__del', rid = key)}}">Borrar</a>
+              <a href="{{url_for('Inventario.edit', rid = key)}}">Editar</a>
+              <a href="{{url_for('Inventario.part', rid = key)}}">Abrir</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </center>
+{% endblock %}

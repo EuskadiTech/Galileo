@@ -1,10 +1,3 @@
-from .Comedor.views import app as ComedorBlueprint
-from .ResumenDiario.views import app as ResumenDiarioBlueprint
-from .Recetas.views import app as RecetasBlueprint
-from .Personas.views import app as PersonasBlueprint
-from .Cafe.views import app as CafeBlueprint
-from .Admin.views import app as AdminBlueprint
-
 G_NAV = [
     {"text": "Inicio", "endpoint": "index", "role": "*"},
     {"text": "Resumen Diario", "endpoint": "ResumenDiario.index", "role": "resumendiario:_module"},
@@ -64,6 +57,19 @@ G_NAV = [
             {"text": "> Crear", "endpoint": "Recetas.new", "role": "recetas:write"},
         ],
         "role": "recetas:_module",
+    },
+    {
+        "text": "Inventario",
+        "endpoint": "Inventario.index",
+        "subitems": [
+            {
+                "text": "Partes",
+                "endpoint": "Inventario.index",
+                "role": "inventario:read",
+            },
+            {"text": "> Crear", "endpoint": "Inventario.new", "role": "inventario:write"},
+        ],
+        "role": "inventario:_module",
     },
     {
         "text": "Admin",

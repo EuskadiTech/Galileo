@@ -11,8 +11,21 @@ from werkzeug.wrappers import Response
 from os.path import join as path_join
 import logging
 import sentry_sdk
+import modules.Admin
+import modules.Admin.views
+import modules.Cafe
+import modules.Cafe.views
+import modules.Comedor
+import modules.Comedor.views
+import modules.Inventario
+import modules.Inventario.views
 import modules.Personas
 import modules.Personas.localutils
+import modules.Personas.views
+import modules.Recetas
+import modules.Recetas.views
+import modules.ResumenDiario
+import modules.ResumenDiario.views
 import utils
 from utils import USERDATA_DIR
 import modules
@@ -72,12 +85,13 @@ def get_upload(path):
     return send_from_directory(USERDATA_DIR + "uploads", path)
 
 
-app.register_blueprint(modules.ComedorBlueprint)
-app.register_blueprint(modules.ResumenDiarioBlueprint)
-app.register_blueprint(modules.RecetasBlueprint)
-app.register_blueprint(modules.PersonasBlueprint)
-app.register_blueprint(modules.CafeBlueprint)
-app.register_blueprint(modules.AdminBlueprint)
+app.register_blueprint(modules.Comedor.views.app)
+app.register_blueprint(modules.ResumenDiario.views.app)
+app.register_blueprint(modules.Recetas.views.app)
+app.register_blueprint(modules.Personas.views.app)
+app.register_blueprint(modules.Cafe.views.app)
+app.register_blueprint(modules.Admin.views.app)
+app.register_blueprint(modules.Inventario.views.app)
 
 if __name__ == "__main__":
     if utils.os.environ.get("GAL_DOCKERTUNNEL_MYURL") != None:
