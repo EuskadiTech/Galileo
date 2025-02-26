@@ -49,8 +49,6 @@ G_NAV = [
             {"text": "Imprimir pegatinas", "endpoint": "Personas.printstickers", "role": "personas:read"},
             "divider",
             {"text": "Regiones", "endpoint": "Personas.regiones", "role": "personas:read"},
-            {"text": "> Crear", "endpoint": "Personas.new", "role": "personas:write"},
-            {"text": "> Buscar por Codigo", "endpoint": "Personas.scan", "role": "personas:read"},
         ],
         "role": "personas:_module",
     },
