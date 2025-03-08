@@ -1,0 +1,26 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+    <center>
+      <form method="POST">
+        <fieldset style="width: calc(100% - 30px); max-width: 25rem; text-align: left; float: left;">
+          <legend>Datos del modulo</legend>
+          <div>
+            <label class="col-form-label" for="formNombre">Nombre modulo</label>
+            <input type="text" class="form-control" placeholder="Ej: Recetario" value="" id="formNombre" name="Nombre" required>
+          </div>
+          <div>
+            <label class="col-form-label" for="formSingular">Nombre unica fila</label>
+            <input type="text" class="form-control" placeholder="Ej: Receta" value="" id="formSingular" name="Singular" required>
+          </div>
+          <div>
+            <label class="col-form-label" for="formPlural">Nombre multiples filas</label>
+            <input type="text" class="form-control" placeholder="Ej: Recetas" value="" id="formPlural" name="Plural" required>
+          </div>
+          <br>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+          <a class="btn btn-primary" href="{{url_for('Admin.builder')}}">Salir</a>
+        </fieldset>
+      </form>
+    </center>
+{% endblock %}

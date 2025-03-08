@@ -119,7 +119,7 @@ def load_config(config: dict):
     return view.app
 
 def load_from_dir():
-    mods = glob(USERDATA_DIR + "mods/**.json", recursive=True)
+    mods = glob(USERDATA_DIR + "mods/*.json")
     loaded = []
     for mod in mods:
         print("Cargando modulo: " + mod)

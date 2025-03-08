@@ -14,6 +14,8 @@ from ..Personas.localutils import PersonAuth, with_auth
 from ..Personas.models import DB_PERSONAS
 from utils import USERDATA_DIR, os, check_path, APPDATA_DIR
 from os.path import join as join_path
+import json
+from glob import glob
 
 app = Blueprint("Admin", __name__)
 
@@ -153,3 +155,20 @@ def filesmv(path):
         os.rename(origen_path, destino_path)
         return redirect(url_for("Admin.files", path=folder))
     return render_template("admin/filesmv.html", path=folder, filename=path)
+
+@app.route("/admin/builder/edit/<mod>", methods=["GET", "POST"])
+@with_auth("admin")
+def builder_editor(mod):
+    path = mod + ".json"
+    base_path = os.path.join(USERDATA_DIR, "mods/")
+    full_path = os.path.normpath(os.path.join(base_path, path))
+    if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
+        raise Exception("Invalid path")
+    mod = json.load(open(full_path, "r"))
+    return render_template("admin/builder/edit.html", mod=mod, filename=path)
+@app.route("/admin/builder", methods=["GET"])
+@with_auth("admin")
+def builder():
+    mods = [mod.replace("\\", "/").split("/")[-1].removesuffix(".json") for mod in glob(USERDATA_DIR + "mods/*.json")]
+
+    return render_template("admin/builder/index.html", mods=mods)

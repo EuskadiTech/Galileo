@@ -9,8 +9,8 @@
         {% for key in CONF['scheme'] %}
           {% if not CONF['scheme'][key].get("hiddenform", false) %}
             <tr>
-              <th style="text-align: right; margin-right: 5px;">{{ CONF['scheme'][key]["label"] }}:</th>
-              <td>
+              <th style="text-align: right; min-width: 125px; vertical-align: unset;">{{ CONF['scheme'][key]["label"] }}:</th>
+              <td style="padding-left: 10px;">
                 {{item[key]}}
               </td>
             </tr>

@@ -81,6 +81,7 @@ G_NAV = [
         "text": "Admin",
         "subitems": [
             {"text": "Archivos", "endpoint": "Admin.files", "role": "admin"},
+            # {"text": "Costructor de Modulos", "endpoint": "Admin.builder", "role": "admin"}, # Not ready for use (in development)
         ],
         "role": "admin",
     },
