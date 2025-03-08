@@ -53,7 +53,7 @@ def with_auth(role: str = ""):
             except Exception as e:
                 return redirect(url_for("Personas.auth_scan", err=e.args))
             g.user = user
-            return f(user=user, *args, **kwargs)
+            return f(*args, **kwargs)
         return decorated_function
     return decorator
 def confirm_deletion(f):

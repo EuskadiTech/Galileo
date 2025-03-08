@@ -5,12 +5,13 @@ from ..Comedor.localutils import fromDay_comedor
 from ..Cafe.views import get_receta
 from ..Personas.localutils import PersonAuth, with_auth
 from ..Personas.models import DB_PERSONAS
+from modules import addperm
 app = Blueprint("ResumenDiario", __name__)
 
 
 @app.route("/resumendiario", methods=["GET"])
 @with_auth("resumendiario:_module")
-def index(user):
+def index():
     today = DateParser()
     data = {
         "Print": False,
@@ -23,10 +24,7 @@ def index(user):
         "Comedor": fromDay_comedor(),
         "ComedorOKKO": {"OK": "suficiente", "KO": "poca"},
         "Receta": get_receta(),
-        "NoticiasEuskadiTech": cached_request(
-            "resumen-diario:eustech_news",
-            f"https://naiel.fyi/_cdn/galileo-news/latest.html",
-        ).text,
+        "NoticiasEuskadiTech": ""
     }
     config = get_config()
     if "print" in request.args.keys():
@@ -47,10 +45,14 @@ def index(user):
             "resumen-diario:jokes", "http://127.0.0.1:8129/static/jokes.txt"
         ).text.split("\n")
         data["Joke"] = choice(data["Jokes"])
+
     def isFree(dat):
         if dat["Puntos"] >= 10:
             return True
+
     data["CafeFree"] = DB_PERSONAS.get_by_query(isFree).values()
     return render_template(
         "resumendiario/index.html", data=data, config=config["Resumen Diario"]
     )
+
+addperm("Resumen Diario", "Acceder", "resumendiario:_module")

@@ -9,6 +9,8 @@ import uuid
 from threading import Event, Thread
 import webbrowser
 
+
+
 APPDATA_DIR = "."
 USERDATA_DIR = "./"
 

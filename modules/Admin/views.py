@@ -1,22 +1,36 @@
-from flask import Blueprint, request, send_file, render_template, url_for, redirect, make_response
+from flask import (
+    Blueprint,
+    request,
+    send_file,
+    render_template,
+    url_for,
+    redirect,
+    make_response,
+    g,
+)
 from werkzeug.utils import secure_filename
 from random import randint
 from ..Personas.localutils import PersonAuth, with_auth
 from ..Personas.models import DB_PERSONAS
-from utils import USERDATA_DIR, os, check_path
+from utils import USERDATA_DIR, os, check_path, APPDATA_DIR
 from os.path import join as join_path
+import json
+from glob import glob
+
 app = Blueprint("Admin", __name__)
+
 
 @app.route("/admin/setup/adminaccount", methods=["GET", "POST"])
 def setup__adminaccount():
     def admins(data):
         if "admin" in data["Roles"]:
             return True
+
     if DB_PERSONAS.get_by_query(admins) != {}:
         return "Cannot start onboarding, there is a admin"
     user = {}
     if request.method == "POST":
-        code = str(randint(100,9999))
+        code = str(randint(100, 9999))
         DB_PERSONAS.add(
             {
                 "Nombre": request.form.get("nombre", ""),
@@ -35,42 +49,56 @@ def setup__adminaccount():
                 "Foto": "",
             }
         )
-        return redirect(url_for("Personas.auth_scan", err = "Codigo del usuario creado: " + code + " - PIN: (" + request.form.get("pin", "").upper() + ")"))
+        return redirect(
+            url_for(
+                "Personas.auth_scan",
+                err="Codigo del usuario creado: "
+                + code
+                + " - PIN: ("
+                + request.form.get("pin", "").upper()
+                + ")",
+            )
+        )
     return render_template("admin/setup/adminaccount.html")
 
 
 @app.route("/admin/files/<path:path>", methods=["GET", "POST"])
 @app.route("/admin/files/", methods=["GET", "POST"], defaults={"path": ""})
 @with_auth("admin")
-def files(user, path):
+def files(path):
     check_path(USERDATA_DIR + "uploads")
     check_path(USERDATA_DIR + "uploads/personas")
     base_path = os.path.join(USERDATA_DIR, "uploads/")
     full_path = os.path.normpath(os.path.join(base_path, path))
     if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
         raise Exception("Invalid path")
-    files = [f for f in os.listdir(full_path) if os.path.isfile(os.path.join(full_path, f))]
-    folders = [f for f in os.listdir(full_path) if os.path.isdir(os.path.join(full_path, f))]
-    return render_template("admin/files.html", files = files, folders = folders, path = path)
+    files = [
+        f for f in os.listdir(full_path) if os.path.isfile(os.path.join(full_path, f))
+    ]
+    folders = [
+        f for f in os.listdir(full_path) if os.path.isdir(os.path.join(full_path, f))
+    ]
+    return render_template("admin/files.html", files=files, folders=folders, path=path)
 
 
 @app.route("/admin/files_rm/", methods=["GET", "POST"], defaults={"path": ""})
 @app.route("/admin/files_rm/<path:path>", methods=["GET", "POST"])
 @with_auth("admin")
-def filesrm(user, path):
+def filesrm(path):
     base_path = os.path.join(USERDATA_DIR, "uploads/")
     full_path = os.path.normpath(os.path.join(base_path, path))
     if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
         raise Exception("Invalid path")
     if request.method == "POST" and request.form.get("deletecapcha") == "ELIMINAR":
         os.unlink(full_path)
-        return redirect(url_for("Admin.files", path = "/".join(path.split("/")[:-1])))
-    return render_template("confirmDeletion.html", USER=user)
+        return redirect(url_for("Admin.files", path="/".join(path.split("/")[:-1])))
+    return render_template("confirmDeletion.html", USER=g.user)
+
 
 @app.route("/admin/files_rmdir/", methods=["GET"], defaults={"path": ""})
 @app.route("/admin/files_rmdir/<path:path>", methods=["GET"])
 @with_auth("admin")
-def filesrmdir(user, path):
+def filesrmdir(path):
     base_path = os.path.join(USERDATA_DIR, "uploads/")
     full_path = os.path.normpath(os.path.join(base_path, path))
     if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
@@ -79,13 +107,13 @@ def filesrmdir(user, path):
         os.rmdir(full_path)
     except OSError:
         return render_template("admin/filesrmdir_err.html")
-    return redirect(url_for("Admin.files", path = "/".join(path.split("/")[:-1])))
+    return redirect(url_for("Admin.files", path="/".join(path.split("/")[:-1])))
 
 
 @app.route("/admin/files_up/", methods=["GET", "POST"], defaults={"path": ""})
 @app.route("/admin/files_up/<path:path>", methods=["GET", "POST"])
 @with_auth("admin")
-def filesupload(user, path):
+def filesupload(path):
     base_path = os.path.join(USERDATA_DIR, "uploads/")
     full_path = os.path.normpath(os.path.join(base_path, path))
     if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
@@ -95,19 +123,21 @@ def filesupload(user, path):
         file = request.files["Archivo"]
         filename = secure_filename(file.filename)
         file.save(os.path.join(folder, filename))
-        return redirect(url_for("Admin.files", path = path))
+        return redirect(url_for("Admin.files", path=path))
     return render_template("admin/filesupload.html", path=path)
+
 
 @app.route("/admin/files_mkd/", methods=["GET", "POST"], defaults={"path": ""})
 @app.route("/admin/files_mkd/<path:path>", methods=["GET", "POST"])
 @with_auth("admin")
-def filesmkdir(user, path):
-    return redirect(url_for("Admin.files", path = path))
+def filesmkdir(path):
+    return redirect(url_for("Admin.files", path=path))
+
 
 @app.route("/admin/files_mv/", methods=["GET", "POST"], defaults={"path": ""})
 @app.route("/admin/files_mv/<path:path>", methods=["GET", "POST"])
 @with_auth("admin")
-def filesmv(user, path):
+def filesmv(path):
     base_path = os.path.join(USERDATA_DIR, "uploads/")
     full_path = os.path.normpath(os.path.join(base_path, path))
     if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
@@ -115,9 +145,30 @@ def filesmv(user, path):
     folder = "/".join(path.split("/")[:-1])
     if request.method == "POST":
         origen_path = os.path.normpath(os.path.join(base_path, request.form["Origen"]))
-        destino_path = os.path.normpath(os.path.join(base_path, request.form["Destino"]))
-        if not origen_path.startswith(base_path) or not destino_path.startswith(base_path):
+        destino_path = os.path.normpath(
+            os.path.join(base_path, request.form["Destino"])
+        )
+        if not origen_path.startswith(base_path) or not destino_path.startswith(
+            base_path
+        ):
             raise Exception("Invalid path")
         os.rename(origen_path, destino_path)
-        return redirect(url_for("Admin.files", path = folder))
-    return render_template("admin/filesmv.html", path=folder, filename = path)
+        return redirect(url_for("Admin.files", path=folder))
+    return render_template("admin/filesmv.html", path=folder, filename=path)
+
+@app.route("/admin/builder/edit/<mod>", methods=["GET", "POST"])
+@with_auth("admin")
+def builder_editor(mod):
+    path = mod + ".json"
+    base_path = os.path.join(USERDATA_DIR, "mods/")
+    full_path = os.path.normpath(os.path.join(base_path, path))
+    if not full_path.startswith(base_path.removeprefix("./").removesuffix("/")):
+        raise Exception("Invalid path")
+    mod = json.load(open(full_path, "r"))
+    return render_template("admin/builder/edit.html", mod=mod, filename=path)
+@app.route("/admin/builder", methods=["GET"])
+@with_auth("admin")
+def builder():
+    mods = [mod.replace("\\", "/").split("/")[-1].removesuffix(".json") for mod in glob(USERDATA_DIR + "mods/*.json")]
+
+    return render_template("admin/builder/index.html", mods=mods)
