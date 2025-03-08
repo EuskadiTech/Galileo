@@ -11,11 +11,17 @@ from werkzeug.wrappers import Response
 from os.path import join as path_join
 import logging
 import sentry_sdk
-import modules.Personas
-import modules.Personas.localutils
 import utils
-from utils import USERDATA_DIR
+from utils import USERDATA_DIR, check_path
 import modules
+import modules.Comedor.views
+import modules.ResumenDiario.views
+import modules.Personas.views
+import modules.Cafe.views
+import modules.Admin.views
+
+from modules.AutoModule.localutils import load_from_dir
+
 from flask_qrcode import QRcode
 
 sentry_sdk.init(
@@ -51,8 +57,8 @@ log.disabled = True
 
 @app.route("/", methods=["GET"])
 @modules.Personas.localutils.with_auth()
-def index(user):
-    return render_template("index.html")
+def index():
+    return render_template("_layout.html")
 
 
 @app.route("/api/purgecache", methods=["GET"])
@@ -71,13 +77,16 @@ def status():
 def get_upload(path):
     return send_from_directory(USERDATA_DIR + "uploads", path)
 
+print("Cargando modulo: (incrustado)")
+app.register_blueprint(modules.Comedor.views.app)
+app.register_blueprint(modules.ResumenDiario.views.app)
+app.register_blueprint(modules.Personas.views.app)
+app.register_blueprint(modules.Cafe.views.app)
+app.register_blueprint(modules.Admin.views.app)
 
-app.register_blueprint(modules.ComedorBlueprint)
-app.register_blueprint(modules.ResumenDiarioBlueprint)
-app.register_blueprint(modules.RecetasBlueprint)
-app.register_blueprint(modules.PersonasBlueprint)
-app.register_blueprint(modules.CafeBlueprint)
-app.register_blueprint(modules.AdminBlueprint)
+check_path("mods")
+for mod in load_from_dir():
+    app.register_blueprint(mod)
 
 if __name__ == "__main__":
     if utils.os.environ.get("GAL_DOCKERTUNNEL_MYURL") != None:

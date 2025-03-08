@@ -1,13 +1,10 @@
-from .Comedor.views import app as ComedorBlueprint
-from .ResumenDiario.views import app as ResumenDiarioBlueprint
-from .Recetas.views import app as RecetasBlueprint
-from .Personas.views import app as PersonasBlueprint
-from .Cafe.views import app as CafeBlueprint
-from .Admin.views import app as AdminBlueprint
-
 G_NAV = [
     {"text": "Inicio", "endpoint": "index", "role": "*"},
-    {"text": "Resumen Diario", "endpoint": "ResumenDiario.index", "role": "resumendiario:_module"},
+    {
+        "text": "Resumen Diario",
+        "endpoint": "ResumenDiario.index",
+        "role": "resumendiario:_module",
+    },
     {
         "text": "SuperCafé",
         "endpoint": "Cafe.index",
@@ -17,7 +14,7 @@ G_NAV = [
             {
                 "text": "Historial del Clientx",
                 "endpoint": "Personas.scan",
-                "role":  "personas:read",
+                "role": "personas:read",
             },
             "divider",
             {"text": "Pant. Cocina", "endpoint": "Cafe.cocina", "role": "cafe:cocina"},
@@ -29,9 +26,21 @@ G_NAV = [
         "text": "Comedor",
         "endpoint": "Comedor.index",
         "subitems": [
-            {"text": "Menús descargados", "endpoint": "Comedor.index", "role": "comedor:read"},
-            {"text": "Ver menú", "endpoint": "Comedor.byDayModal", "role": "comedor:read"},
-            {"text": "Importar Menú", "endpoint": "Comedor.loadMenuModal", "role": "comedor:write"},
+            {
+                "text": "Menús descargados",
+                "endpoint": "Comedor.index",
+                "role": "comedor:read",
+            },
+            {
+                "text": "Ver menú",
+                "endpoint": "Comedor.byDayModal",
+                "role": "comedor:read",
+            },
+            {
+                "text": "Importar Menú",
+                "endpoint": "Comedor.loadMenuModal",
+                "role": "comedor:write",
+            },
             "divider",
             {"text": "API: Menú de hoy", "endpoint": "Comedor.api__today", "role": "*"},
         ],
@@ -43,29 +52,30 @@ G_NAV = [
         "subitems": [
             {"text": "Personas", "endpoint": "Personas.index", "role": "personas:read"},
             {"text": "> Crear", "endpoint": "Personas.new", "role": "personas:write"},
-            {"text": "> Buscar por Codigo", "endpoint": "Personas.scan", "role": "personas:read"},
+            {
+                "text": "> Buscar por Codigo",
+                "endpoint": "Personas.scan",
+                "role": "personas:read",
+            },
             "divider",
-            {"text": "Imprimir tarjetas", "endpoint": "Personas.printcards", "role": "personas:read"},
-            {"text": "Imprimir pegatinas", "endpoint": "Personas.printstickers", "role": "personas:read"},
+            {
+                "text": "Imprimir tarjetas",
+                "endpoint": "Personas.printcards",
+                "role": "personas:read",
+            },
+            {
+                "text": "Imprimir pegatinas",
+                "endpoint": "Personas.printstickers",
+                "role": "personas:read",
+            },
             "divider",
-            {"text": "Regiones", "endpoint": "Personas.regiones", "role": "personas:read"},
-            {"text": "> Crear", "endpoint": "Personas.new", "role": "personas:write"},
-            {"text": "> Buscar por Codigo", "endpoint": "Personas.scan", "role": "personas:read"},
+            {
+                "text": "Regiones",
+                "endpoint": "Personas.regiones",
+                "role": "personas:read",
+            },
         ],
         "role": "personas:_module",
-    },
-    {
-        "text": "Recetas",
-        "endpoint": "Recetas.index",
-        "subitems": [
-            {
-                "text": "Recetas",
-                "endpoint": "Recetas.index",
-                "role": "recetas:read",
-            },
-            {"text": "> Crear", "endpoint": "Recetas.new", "role": "recetas:write"},
-        ],
-        "role": "recetas:_module",
     },
     {
         "text": "Admin",
@@ -74,5 +84,20 @@ G_NAV = [
         ],
         "role": "admin",
     },
-    {"text": "Cerrar sesión", "endpoint": "Personas.auth_logout", "role": "*"},
 ]
+
+G_PERMS = {"Sistema": []}
+
+
+def addnav(nav):
+    G_NAV.append(nav)
+
+
+def addperm(app, label, role):
+    if G_PERMS.get(app) == None:
+        G_PERMS[app] = []
+    G_PERMS[app].append({"label": label, "role": role})
+
+
+addperm("Sistema", "Admin", "admin")
+

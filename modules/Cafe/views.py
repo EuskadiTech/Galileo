@@ -1,8 +1,9 @@
-from flask import Blueprint, request, render_template, url_for, redirect
+from flask import Blueprint, request, render_template, url_for, redirect, g
 from ..Personas.models import DB_PERSONAS
 import utils
 from .models import DB_COMANDAS, ANILLAS
 from ..Personas.localutils import PersonAuth, with_auth
+from modules import addperm
 
 app = Blueprint("Cafe", __name__)
 
@@ -20,13 +21,13 @@ def get_receta():
 
 @app.route("/cafe", methods=["GET"])
 @with_auth("cafe:_module")
-def index(user):
-    return render_template("cafe/index.html", Receta=get_receta(), USER=user)
+def index():
+    return render_template("cafe/index.html", Receta=get_receta(), USER=g.user)
 
 
 @app.route("/cafe/config", methods=["GET", "POST"])
 @with_auth("cafe:write")
-def config(user):
+def config():
     if request.method == "POST":
         set_cfg("Receta", request.form["receta"])
         set_cfg("SC_CanClientSendComanda", request.form["SC_CanClientSendComanda"])
@@ -41,7 +42,7 @@ def config(user):
     return render_template(
         "cafe/config.html",
         Receta=get_receta(),
-        USER=user,
+        USER=g.user,
         SC_CanClientSendComanda=utils.get_config().get(
             "SC_CanClientSendComanda", "Desactivar"
         ),
@@ -52,7 +53,7 @@ def config(user):
 
 @app.route("/cafe/select", methods=["GET", "POST"])
 @with_auth("cafe:send")
-def select(user):
+def select():
     if request.method == "POST":
 
         def query(data):
@@ -65,7 +66,7 @@ def select(user):
     return render_template(
         "cafe/select.html",
         personas=DB_PERSONAS.get_all(),
-        USER=user,
+        USER=g.user,
         CAN_CLIENT_SEND=CAN_CLIENT_SEND,
         CONFIG=utils.get_config(),
     )
@@ -73,7 +74,7 @@ def select(user):
 
 @app.route("/cafe/comanda/<rid>", methods=["GET", "POST"])
 @with_auth("cafe:send")
-def comanda(user, rid):
+def comanda(rid):
     if request.method == "POST":
         total = utils.get_config().get("SC_PRECIO_SERVICIO", 10)
         data = {
@@ -120,14 +121,14 @@ def comanda(user, rid):
         client=DB_PERSONAS.get_by_id(rid),
         Receta=get_receta(),
         last_comanda={},
-        USER=user,
+        USER=g.user,
         CONFIG=utils.get_config(),
     )
 
 
 @app.route("/cafe/cocina", methods=["GET", "POST"])
 @with_auth("cafe:cocina")
-def cocina(user):
+def cocina():
     regiones = {}
 
     def query(data):
@@ -148,7 +149,7 @@ def cocina(user):
         Receta=get_receta(),
         comandas=DB_COMANDAS.get_by_query(query).items(),
         regiones=dict(sorted(regiones.items(), key=lambda x: x[0], reverse=True)),
-        USER=user,
+        USER=g.user,
         fc="cocina",
         ft="Pago",
         CONFIG=utils.get_config(),
@@ -157,7 +158,7 @@ def cocina(user):
 
 @app.route("/cafe/pago", methods=["GET", "POST"])
 @with_auth("cafe:pago")
-def pago(user):
+def pago():
     regiones = {}
     total = 0
 
@@ -183,7 +184,7 @@ def pago(user):
         Receta=get_receta(),
         comandas=DB_COMANDAS.get_by_query(query).items(),
         regiones=regiones,
-        USER=user,
+        USER=g.user,
         fc="pago",
         ft="Historial",
         CONFIG=utils.get_config(),
@@ -192,7 +193,7 @@ def pago(user):
 
 @app.route("/cafe/historialfilter", methods=["GET", "POST"])
 @with_auth("cafe:read")
-def historial(user):
+def historial():
     regiones = {}
 
     def query(data):
@@ -216,21 +217,21 @@ def historial(user):
         Receta="Receta del dia",
         comandas=DB_COMANDAS.get_by_query(query).items(),
         regiones=regiones,
-        USER=user,
+        USER=g.user,
         CONFIG=utils.get_config(),
     )
 
 
 @app.route("/cafe/updategrp", methods=["GET"])
 @with_auth("cafe:cocina")
-def updategrp(user):
+def updategrp():
     DB_COMANDAS.update_by_id(request.args["f"], {"_grupo": request.args["v"]})
     return redirect(url_for("Cafe.cocina"))
 
 
 @app.route("/cafe/transfer_fase/<rid>/<ft>/<fc>", methods=["GET"])
 @with_auth("cafe:cocina")
-def rdel(user, rid, ft, fc):
+def rdel(rid, ft, fc):
     DB_COMANDAS.update_by_id(
         rid, {"_fase": ft + " - " + utils.DateParser().pretty_dayCode()}
     )
@@ -246,3 +247,13 @@ def rdel(user, rid, ft, fc):
         )
         # DB_COMANDAS.delete_by_id(rid)
     return redirect(url_for("Cafe." + fc))
+
+addperm("SuperCafé", "Acceder", "cafe:_module")
+addperm("SuperCafé", "Leer", "cafe:read")
+addperm("SuperCafé", "Cliente", "cafe:client")
+addperm("SuperCafé", "Pant. Cocina", "cafe:cocina")
+addperm("SuperCafé", "Pant. Pagos", "cafe:pago")
+addperm("SuperCafé", "Enviar comanda", "cafe:send")
+addperm("SuperCafé", "Editar receta", "cafe:write")
+addperm("SuperCafé", "Pref: Cafeina", "cafe:cafeina")
+addperm("SuperCafé", "Pref: Sin Lactosa", "cafe:nolact")

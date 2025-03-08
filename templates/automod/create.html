@@ -1,0 +1,33 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+<center>
+  <h2>Añadir {{CONF['singular']}}</h2>
+  <form action="{{url_for(CONF['modulename'] + '.create')}}" method="POST">
+    <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
+      <legend>Añadir {{CONF['singular']}}</legend>
+
+      <table>
+        {% for key in CONF['scheme'] %}
+          {% if not CONF['scheme'][key].get("hiddenform", false) %}
+            <tr>
+              <th style="text-align: right;">{{ CONF['scheme'][key]["label"] }}<span style="color: red;">{{ "*" if CONF['scheme'][key]["required"] == True }}</span>:</th>
+              <td>
+                {% if CONF['scheme'][key]["type"] == "textarea" %}
+                  <textarea name="{{key}}" cols="30" rows="5">{{CONF['scheme'][key]['default']}}</textarea>
+                {% else %}
+                  <input type="{{CONF['scheme'][key]['type']}}" value="{{CONF['scheme'][key]['default']}}" name="{{key}}" {{ "required" if CONF['scheme'][key]["required"] == True }}>
+                {% endif %}
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </table>
+      <br />
+      <br />
+      <button class="btn btn-primary" type="submit">Crear {{CONF['singular']}}</button>
+      <a class="btn btn-primary" href="{{url_for(CONF['modulename'] + '.index')}}">Salir</a>
+    </fieldset>
+  </form>
+</center>
+{% endblock %}
