@@ -1,9 +1,9 @@
-from flask import Blueprint, request, render_template, url_for
+from flask import Blueprint, request, render_template
 from utils import DateParser, get_config, cached_request
 from random import choice
 from ..Comedor.localutils import fromDay_comedor
 from ..Cafe.views import get_receta
-from ..Personas.localutils import PersonAuth, with_auth
+from ..Personas.localutils import with_auth
 from ..Personas.models import DB_PERSONAS
 from modules import addperm
 app = Blueprint("ResumenDiario", __name__)

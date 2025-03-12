@@ -1,18 +1,15 @@
 from flask import Blueprint, request, send_file, render_template, url_for, redirect, g
 from io import BytesIO
-import requests
 from utils import DateParser
 from .models import DB_COMEDOR
 from .localutils import (
     list_comedor,
     list_comedor_menus,
-    list_comedor_monthMenu,
     list_comedor_months,
     load_comedor,
     fromDay_comedor,
 )
-from utils import get_config
-from ..Personas.localutils import PersonAuth, with_auth, confirm_deletion
+from ..Personas.localutils import with_auth, confirm_deletion
 from modules import addperm
 
 app = Blueprint("Comedor", __name__)

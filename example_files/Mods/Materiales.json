@@ -5,7 +5,7 @@
         "Nombre": {"type": "text", "label": "Nombre", "default": "", "required": true, "primarykey": true},
         "Ubicacion": {"type": "text", "label": "Ubicación", "default": "", "required": true},
         "Cantidad": {"type": "text", "label": "Cantidad", "default": "0 unidades", "required": true},
-        "Notas": {"type": "textarea", "label": "Notas", "default": "", "required": true, "hiddentable": true}
+        "Notas": {"type": "markdown", "label": "Notas", "default": "", "required": true, "hiddentable": true}
     },
     "singular": "Material",
     "plural": "Materiales"

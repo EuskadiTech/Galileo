@@ -1,20 +1,18 @@
 from flask import (
     Blueprint,
     request,
-    send_file,
     render_template,
     url_for,
     redirect,
     make_response,
     g,
 )
-from io import BytesIO
 from markdown import markdown
 from .models import DB_PERSONAS, DB_REGIONES
 from ..Cafe.models import ANILLAS
 from random import randint
 from . import localutils
-from .localutils import PersonAuth, with_auth, confirm_deletion
+from .localutils import with_auth, confirm_deletion
 from utils import USERDATA_DIR, os, check_path
 from glob import glob
 from modules import G_PERMS, addperm

@@ -1,19 +1,16 @@
 from flask import (
     Blueprint,
     request,
-    send_file,
     render_template,
     url_for,
     redirect,
-    make_response,
     g,
 )
 from werkzeug.utils import secure_filename
 from random import randint
-from ..Personas.localutils import PersonAuth, with_auth
+from ..Personas.localutils import with_auth
 from ..Personas.models import DB_PERSONAS
-from utils import USERDATA_DIR, os, check_path, APPDATA_DIR
-from os.path import join as join_path
+from utils import USERDATA_DIR, os, check_path
 import json
 from glob import glob
 

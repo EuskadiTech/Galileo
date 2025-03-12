@@ -16,7 +16,10 @@
                 {% if CONF['scheme'][key]["type"] == "textarea" %}
                   <textarea name="{{key}}" cols="30" rows="5">{{CONF['scheme'][key]['default']}}</textarea>
                 {% elif CONF['scheme'][key]["type"] == "markdown" %}
-                  <textarea name="{{key}}" cols="30" rows="5">{{CONF['scheme'][key]['default']}}</textarea>
+                  <textarea name="{{key}}" cols="30" rows="5" id="{{CONF['tablename'] + '-' + key}}">{{CONF['scheme'][key]['default']}}</textarea>
+                  <script>
+                    const easyMDE = new EasyMDE({element: document.getElementById("{{CONF['tablename'] + '-' + key}}"), forceSync: true, spellChecker: false});
+                  </script>
                 {% else %}
                   <input type="{{CONF['scheme'][key]['type']}}" value="{{CONF['scheme'][key]['default']}}" name="{{key}}" {{ "required" if CONF['scheme'][key]["required"] == True }}>
                 {% endif %}

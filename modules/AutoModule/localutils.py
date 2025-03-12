@@ -2,7 +2,7 @@ from flask import Blueprint, request, render_template, url_for, redirect, g
 from markdown import markdown
 from ..Personas.localutils import with_auth
 from pysondb import PysonDB
-from modules import addnav, addautonav, addperm
+from modules import addautonav, addperm
 from utils import USERDATA_DIR
 from glob import glob
 import json

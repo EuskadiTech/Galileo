@@ -6,7 +6,7 @@
         "Origen": {"type": "text", "label": "Origen", "default": "Local", "required": true},
         "OrigenURL": {"type": "url", "label": "URL Origen", "default": "", "required": false, "hiddentable": true},
         "YYYY-MM-DD": {"type": "date", "label": "Fecha", "default": "", "required": true},
-        "content": {"type": "textarea", "label": "Contenido", "default": "", "required": true, "hiddentable": true}
+        "content": {"type": "markdown", "label": "Contenido", "default": "", "required": true, "hiddentable": true}
     },
     "singular": "Receta",
     "plural": "Recetas"

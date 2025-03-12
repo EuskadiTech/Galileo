@@ -2,7 +2,7 @@ from flask import Blueprint, request, render_template, url_for, redirect, g
 from ..Personas.models import DB_PERSONAS
 import utils
 from .models import DB_COMANDAS, ANILLAS
-from ..Personas.localutils import PersonAuth, with_auth
+from ..Personas.localutils import with_auth
 from modules import addperm
 
 app = Blueprint("Cafe", __name__)
