@@ -73,7 +73,7 @@ def creq__menuComedor(pid):
 def open(pid):
     try:
         SITE_NAME = URLS[pid]
-        url = f"{SITE_NAME}/status"
+        url = f"{SITE_NAME}"
         resp = requests.get(url, allow_redirects=True)
         return redirect(url)
     except:
