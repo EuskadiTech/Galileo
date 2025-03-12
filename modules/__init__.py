@@ -1,3 +1,6 @@
+MODS = [
+    {"text": "ADM: Archivos", "endpoint": "Admin.files", "role": "admin"},
+]
 G_NAV = [
     {"text": "Inicio", "endpoint": "index", "role": "*"},
     {
@@ -78,12 +81,9 @@ G_NAV = [
         "role": "personas:_module",
     },
     {
-        "text": "Admin",
-        "subitems": [
-            {"text": "Archivos", "endpoint": "Admin.files", "role": "admin"},
-            # {"text": "Costructor de Modulos", "endpoint": "Admin.builder", "role": "admin"}, # Not ready for use (in development)
-        ],
-        "role": "admin",
+        "text": "Modulos",
+        "subitems": MODS,
+        "role": "*",
     },
 ]
 
@@ -92,6 +92,9 @@ G_PERMS = {"Sistema": []}
 
 def addnav(nav):
     G_NAV.append(nav)
+
+def addautonav(nav):
+    MODS.append(nav)
 
 
 def addperm(app, label, role):

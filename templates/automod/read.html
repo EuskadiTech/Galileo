@@ -11,7 +11,12 @@
             <tr>
               <th style="text-align: right; min-width: 125px; vertical-align: unset;">{{ CONF['scheme'][key]["label"] }}:</th>
               <td style="padding-left: 10px;">
-                {{item[key]}}
+                
+                {% if CONF['scheme'][key]["type"] == "markdown" %}
+                  {{markdown(item[key]) | safe}}
+                {% else %}
+                  {{item[key]}}
+                {% endif %}
               </td>
             </tr>
           {% endif %}
