@@ -1,10 +1,11 @@
 from flask import Blueprint, request, render_template, url_for, redirect, g
 from markdown import markdown
 from ..Personas.localutils import with_auth
-from pysondb import PysonDB
+from pysondb import PysonDB, errors
 from modules import addnav, addautonav, addperm
-from utils import USERDATA_DIR
+from utils import USERDATA_DIR, check_path
 from glob import glob
+from uuid import uuid4
 import json
 
 
@@ -27,7 +28,10 @@ class ModelView:
             "plural": plural,
             "scheme": self.DATA_SCHEME,
         }
+        basefolder = "uploads/automod/" + modulename
 
+        check_path("uploads/automod")
+        check_path(basefolder)
         @self.app.route(f"/{tablename}", methods=["GET"])
         @with_auth(f"{tablename}:read")
         def index():
@@ -44,8 +48,30 @@ class ModelView:
             if request.method == "POST":
                 inp = {}
                 for key, value in self.DATA_SCHEME.items():
-                    inp[key] = request.form.get(key, value["default"])
-                model.add(inp)
+                    if value["type"] == "image":
+                        filespaths = []
+                        files = request.files.getlist(key)
+                        for file in files:
+                            filename = file.filename
+                            print("Subiendo archivo:", filename)
+                            reqid = str(uuid4()).split("-")[0]
+                            f = "uploads/automod/" + modulename + "/" + reqid + "/"
+                            p = f + filename
+                            filesave = USERDATA_DIR + p
+                            check_path(f)
+                            file.save(filesave)
+                            filespaths.append("automod/" + modulename + "/" + reqid + "/" + filename)
+                        inp[key] = filespaths
+                    else:
+                        inp[key] = request.form.get(key, value["default"])
+                try:
+                    model.add(inp)
+                except errors.UnknownKeyError as ex:
+                    # TODO: fix this hacky mess
+                    unknown_keys = ex.args[0].replace("Unrecognized key(s) ['", "").replace("']", "").split("', '")
+                    for key in unknown_keys:
+                        model.add_new_key(key, self.DATA_SCHEME[key].get("default"))
+                    model.add(inp)
                 return redirect(url_for(f"{modulename}.index"))
             return render_template("automod/create.html", CONF=CONF, markdown=markdown)
 
@@ -64,8 +90,44 @@ class ModelView:
             if request.method == "POST":
                 inp = {}
                 for key, value in self.DATA_SCHEME.items():
-                    inp[key] = request.form.get(key, item[key])
-                model.update_by_id(rid, inp)
+                    if value["type"] == "image" and request.form.get("AXL__replacefile", "DO_NOT") == "AXL__replacefile":
+                        filespaths = []
+                        files = request.files.getlist(key)
+                        for file in files:
+                            filename = file.filename
+                            print("Subiendo archivo:", filename)
+                            reqid = str(uuid4()).split("-")[0]
+                            f = "uploads/automod/" + modulename + "/" + reqid + "/"
+                            p = f + filename
+                            filesave = USERDATA_DIR + p
+                            check_path(f)
+                            file.save(filesave)
+                            filespaths.append("automod/" + modulename + "/" + reqid + "/" + filename)
+                        inp[key] = filespaths
+                    elif value["type"] == "image" and request.form.get("AXL__replacefile", "DO_NOT") == "AXL__addfile":
+                        filespaths = item[key]
+                        files = request.files.getlist(key)
+                        for file in files:
+                            filename = file.filename
+                            print("Subiendo archivo:", filename)
+                            reqid = str(uuid4()).split("-")[0]
+                            f = "uploads/automod/" + modulename + "/" + reqid + "/"
+                            p = f + filename
+                            filesave = USERDATA_DIR + p
+                            check_path(f)
+                            file.save(filesave)
+                            filespaths.append("automod/" + modulename + "/" + reqid + "/" + filename)
+                        inp[key] = filespaths
+                    else:
+                        inp[key] = request.form.get(key, item.get(key, value["default"]))
+                try:
+                    model.update_by_id(rid, inp)
+                except errors.UnknownKeyError as ex:
+                    # TODO: fix this hacky mess
+                    unknown_keys = ex.args[0].replace("Unrecognized key(s) ['", "").replace("']", "").split("', '")
+                    for key in unknown_keys:
+                        model.add_new_key(key, self.DATA_SCHEME[key].get("default"))
+                    model.update_by_id(rid, inp)
                 return redirect(url_for(f"{modulename}.index"))
             return render_template(
                 "automod/update.html",

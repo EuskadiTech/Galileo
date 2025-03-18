@@ -14,6 +14,11 @@
                 
                 {% if CONF['scheme'][key]["type"] == "markdown" %}
                   {{markdown(item[key]) | safe}}
+                {% elif CONF['scheme'][key]["type"] == "image" %}
+                  {% for image in item[key] %}
+                    <a target="_blank" href="{{url_for('get_upload', path=image)}}"><img src="{{url_for('get_upload', path=image)}}" height="64"></a>
+                  {% endfor %}
+                  (pulsa para abrir)
                 {% else %}
                   {{item[key]}}
                 {% endif %}
