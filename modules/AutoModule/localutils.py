@@ -29,7 +29,15 @@ class ModelView:
             "scheme": self.DATA_SCHEME,
         }
         basefolder = "uploads/automod/" + modulename
-
+        def upfile(file, reqid):
+            filename = file.filename
+            print("Subiendo archivo:", filename)
+            f = "uploads/automod/" + modulename + "/" + reqid + "/"
+            p = f + filename
+            filesave = USERDATA_DIR + p
+            check_path(USERDATA_DIR + f)
+            file.save(filesave)
+            return "automod/" + modulename + "/" + reqid + "/" + filename
         check_path("uploads/automod")
         check_path(basefolder)
         @self.app.route(f"/{tablename}", methods=["GET"])
@@ -51,16 +59,9 @@ class ModelView:
                     if value["type"] == "image":
                         filespaths = []
                         files = request.files.getlist(key)
+                        reqid = str(uuid4()).split("-")[0]
                         for file in files:
-                            filename = file.filename
-                            print("Subiendo archivo:", filename)
-                            reqid = str(uuid4()).split("-")[0]
-                            f = "uploads/automod/" + modulename + "/" + reqid + "/"
-                            p = f + filename
-                            filesave = USERDATA_DIR + p
-                            check_path(f)
-                            file.save(filesave)
-                            filespaths.append("automod/" + modulename + "/" + reqid + "/" + filename)
+                            filespaths.append(upfile(file, reqid))
                         inp[key] = filespaths
                     else:
                         inp[key] = request.form.get(key, value["default"])
@@ -93,30 +94,16 @@ class ModelView:
                     if value["type"] == "image" and request.form.get("AXL__replacefile", "DO_NOT") == "AXL__replacefile":
                         filespaths = []
                         files = request.files.getlist(key)
+                        reqid = str(uuid4()).split("-")[0]
                         for file in files:
-                            filename = file.filename
-                            print("Subiendo archivo:", filename)
-                            reqid = str(uuid4()).split("-")[0]
-                            f = "uploads/automod/" + modulename + "/" + reqid + "/"
-                            p = f + filename
-                            filesave = USERDATA_DIR + p
-                            check_path(f)
-                            file.save(filesave)
-                            filespaths.append("automod/" + modulename + "/" + reqid + "/" + filename)
+                            filespaths.append(upfile(file, reqid))
                         inp[key] = filespaths
                     elif value["type"] == "image" and request.form.get("AXL__replacefile", "DO_NOT") == "AXL__addfile":
                         filespaths = item[key]
                         files = request.files.getlist(key)
+                        reqid = str(uuid4()).split("-")[0]
                         for file in files:
-                            filename = file.filename
-                            print("Subiendo archivo:", filename)
-                            reqid = str(uuid4()).split("-")[0]
-                            f = "uploads/automod/" + modulename + "/" + reqid + "/"
-                            p = f + filename
-                            filesave = USERDATA_DIR + p
-                            check_path(f)
-                            file.save(filesave)
-                            filespaths.append("automod/" + modulename + "/" + reqid + "/" + filename)
+                            filespaths.append(upfile(file, reqid))
                         inp[key] = filespaths
                     else:
                         inp[key] = request.form.get(key, item.get(key, value["default"]))
