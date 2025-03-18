@@ -38,8 +38,8 @@ class ModelView:
             check_path(USERDATA_DIR + f)
             file.save(filesave)
             return "automod/" + modulename + "/" + reqid + "/" + filename
-        check_path("uploads/automod")
-        check_path(basefolder)
+        check_path(USERDATA_DIR + "uploads/automod")
+        check_path(USERDATA_DIR + basefolder)
         @self.app.route(f"/{tablename}", methods=["GET"])
         @with_auth(f"{tablename}:read")
         def index():
