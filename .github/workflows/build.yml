@@ -4,9 +4,8 @@ on:
     branches:
       - auth
       - main
-    tags: 
-      - 'v*.*.*'
-
+    tags:
+      - "v*.*.*"
 
 jobs:
   build-windows:
@@ -41,7 +40,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache

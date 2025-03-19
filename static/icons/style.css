@@ -67,8 +67,11 @@
 .dim-food {
   background-size: 32px !important;
   background-color: rgba(255, 255, 255, 0.75) !important;
-  background-image: url("cook.png"), url("cake_slice.png"), url("chocolate.png"), url("apple.png") !important;
+  background-image:
+    url("cook.png"), url("cake_slice.png"), url("chocolate.png"),
+    url("apple.png") !important;
   background-blend-mode: lighten;
-  background-position-y: calc(32px * 0), calc(32px * 1), calc(32px * 2), calc(32px * 3) !important;
+  background-position-y:
+    calc(32px * 0), calc(32px * 1), calc(32px * 2), calc(32px * 3) !important;
   background-repeat: repeat-x;
 }

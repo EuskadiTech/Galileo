@@ -1,61 +1,53 @@
-{% extends "_layout.html" %}
-
-{% block container %}
-      <center>
-        <h2>Menú del comedor del {{day}}</h2>
-        <a class="btn btn-primary" href="{{url_for('Comedor.index')}}"
-          >Salir</a
-        >
-        <a
-          class="btn btn-primary"
-          href="{{url_for('Comedor.byDayModal')}}"
-          >Ver otra fecha</a
-        >
-        <!-- <h2>Menús</h2> -->
-        <table border class="table table-striped">
-          <thead>
-            <tr class="table-primary">
-              <th>Menú</th>
-              <th>1<sup>er</sup> plato</th>
-              <th>2<sup>er</sup> plato</th>
-              <th>3<sup>er</sup> plato</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for result in results %}
-            <tr>
-              <td>
-                <b>{{result}}</b><br /><small
-                  >{{results[result]["IsEnought"]}}</small
-                >
-              </td>
-              <td>
-                {{results[result]["P1 Text"]}}
-                <img
-                  src='{{url_for("static", filename="comedorico/" + results[result]["P1 Img"])}}'
-                  style="max-width: 80px; max-height: 40px"
-                  alt=""
-                />
-              </td>
-              <td>
-                {{results[result]["P2 Text"]}}
-                <img
-                  src='{{url_for("static", filename="comedorico/" + results[result]["P2 Img"])}}'
-                  style="max-width: 80px; max-height: 40px"
-                  alt=""
-                />
-              </td>
-              <td>
-                {{results[result]["P3 Text"]}}
-                <img
-                  src='{{url_for("static", filename="comedorico/" + results[result]["P3 Img"])}}'
-                  style="max-width: 80px; max-height: 40px"
-                  alt=""
-                />
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </center>
+{% extends "_layout.html" %} {% block container %}
+<center>
+  <h2>Menú del comedor del {{day}}</h2>
+  <a class="btn btn-primary" href="{{url_for('Comedor.index')}}">Salir</a>
+  <a class="btn btn-primary" href="{{url_for('Comedor.byDayModal')}}"
+    >Ver otra fecha</a
+  >
+  <!-- <h2>Menús</h2> -->
+  <table border class="table table-striped">
+    <thead>
+      <tr class="table-primary">
+        <th>Menú</th>
+        <th>1<sup>er</sup> plato</th>
+        <th>2<sup>er</sup> plato</th>
+        <th>3<sup>er</sup> plato</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for result in results %}
+      <tr>
+        <td>
+          <b>{{result}}</b><br /><small>{{results[result]["IsEnought"]}}</small>
+        </td>
+        <td>
+          {{results[result]["P1 Text"]}}
+          <img
+            src='{{url_for("static", filename="comedorico/" + results[result]["P1 Img"])}}'
+            style="max-width: 80px; max-height: 40px"
+            alt=""
+          />
+        </td>
+        <td>
+          {{results[result]["P2 Text"]}}
+          <img
+            src='{{url_for("static", filename="comedorico/" + results[result]["P2 Img"])}}'
+            style="max-width: 80px; max-height: 40px"
+            alt=""
+          />
+        </td>
+        <td>
+          {{results[result]["P3 Text"]}}
+          <img
+            src='{{url_for("static", filename="comedorico/" + results[result]["P3 Img"])}}'
+            style="max-width: 80px; max-height: 40px"
+            alt=""
+          />
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</center>
 {% endblock %}

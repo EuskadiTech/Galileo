@@ -1,16 +1,18 @@
-{% extends "_layout.html" %}
+{% extends "_layout.html" %} {% block container %}
+<center>
+  <h2>SuperCafé</h2>
+  <h1>Receta de hoy: {{Receta}}</h1>
+  <br />
 
-{% block container %}
-    <center>
-      <h2>SuperCafé</h2>
-      <h1>Receta de hoy: {{Receta}}</h1>
-      <br>
-
-      <a class="btn btn-primary" href="{{url_for('index')}}">Salir</a>
-      <a class="btn btn-primary" href="{{url_for('Cafe.config')}}">Establecer Receta</a>
-      <a class="btn btn-primary" href="{{url_for('Cafe.select')}}">Comanda</a>
-      <a class="btn btn-primary" href="{{url_for('Personas.scan')}}">Escanear Codigo</a>
-      <a class="btn btn-primary" href="{{url_for('Cafe.cocina')}}">Cocina</a>
-      <a class="btn btn-primary" href="{{url_for('Cafe.pago')}}">Pago</a>
-    </center>
+  <a class="btn btn-primary" href="{{url_for('index')}}">Salir</a>
+  <a class="btn btn-primary" href="{{url_for('Cafe.config')}}"
+    >Establecer Receta</a
+  >
+  <a class="btn btn-primary" href="{{url_for('Cafe.select')}}">Comanda</a>
+  <a class="btn btn-primary" href="{{url_for('Personas.scan')}}"
+    >Escanear Codigo</a
+  >
+  <a class="btn btn-primary" href="{{url_for('Cafe.cocina')}}">Cocina</a>
+  <a class="btn btn-primary" href="{{url_for('Cafe.pago')}}">Pago</a>
+</center>
 {% endblock %}

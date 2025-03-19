@@ -1,62 +1,80 @@
-{% extends "_layout.html" %}
-
-{% block container %}
+{% extends "_layout.html" %} {% block container %}
 <center>
   <h2>Realizar Comanda</h2>
   <form method="post">
-    <fieldset style="width: calc(100% - 30px); max-width: 410px; text-align: left;">
+    <fieldset
+      style="width: calc(100% - 30px); max-width: 410px; text-align: left"
+    >
       <h4>¿Para quién quieres hacer esta comanda?</h4>
       {% if "cafe:client" in g.user.r and "cafe:send" in g.user.r %}
-        <details style="border: 2px solid #36587c; border-radius: 10px;">
-          <summary class="btn btn-lg btn-primary" style="width: 100%;">Para mí ({{g.user.u["Nombre"]}} -
-            {{g.user.u["Region"].split(";")[0]}})</summary>
-            <b>Aviso: Si pides para tí, tienes que pedir el dia anterior despues del cobro.</b>
-            <br><br>
-            {% if CAN_CLIENT_SEND %}
-              <a class="btn btn-primary" href="{{url_for('Cafe.comanda', rid=g.user.rid)}}">Hacer mi comanda</a>
-            {% else %}
-              <b>En este momento no se puede crear una comanda.</b>
-            {% endif %}
-        </details>
-      {% endif %}
-      {% if "cafe:cocina" in g.user.r %}
-        <details open style="border: 2px solid #aa5e00; border-radius: 10px;">
-          <summary class="btn btn-lg btn-warning" style="width: 100%;">Para otra persona</summary>
-          <label for="byName">Buscar por nombre:</label>
-          <select name="code" id="byName" class="form-control">
-            <option value="" disabled selected>Por nombre...</option>
-            {% for key in personas %}
-            {% if "cafe:client" in personas[key]["Roles"] %}
-            <option value='{{personas[key]["Codigo"]}}'>{{personas[key]["Nombre"]}} ({{personas[key]["Region"].split(";")[0].split(";")[0]}})
-            </option>
-            {% endif %}
-            {% endfor %}
-          </select>
-          <br>
-          <label for="reader_output">Buscar por codigo:</label>
-          <input type="text" class="form-control" placeholder="Por codigo..." name="code" id="reader_output">
-          <br>
-          <button type="submit" class="btn btn-warning">Iniciar Comanda</button>
-          <div style="width: 375px" id="reader"></div>
-        </details>
+      <details style="border: 2px solid #36587c; border-radius: 10px">
+        <summary class="btn btn-lg btn-primary" style="width: 100%">
+          Para mí ({{g.user.u["Nombre"]}} -
+          {{g.user.u["Region"].split(";")[0]}})
+        </summary>
+        <b
+          >Aviso: Si pides para tí, tienes que pedir el dia anterior despues del
+          cobro.</b
+        >
+        <br /><br />
+        {% if CAN_CLIENT_SEND %}
+        <a
+          class="btn btn-primary"
+          href="{{url_for('Cafe.comanda', rid=g.user.rid)}}"
+          >Hacer mi comanda</a
+        >
+        {% else %}
+        <b>En este momento no se puede crear una comanda.</b>
+        {% endif %}
+      </details>
+      {% endif %} {% if "cafe:cocina" in g.user.r %}
+      <details open style="border: 2px solid #aa5e00; border-radius: 10px">
+        <summary class="btn btn-lg btn-warning" style="width: 100%">
+          Para otra persona
+        </summary>
+        <label for="byName">Buscar por nombre:</label>
+        <select name="code" id="byName" class="form-control">
+          <option value="" disabled selected>Por nombre...</option>
+          {% for key in personas %} {% if "cafe:client" in
+          personas[key]["Roles"] %}
+          <option value='{{personas[key]["Codigo"]}}'>
+            {{personas[key]["Nombre"]}}
+            ({{personas[key]["Region"].split(";")[0].split(";")[0]}})
+          </option>
+          {% endif %} {% endfor %}
+        </select>
+        <br />
+        <label for="reader_output">Buscar por codigo:</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Por codigo..."
+          name="code"
+          id="reader_output"
+        />
+        <br />
+        <button type="submit" class="btn btn-warning">Iniciar Comanda</button>
+        <div style="width: 375px" id="reader"></div>
+      </details>
       {% endif %}
     </fieldset>
   </form>
 </center>
 <script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
 <script>
-  var html5QrcodeScanner = new Html5QrcodeScanner(
-    "reader", { fps: 10, qrbox: 250 });
+  var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+    fps: 10,
+    qrbox: 250,
+  });
 
   function onScanSuccess(decodedText, decodedResult) {
     // Handle on success condition with the decoded text or result.
     console.log(`Scan result: ${decodedText}`, decodedResult);
     // ...
     html5QrcodeScanner.clear();
-    document.getElementById("reader_output").value = decodedText
+    document.getElementById("reader_output").value = decodedText;
     // ^ this will stop the scanner (video feed) and clear the scan area.
     document.querySelector("form").submit();
-
   }
 
   html5QrcodeScanner.render(onScanSuccess);

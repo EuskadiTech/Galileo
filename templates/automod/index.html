@@ -1,45 +1,61 @@
-{% extends "_layout.html" %}
-
-{% block container %}
+{% extends "_layout.html" %} {% block container %}
 <center>
   <h1>Lista de {{CONF['plural']}}</h1>
   <a class="btn btn-primary di di-exit" href="{{url_for('index')}}">Salir</a>
-  <a class="btn btn-primary di di-add2" href="{{url_for(CONF['modulename'] + '.create')}}">Crear
-    {{CONF['singular']}}</a>
+  <a
+    class="btn btn-primary di di-add2"
+    href="{{url_for(CONF['modulename'] + '.create')}}"
+    >Crear {{CONF['singular']}}</a
+  >
 
   <table border class="table table-striped">
     <thead>
       <tr class="table-primary">
-        {% for key in CONF['scheme'] %}
-          {% if not CONF['scheme'][key].get("hiddentable", false) %}
-            <th>{{ CONF['scheme'][key]["label"] }}</th>
-          {% endif %}
-        {% endfor %}
+        {% for key in CONF['scheme'] %} {% if not
+        CONF['scheme'][key].get("hiddentable", false) %}
+        <th>{{ CONF['scheme'][key]["label"] }}</th>
+        {% endif %} {% endfor %}
         <th>Acciónes</th>
       </tr>
     </thead>
     <tbody>
       {% for key in items %}
       <tr>
-        {% for kkey in CONF['scheme'] %}
-          {% if not CONF['scheme'][kkey].get("hiddentable", false) %}
-            {% if CONF['scheme'][kkey].get("primarykey", false) %}
-              <td><a href="{{url_for(CONF['modulename'] + '.read', rid = key)}}">{{items[key][kkey]}}</a></td>
-            {% elif CONF['scheme'][kkey].get("type") == "image" %}
-              <td>
-                {% for image in items[key][kkey] %}
-                <a target="_blank" href="{{url_for('get_upload', path=image)}}"><img src="{{url_for('get_upload', path=image)}}" height="38"></a>
-                {% endfor %}
-              </td>
-            {% else %}
-              <td>{{ items[key][kkey] }}</td>
-            {% endif %}
-          {% endif %}
-        {% endfor %}
+        {% for kkey in CONF['scheme'] %} {% if not
+        CONF['scheme'][kkey].get("hiddentable", false) %} {% if
+        CONF['scheme'][kkey].get("primarykey", false) %}
         <td>
-          <a class="btn btn-primary" href="{{url_for(CONF['modulename'] + '.read', rid = key)}}">Abrir</a>
-          <a class="btn btn-warning" href="{{url_for(CONF['modulename'] + '.update', rid = key)}}">Editar</a>
-          <a class="btn btn-danger" href="{{url_for(CONF['modulename'] + '.delete', rid = key)}}">Borrar</a>
+          <a href="{{url_for(CONF['modulename'] + '.read', rid = key)}}"
+            >{{items[key][kkey]}}</a
+          >
+        </td>
+        {% elif CONF['scheme'][kkey].get("type") == "image" %}
+        <td>
+          {% for image in items[key][kkey] %}
+          <a target="_blank" href="{{url_for('get_upload', path=image)}}"
+            ><img src="{{url_for('get_upload', path=image)}}" height="38"
+          /></a>
+          {% endfor %}
+        </td>
+        {% else %}
+        <td>{{ items[key][kkey] }}</td>
+        {% endif %} {% endif %} {% endfor %}
+        <td>
+          <a
+            class="btn btn-primary"
+            href="{{url_for(CONF['modulename'] + '.read', rid = key)}}"
+            >Abrir</a
+          >
+          <a
+            class="btn btn-warning"
+            href="{{url_for(CONF['modulename'] + '.update', rid = key)}}"
+            >Editar</a
+          >
+          <a
+            class="btn btn-danger"
+            href="{{url_for(CONF['modulename'] + '.delete', rid = key)}}"
+            >Borrar</a
+          >
         </td>
       </tr>
       {% endfor %}

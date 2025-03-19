@@ -1,41 +1,59 @@
-{% extends "_layout.html" %}
+{% extends "_layout.html" %} {% block container %}
+<center>
+  {% if err != None %}
+  <h1 style="border: 5px solid red; padding: 15px">Error: {{err}}</h1>
+  {% endif %}
+  <h2>Iniciar sesión</h2>
+  <form method="post" autocomplete="off">
+    <fieldset
+      style="width: calc(100% - 30px); max-width: 35rem; text-align: left"
+    >
+      <legend>Escanear Codigo</legend>
+      <label>
+        <b>Codigo:</b><br />
+        <input
+          autofocus
+          type="text"
+          name="code"
+          style="
+            font-family: monospace;
+            font-size: 30px;
+            max-width: 375px;
+            width: 100%;
+          "
+          id="reader_output"
+        />
+      </label>
+      <div style="width: 375px" id="reader"></div>
+      <br />
+      <input
+        type="submit"
+        class="btn btn-primary actbtn di di-user"
+        value="Buscar"
+      />
+      <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}"
+        >Salir</a
+      >
+    </fieldset>
+  </form>
+</center>
+<script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
+<script>
+  var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+    fps: 10,
+    qrbox: 250,
+  });
 
-{% block container %}
-    <center>
-      {% if err != None %}
-      <h1 style="border: 5px solid red; padding: 15px;">Error: {{err}}</h1>
-      {% endif %}
-      <h2>Iniciar sesión</h2>
-      <form method="post" autocomplete="off">
-        <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
-          <legend>Escanear Codigo</legend>
-          <label>
-            <b>Codigo:</b><br>
-            <input autofocus type="text" name="code" style="font-family: monospace; font-size: 30px; max-width: 375px; width: 100%;" id="reader_output">
-          </label>
-          <div style="width: 375px" id="reader"></div>
-          <br>
-          <input type="submit" class="btn btn-primary actbtn di di-user" value="Buscar" />
-          <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
-        </fieldset>
-      </form>
-    </center>
-  <script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
-  <script>
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-      "reader", { fps: 10, qrbox: 250 });
+  function onScanSuccess(decodedText, decodedResult) {
+    // Handle on success condition with the decoded text or result.
+    console.log(`Scan result: ${decodedText}`, decodedResult);
+    // ...
+    html5QrcodeScanner.clear();
+    document.getElementById("reader_output").value = decodedText;
+    // ^ this will stop the scanner (video feed) and clear the scan area.
+    document.querySelector("form").submit();
+  }
 
-    function onScanSuccess(decodedText, decodedResult) {
-      // Handle on success condition with the decoded text or result.
-      console.log(`Scan result: ${decodedText}`, decodedResult);
-      // ...
-      html5QrcodeScanner.clear();
-      document.getElementById("reader_output").value = decodedText
-      // ^ this will stop the scanner (video feed) and clear the scan area.
-      document.querySelector("form").submit();
-
-    }
-
-    html5QrcodeScanner.render(onScanSuccess);
-  </script>
+  html5QrcodeScanner.render(onScanSuccess);
+</script>
 {% endblock %}

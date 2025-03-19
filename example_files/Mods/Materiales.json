@@ -1,12 +1,34 @@
 {
-    "name": "Materiales",
-    "db": "materiales",
-    "data_scheme": {
-        "Nombre": {"type": "text", "label": "Nombre", "default": "", "required": true, "primarykey": true},
-        "Ubicacion": {"type": "text", "label": "Ubicación", "default": "", "required": true},
-        "Cantidad": {"type": "text", "label": "Cantidad", "default": "0 unidades", "required": true},
-        "Notas": {"type": "textarea", "label": "Notas", "default": "", "required": true, "hiddentable": true}
+  "name": "Materiales",
+  "db": "materiales",
+  "data_scheme": {
+    "Nombre": {
+      "type": "text",
+      "label": "Nombre",
+      "default": "",
+      "required": true,
+      "primarykey": true
     },
-    "singular": "Material",
-    "plural": "Materiales"
+    "Ubicacion": {
+      "type": "text",
+      "label": "Ubicación",
+      "default": "",
+      "required": true
+    },
+    "Cantidad": {
+      "type": "text",
+      "label": "Cantidad",
+      "default": "0 unidades",
+      "required": true
+    },
+    "Notas": {
+      "type": "textarea",
+      "label": "Notas",
+      "default": "",
+      "required": true,
+      "hiddentable": true
+    }
+  },
+  "singular": "Material",
+  "plural": "Materiales"
 }

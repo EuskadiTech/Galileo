@@ -2,25 +2,38 @@ from .models import DB_PERSONAS
 from flask import redirect, url_for, request, g, render_template
 from functools import wraps
 
-#region Auth
+
+# region Auth
 class UnknownCodeError(Exception):
     pass
+
+
 class PinRequired(Exception):
     pass
+
+
 class InvalidPin(Exception):
     pass
+
+
 class LoggedOutError(Exception):
     pass
+
+
 class NotAllowed(Exception):
     pass
+
+
 class PersonAuth:
     def __init__(self, code: str, pin: str = ""):
         self.userCode = code
         self.userPin = pin
+
     def isLoggedIn(self, needsRole: str = ""):
         def query(data):
             if data["Codigo"] == str(self.userCode):
                 return True
+
         if self.userCode == "UNK":
             raise LoggedOutError("No has iniciado sesión")
         keys = list(DB_PERSONAS.get_by_query(query).keys())
@@ -39,23 +52,63 @@ class PersonAuth:
         self.r = person["Roles"]
         self.r.append("*")
         return True
-#endregion
+
+
+# endregion
+
 
 def with_auth(role: str = ""):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if DB_PERSONAS.get_all() == {}:
-                return redirect(url_for("Admin.setup__adminaccount", err = "Configura a un Administrador"))
+                return redirect(
+                    url_for(
+                        "Admin.setup__adminaccount", err="Configura a un Administrador"
+                    )
+                )
             try:
-                user = PersonAuth(request.cookies.get('AUTH_CODE', "UNK"), request.cookies.get('AUTH_PIN'))
+                user = PersonAuth(
+                    request.cookies.get("AUTH_CODE", "UNK"),
+                    request.cookies.get("AUTH_PIN"),
+                )
                 user.isLoggedIn(role)
             except Exception as e:
                 return redirect(url_for("Personas.auth_scan", err=e.args))
             g.user = user
             return f(*args, **kwargs)
+
         return decorated_function
+
     return decorator
+
+
+def with_api_auth(role: str = ""):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if DB_PERSONAS.get_all() == {}:
+                return redirect(
+                    url_for(
+                        "Admin.setup__adminaccount", err="Configura a un Administrador"
+                    )
+                )
+            try:
+                user = PersonAuth(
+                    request.authorization.get("username", "UNK"),
+                    request.authorization.get("password"),
+                )
+                user.isLoggedIn(role)
+            except Exception as e:
+                return redirect(url_for("Personas.auth_scan", err=e.args))
+            g.user = user
+            return f(*args, **kwargs)
+
+        return decorated_function
+
+    return decorator
+
+
 def confirm_deletion(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -64,4 +117,5 @@ def confirm_deletion(f):
         if request.args.get("confirmDeletion").upper() != "ELIMINAR":
             return render_template("confirmDeletion.html")
         return f(*args, **kwargs)
+
     return decorated_function

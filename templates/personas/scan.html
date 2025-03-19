@@ -1,35 +1,48 @@
-{% extends "_layout.html" %}
+{% extends "_layout.html" %} {% block container %}
+<center>
+  <h2>Escanear Codigo</h2>
+  <form method="post">
+    <fieldset
+      style="width: calc(100% - 30px); max-width: 35rem; text-align: left"
+    >
+      <legend>Escanear Codigo</legend>
+      <label style="font-size: 30px"
+        >Codigo:
+        <input
+          type="text"
+          name="code"
+          style="font-family: monospace; font-size: 30px"
+          id="reader_output"
+      /></label>
+      <div style="width: 375px" id="reader"></div>
+      <input
+        type="submit"
+        class="btn btn-primary actbtn di di-user"
+        value="Buscar"
+      />
+      <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}"
+        >Salir</a
+      >
+    </fieldset>
+  </form>
+</center>
+<script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
+<script>
+  var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+    fps: 10,
+    qrbox: 250,
+  });
 
-{% block container %}
-    <center>
-      <h2>Escanear Codigo</h2>
-      <form method="post">
-        <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
-          <legend>Escanear Codigo</legend>
-          <label style="font-size: 30px;">Codigo: <input type="text" name="code"
-              style="font-family: monospace;font-size: 30px;" id="reader_output"></label>
-          <div style="width: 375px" id="reader"></div>
-          <input type="submit" class="btn btn-primary actbtn di di-user" value="Buscar" />
-          <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
-        </fieldset>
-      </form>
-    </center>
-  <script src="{{url_for('static', filename='vendor/html5-qrcode.min.js')}}"></script>
-  <script>
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-      "reader", { fps: 10, qrbox: 250 });
+  function onScanSuccess(decodedText, decodedResult) {
+    // Handle on success condition with the decoded text or result.
+    console.log(`Scan result: ${decodedText}`, decodedResult);
+    // ...
+    html5QrcodeScanner.clear();
+    document.getElementById("reader_output").value = decodedText;
+    // ^ this will stop the scanner (video feed) and clear the scan area.
+    document.querySelector("form").submit();
+  }
 
-    function onScanSuccess(decodedText, decodedResult) {
-      // Handle on success condition with the decoded text or result.
-      console.log(`Scan result: ${decodedText}`, decodedResult);
-      // ...
-      html5QrcodeScanner.clear();
-      document.getElementById("reader_output").value = decodedText
-      // ^ this will stop the scanner (video feed) and clear the scan area.
-      document.querySelector("form").submit();
-
-    }
-
-    html5QrcodeScanner.render(onScanSuccess);
-  </script>
+  html5QrcodeScanner.render(onScanSuccess);
+</script>
 {% endblock %}

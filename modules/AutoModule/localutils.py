@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, url_for, redirect, g
 from markdown import markdown
-from ..Personas.localutils import with_auth
+from ..Personas.localutils import with_auth, with_api_auth
 from pysondb import PysonDB, errors
 from modules import addnav, addautonav, addperm
 from utils import USERDATA_DIR, check_path
@@ -29,6 +29,7 @@ class ModelView:
             "scheme": self.DATA_SCHEME,
         }
         basefolder = "uploads/automod/" + modulename
+
         def upfile(file, reqid):
             filename = file.filename
             print("Subiendo archivo:", filename)
@@ -38,8 +39,10 @@ class ModelView:
             check_path(USERDATA_DIR + f)
             file.save(filesave)
             return "automod/" + modulename + "/" + reqid + "/" + filename
+
         check_path(USERDATA_DIR + "uploads/automod")
         check_path(USERDATA_DIR + basefolder)
+
         @self.app.route(f"/{tablename}", methods=["GET"])
         @with_auth(f"{tablename}:read")
         def index():
@@ -49,6 +52,11 @@ class ModelView:
                 items=model.get_all(),
                 markdown=markdown,
             )
+
+        @self.app.route(f"/api/{tablename}", methods=["GET"])
+        @with_api_auth(f"{tablename}:read")
+        def api__list():
+            return model.get_all()
 
         @self.app.route(f"/{tablename}/new", methods=["GET", "POST"])
         @with_auth(f"{tablename}:create")
@@ -69,12 +77,46 @@ class ModelView:
                     model.add(inp)
                 except errors.UnknownKeyError as ex:
                     # TODO: fix this hacky mess
-                    unknown_keys = ex.args[0].replace("Unrecognized key(s) ['", "").replace("']", "").split("', '")
+                    unknown_keys = (
+                        ex.args[0]
+                        .replace("Unrecognized key(s) ['", "")
+                        .replace("']", "")
+                        .split("', '")
+                    )
                     for key in unknown_keys:
                         model.add_new_key(key, self.DATA_SCHEME[key].get("default"))
                     model.add(inp)
                 return redirect(url_for(f"{modulename}.index"))
             return render_template("automod/create.html", CONF=CONF, markdown=markdown)
+
+        @self.app.route(f"/api/{tablename}/new", methods=["POST"])
+        @with_api_auth(f"{tablename}:create")
+        def api__create():
+            inp = {}
+            for key, value in self.DATA_SCHEME.items():
+                if value["type"] == "image":
+                    filespaths = []
+                    files = request.files.getlist(key)
+                    reqid = str(uuid4()).split("-")[0]
+                    for file in files:
+                        filespaths.append(upfile(file, reqid))
+                    inp[key] = filespaths
+                else:
+                    inp[key] = request.form.get(key, value["default"])
+            try:
+                rid = model.add(inp)
+            except errors.UnknownKeyError as ex:
+                # TODO: fix this hacky mess
+                unknown_keys = (
+                    ex.args[0]
+                    .replace("Unrecognized key(s) ['", "")
+                    .replace("']", "")
+                    .split("', '")
+                )
+                for key in unknown_keys:
+                    model.add_new_key(key, self.DATA_SCHEME[key].get("default"))
+                rid = model.add(inp)
+            return {"status": "success", "id": rid}
 
         @self.app.route(f"/{tablename}/<rid>", methods=["GET"])
         @with_auth(f"{tablename}:read")
@@ -84,6 +126,11 @@ class ModelView:
                 "automod/read.html", CONF=CONF, item=item, rid=rid, markdown=markdown
             )
 
+        @self.app.route(f"/api/{tablename}/<rid>", methods=["GET"])
+        @with_api_auth(f"{tablename}:read")
+        def api__read(rid):
+            return model.get_by_id(str(rid))
+
         @self.app.route(f"/{tablename}/<rid>/edit", methods=["GET", "POST"])
         @with_auth(f"{tablename}:update")
         def update(rid):
@@ -91,14 +138,22 @@ class ModelView:
             if request.method == "POST":
                 inp = {}
                 for key, value in self.DATA_SCHEME.items():
-                    if value["type"] == "image" and request.form.get("AXL__replacefile", "DO_NOT") == "AXL__replacefile":
+                    if (
+                        value["type"] == "image"
+                        and request.form.get("AXL__replacefile", "DO_NOT")
+                        == "AXL__replacefile"
+                    ):
                         filespaths = []
                         files = request.files.getlist(key)
                         reqid = str(uuid4()).split("-")[0]
                         for file in files:
                             filespaths.append(upfile(file, reqid))
                         inp[key] = filespaths
-                    elif value["type"] == "image" and request.form.get("AXL__replacefile", "DO_NOT") == "AXL__addfile":
+                    elif (
+                        value["type"] == "image"
+                        and request.form.get("AXL__replacefile", "DO_NOT")
+                        == "AXL__addfile"
+                    ):
                         filespaths = item[key]
                         files = request.files.getlist(key)
                         reqid = str(uuid4()).split("-")[0]
@@ -106,12 +161,19 @@ class ModelView:
                             filespaths.append(upfile(file, reqid))
                         inp[key] = filespaths
                     else:
-                        inp[key] = request.form.get(key, item.get(key, value["default"]))
+                        inp[key] = request.form.get(
+                            key, item.get(key, value["default"])
+                        )
                 try:
                     model.update_by_id(rid, inp)
                 except errors.UnknownKeyError as ex:
                     # TODO: fix this hacky mess
-                    unknown_keys = ex.args[0].replace("Unrecognized key(s) ['", "").replace("']", "").split("', '")
+                    unknown_keys = (
+                        ex.args[0]
+                        .replace("Unrecognized key(s) ['", "")
+                        .replace("']", "")
+                        .split("', '")
+                    )
                     for key in unknown_keys:
                         model.add_new_key(key, self.DATA_SCHEME[key].get("default"))
                     model.update_by_id(rid, inp)
@@ -125,6 +187,50 @@ class ModelView:
                 markdown=markdown,
             )
 
+        @self.app.route(f"/api/{tablename}/<rid>/edit", methods=["POST"])
+        @with_api_auth(f"{tablename}:update")
+        def api__update(rid):
+            item = model.get_by_id(str(rid))
+            inp = {}
+            for key, value in self.DATA_SCHEME.items():
+                if (
+                    value["type"] == "image"
+                    and request.form.get("AXL__replacefile", "DO_NOT")
+                    == "AXL__replacefile"
+                ):
+                    filespaths = []
+                    files = request.files.getlist(key)
+                    reqid = str(uuid4()).split("-")[0]
+                    for file in files:
+                        filespaths.append(upfile(file, reqid))
+                    inp[key] = filespaths
+                elif (
+                    value["type"] == "image"
+                    and request.form.get("AXL__replacefile", "DO_NOT") == "AXL__addfile"
+                ):
+                    filespaths = item[key]
+                    files = request.files.getlist(key)
+                    reqid = str(uuid4()).split("-")[0]
+                    for file in files:
+                        filespaths.append(upfile(file, reqid))
+                    inp[key] = filespaths
+                else:
+                    inp[key] = request.form.get(key, item.get(key, value["default"]))
+            try:
+                model.update_by_id(rid, inp)
+            except errors.UnknownKeyError as ex:
+                # TODO: fix this hacky mess
+                unknown_keys = (
+                    ex.args[0]
+                    .replace("Unrecognized key(s) ['", "")
+                    .replace("']", "")
+                    .split("', '")
+                )
+                for key in unknown_keys:
+                    model.add_new_key(key, self.DATA_SCHEME[key].get("default"))
+                model.update_by_id(rid, inp)
+            return {"status": "success", "id": rid}
+
         @self.app.route(f"/{tablename}/<rid>/del", methods=["GET", "POST"])
         @with_auth(f"{tablename}:delete")
         def delete(rid):
@@ -137,6 +243,12 @@ class ModelView:
             return render_template(
                 "confirmDeletion.html", USER=g.user, markdown=markdown
             )
+
+        @self.app.route(f"/api/{tablename}/<rid>/del", methods=["POST"])
+        @with_api_auth(f"{tablename}:read")
+        def api__delete(rid):
+            model.delete_by_id(str(rid))
+            return {"status": "success"}
 
         self.app = self.app
         addautonav(
@@ -169,5 +281,5 @@ def load_from_dir():
     loaded = []
     for mod in mods:
         print("Cargando modulo: " + mod)
-        loaded.append(load_config(json.load(open(mod, "r", encoding='utf-8'))))
+        loaded.append(load_config(json.load(open(mod, "r", encoding="utf-8"))))
     return loaded

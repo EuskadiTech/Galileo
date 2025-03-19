@@ -1,30 +1,48 @@
-{% extends "_layout.html" %}
-
-{% block container %}
-    <center>
-      <h1>Listado de Regiones</h1>
-      <a class="btn btn-primary di di-add2" href="{{url_for('Personas.regiones_new')}}">Añadir región</a>
-      <table border class="table table-striped">
-        <thead>
-          <tr class="table-primary">
-            <th>Nombre</th>
-            <th>Acciónes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for key in regiones %}
-          <tr>
-            <td style="background-color: {{regiones[key]['Color']}}; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;">{{regiones[key]["Nombre"]}}</td>
-            <td>
-              <div class="input-group">
-                <a class="btn btn-danger" href="{{url_for('Personas.regiones_rdel', rid = key)}}">Borrar</a>
-                <a class="btn btn-warning" href="{{url_for('Personas.regiones_edit', rid = key)}}">Editar</a>
-                <a class="btn btn-primary" href="{{url_for('Personas.regiones_region', rid = key)}}">Abrir</a>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </center>
+{% extends "_layout.html" %} {% block container %}
+<center>
+  <h1>Listado de Regiones</h1>
+  <a
+    class="btn btn-primary di di-add2"
+    href="{{url_for('Personas.regiones_new')}}"
+    >Añadir región</a
+  >
+  <table border class="table table-striped">
+    <thead>
+      <tr class="table-primary">
+        <th>Nombre</th>
+        <th>Acciónes</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for key in regiones %}
+      <tr>
+        <td
+          style="background-color: {{regiones[key]['Color']}}; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;"
+        >
+          {{regiones[key]["Nombre"]}}
+        </td>
+        <td>
+          <div class="input-group">
+            <a
+              class="btn btn-danger"
+              href="{{url_for('Personas.regiones_rdel', rid = key)}}"
+              >Borrar</a
+            >
+            <a
+              class="btn btn-warning"
+              href="{{url_for('Personas.regiones_edit', rid = key)}}"
+              >Editar</a
+            >
+            <a
+              class="btn btn-primary"
+              href="{{url_for('Personas.regiones_region', rid = key)}}"
+              >Abrir</a
+            >
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</center>
 {% endblock %}

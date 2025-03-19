@@ -1,47 +1,85 @@
-{% extends "_layout.html" %}
-
-{% block container %}
-    <center>
-      <h2 class="nop">Tarjeta Identificativa de {{receta["Nombre"]}}</h2>
-        <table style="width: calc(100% - 30px); max-width: 30rem; text-align: left; color: black; border: 1px solid black;">
-          <tr>
-            <td colspan="2" style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px; border: 1px solid black;">
-              {{receta["Nombre"]}} ({{receta["Region"].split(";")[0]}})</td>
-            <td style="width: 150px; text-align: center; border: 1px solid black;" rowspan="2">
-              <img src="{{ qrcode(receta['Codigo'], border=3) }}"
-                width="150px"><br><small>
-                  Codigo - {{receta["Codigo"]}}
-                  
-                  {% if receta["PIN"] != "" %}
-                  <br>PIN - {{receta["PIN"]}}
-                  {% endif %}
-                </small>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 0; width: 125px; border: 1px solid black;">
-              <img src='{{url_for("get_upload", path="personas/"+receta["Foto"]) }}' alt="" height="125px">
-            </td>
-            <td>
-              <center>
-                {{content | safe}}
-              </center>
-            </td>
-          </tr>
-          <tr class="nop">
-            <td style="font-size: 75%; border: 1px solid black;" colspan="2">
-              <b>Roles:</b> <code style="font-family: monospace !important;">{{" ".join(receta['Roles'])}}</code>
-            </td>
-            <td style="width: 150px; text-align: center; border: 1px solid black;" rowspan="1">
-              <code style="font-family: monospace !important;font-size: 20px;">{{receta['Puntos']}} puntos</code>
-            </td>
-          </tr>
-        </table>
-      <div class="nop">
-        <br>
-        <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}">Salir</a>
-        <a class="btn btn-primary di di-edit" href="{{url_for('Personas.edit', rid=rid)}}">Editar</a>
-        <a class="btn btn-primary di di-edit" href="{{url_for('Cafe.historial', rid=rid)}}">Historial SuperCafé</a>
-      </div>
-    </center>
+{% extends "_layout.html" %} {% block container %}
+<center>
+  <h2 class="nop">Tarjeta Identificativa de {{receta["Nombre"]}}</h2>
+  <table
+    style="
+      width: calc(100% - 30px);
+      max-width: 30rem;
+      text-align: left;
+      color: black;
+      border: 1px solid black;
+    "
+  >
+    <tr>
+      <td
+        colspan="2"
+        style="
+          font-family: monospace !important;
+          font-size: 25px;
+          text-align: center;
+          height: 30px;
+          border: 1px solid black;
+        "
+      >
+        {{receta["Nombre"]}} ({{receta["Region"].split(";")[0]}})
+      </td>
+      <td
+        style="width: 150px; text-align: center; border: 1px solid black"
+        rowspan="2"
+      >
+        <img
+          src="{{ qrcode(receta['Codigo'], border=3) }}"
+          width="150px"
+        /><br /><small>
+          Codigo - {{receta["Codigo"]}} {% if receta["PIN"] != "" %}
+          <br />PIN - {{receta["PIN"]}} {% endif %}
+        </small>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 0; width: 125px; border: 1px solid black">
+        <img
+          src='{{url_for("get_upload", path="personas/"+receta["Foto"]) }}'
+          alt=""
+          height="125px"
+        />
+      </td>
+      <td>
+        <center>{{content | safe}}</center>
+      </td>
+    </tr>
+    <tr class="nop">
+      <td style="font-size: 75%; border: 1px solid black" colspan="2">
+        <b>Roles:</b>
+        <code style="font-family: monospace !important"
+          >{{" ".join(receta['Roles'])}}</code
+        >
+      </td>
+      <td
+        style="width: 150px; text-align: center; border: 1px solid black"
+        rowspan="1"
+      >
+        <code style="font-family: monospace !important; font-size: 20px"
+          >{{receta['Puntos']}} puntos</code
+        >
+      </td>
+    </tr>
+  </table>
+  <div class="nop">
+    <br />
+    <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}"
+      >Salir</a
+    >
+    <a
+      class="btn btn-primary di di-edit"
+      href="{{url_for('Personas.edit', rid=rid)}}"
+      >Editar</a
+    >
+    <a
+      class="btn btn-primary di di-edit"
+      href="{{url_for('Cafe.historial', rid=rid)}}"
+      >Historial SuperCafé</a
+    >
+  </div>
+</center>
 {% endblock %}

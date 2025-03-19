@@ -1,15 +1,19 @@
-{% extends "_layout.html" %}
-
-{% block container %}
+{% extends "_layout.html" %} {% block container %}
 <center>
   <h2>Menús descargados en el servidor</h2>
   <!-- <a class="btn" href="{{url_for('index')}}">Salir</a> -->
   <!-- <a class="btn btn-primary" href="">Buscar menú</a> -->
-  <a class="btn btn-primary" href="{{url_for('Comedor.byDayModal')}}">Ver menú</a>
-  <a class="btn btn-primary" href="{{url_for('Comedor.getMenu')}}">Menú de hoy</a>
-  <a class="btn btn-primary" href="{{url_for('Comedor.loadMenuModal')}}">Importar Menú</a>
+  <a class="btn btn-primary" href="{{url_for('Comedor.byDayModal')}}"
+    >Ver menú</a
+  >
+  <a class="btn btn-primary" href="{{url_for('Comedor.getMenu')}}"
+    >Menú de hoy</a
+  >
+  <a class="btn btn-primary" href="{{url_for('Comedor.loadMenuModal')}}"
+    >Importar Menú</a
+  >
   <!-- <h2>Menús</h2> -->
-  <br><br>
+  <br /><br />
   <table border class="table table-striped">
     <thead>
       <tr class="table-primary">
@@ -27,12 +31,22 @@
         <td>{{comedor[key]["meta"]["Description"]}}</td>
         <td>{{comedor[key]["meta"]["YYYY-MM"]}}</td>
         <td>
-          <a href='{{comedor[key]["meta"]["Link"]}}'>{{comedor[key]["meta"]["Origin"]}}</a>
+          <a href='{{comedor[key]["meta"]["Link"]}}'
+            >{{comedor[key]["meta"]["Origin"]}}</a
+          >
         </td>
         <td>
           <div class="input-group">
-            <a class="btn btn-danger" href="{{url_for('Comedor.api__deleteMenu', mid = key)}}">Borrar</a>
-            <a class="btn btn-primary" href="{{url_for('Comedor.api__downloadMenu', mid = key)}}">Guardar</a>
+            <a
+              class="btn btn-danger"
+              href="{{url_for('Comedor.api__deleteMenu', mid = key)}}"
+              >Borrar</a
+            >
+            <a
+              class="btn btn-primary"
+              href="{{url_for('Comedor.api__downloadMenu', mid = key)}}"
+              >Guardar</a
+            >
           </div>
         </td>
       </tr>

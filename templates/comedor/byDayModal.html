@@ -1,28 +1,24 @@
-{% extends "_layout.html" %}
-
-{% block container %}
-      <center>
-        <h2>Ver menú</h2>
-        <form action="{{url_for('Comedor.getMenu')}}" method="GET">
-          <fieldset>
-            <legend>por fecha</legend>
-            <label
-              >Menú:
-              <select name="menu">
-                <option value="*">> Todos</option>
-                {% for menu in menus %}
-                <option value="{{menu}}">{{menu}}</option>
-                {% endfor %}
-              </select></label
-            >
-            <br />
-            <label>Dia: <input type="date" name="day" required /></label>
-            <br />
-            <input type="submit" class="btn btn-primary" value="Abrir" />
-            <a class="btn" href="{{url_for('Comedor.index')}}"
-              >Salir</a
-            >
-          </fieldset>
-        </form>
-      </center>
+{% extends "_layout.html" %} {% block container %}
+<center>
+  <h2>Ver menú</h2>
+  <form action="{{url_for('Comedor.getMenu')}}" method="GET">
+    <fieldset>
+      <legend>por fecha</legend>
+      <label
+        >Menú:
+        <select name="menu">
+          <option value="*">> Todos</option>
+          {% for menu in menus %}
+          <option value="{{menu}}">{{menu}}</option>
+          {% endfor %}
+        </select></label
+      >
+      <br />
+      <label>Dia: <input type="date" name="day" required /></label>
+      <br />
+      <input type="submit" class="btn btn-primary" value="Abrir" />
+      <a class="btn" href="{{url_for('Comedor.index')}}">Salir</a>
+    </fieldset>
+  </form>
+</center>
 {% endblock %}

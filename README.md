@@ -1,13 +1,19 @@
 # Galileo
+
 Un programa todo en uno.
 
-## Instalación 
+## Instalación
+
 ### Docker
+
 ```bash
 docker run -d --restart=always -p 8129:8129 -v ./GalileoDat:/data ghcr.io/euskaditech/galileo:main
 ```
+
 ## Configuración
+
 Ejemplo:
+
 ```json
 {
   "Resumen Diario": {

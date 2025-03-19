@@ -1,248 +1,285 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
+  <head>
+    <!-- Required meta tags -->
+    <meta name="color-scheme" content="light dark" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
-<head>
-  <!-- Required meta tags -->
-  <meta name="color-scheme" content="light dark" />
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <title>{{data["Today"]}}</title>
 
-  <title>{{data["Today"]}}</title>
+    <style>
+      body {
+        font-size: 25px;
+      }
 
-  <style>
-    body {
-      font-size: 25px;
-    }
+      html {
+        color-scheme: light dark;
+      }
 
-    html {
-      color-scheme: light dark;
-    }
+      pre {
+        border: 0 !important;
+      }
 
-    pre {
-      border: 0 !important;
-    }
+      button {
+        cursor: pointer;
+      }
 
-    button {
-      cursor: pointer;
-    }
+      small {
+        display: block;
+      }
 
-    small {
-      display: block;
-    }
+      .card-body {
+        padding: 10px;
+      }
 
-    .card-body {
-      padding: 10px;
-    }
+      .card-header {
+        border: none !important;
+        border-radius: 0 0 0 0 !important;
+      }
 
-    .card-header {
-      border: none !important;
-      border-radius: 0 0 0 0 !important;
-    }
+      .grid-item {
+        width: 20rem;
+        /* height: 20rem; */
+        float: left;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        background: floralwhite;
+      }
 
-    .grid-item {
-      width: 20rem;
-      /* height: 20rem; */
-      float: left;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      background: floralwhite;
-    }
-
-    /* .grid {
+      /* .grid {
 
             display: grid;
   grid-template-columns: repeat(auto-fill, calc(20rem + 8px));
   grid-template-rows: masonry;
         } */
-    .grid {
-      position: relative;
-      max-width: calc(350px * 3) !important;
-    }
-
-    .printonly,
-    .printonly * {
-      display: none !important;
-    }
-
-    @media print {
-
-      .noprint,
-      .noprint * {
-        display: none !important;
+      .grid {
+        position: relative;
+        max-width: calc(350px * 3) !important;
       }
 
       .printonly,
       .printonly * {
-        display: block !important;
+        display: none !important;
       }
-    }
-  </style>
-</head>
 
-<body style="margin: 15px">
+      @media print {
+        .noprint,
+        .noprint * {
+          display: none !important;
+        }
 
-  <script>
-    document.onreadystatechange = function () {
-      if (document.readyState !== "complete") {
+        .printonly,
+        .printonly * {
+          display: block !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body style="margin: 15px">
+    <script>
+      document.onreadystatechange = function () {
+        if (document.readyState !== "complete") {
+          document.querySelector("#loader").style.display = "block";
+        } else {
+          document.querySelector("#loader").style.display = "none";
+        }
+      };
+      function load(url) {
         document.querySelector("#loader").style.display = "block";
-      } else {
-        document.querySelector("#loader").style.display = "none";
+        location.href = url;
       }
-    };
-    function load(url) {
-      document.querySelector("#loader").style.display = "block";
-      location.href = url;
-    }
-    window.onbeforeunload = () => {
-      document.querySelector("#loader").style.display = "block";
-    };
-  </script>
+      window.onbeforeunload = () => {
+        document.querySelector("#loader").style.display = "block";
+      };
+    </script>
 
-  <center id="loader" style="
-      z-index: 9;
-      border: 25px solid red;
-      background-color: #fff;
-      color: black;
-      margin: 0;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 340px;
-      height: 340px;
-    ">
-    <img src="{{url_for('static', filename='load.gif')}}" width="200" height="200" />
-    <h2>Cargando...</h2>
-    Espera mientras se muestra esto.
-  </center>
+    <center
+      id="loader"
+      style="
+        z-index: 9;
+        border: 25px solid red;
+        background-color: #fff;
+        color: black;
+        margin: 0;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 340px;
+        height: 340px;
+      "
+    >
+      <img
+        src="{{url_for('static', filename='load.gif')}}"
+        width="200"
+        height="200"
+      />
+      <h2>Cargando...</h2>
+      Espera mientras se muestra esto.
+    </center>
 
-  <script>
-    function printThis() {
-      // var URL = "?print";
-      // var W = window.open(URL);
-      window.print();
-    }
-  </script>
+    <script>
+      function printThis() {
+        // var URL = "?print";
+        // var W = window.open(URL);
+        window.print();
+      }
+    </script>
 
-  {% if data["Print"] %}
-  <script>
-    onload = () => {
-      window.print();
-      // window.close()
-    };
-  </script>
-  {% endif %}
-  <div>
-    <header style="
+    {% if data["Print"] %}
+    <script>
+      onload = () => {
+        window.print();
+        // window.close()
+      };
+    </script>
+    {% endif %}
+    <div>
+      <header
+        style="
           font-size: 18px !important;
           background-color: #000;
           color: #fff;
           border: 1px solid #000;
           margin-bottom: 5px;
-        " class="noprint">
-      <b>Galileo - Resumen Diario -
-        <a style="color: white; text-decoration: underline" href="{{url_for('index')}}">Volver a Inicio</a></b>
-    </header>
-    <div>
-      <h1 style="font-size: 47.5px">
-        {{data["Today"]}} - {{data["Weather"]["Icon"]}}
-        <span class="noprint"><button class="noprint" onclick="printThis()" type="button">
-            🖨️
-          </button></span>
-      </h1>
-      <small style="font-size: 12px">
-        <i> Creado por EuskadiTech&trade;, clima por wttr.in</i>
-      </small>
-    </div>
-    <!-- <h1 style="border: 16px solid red">NO IMPRIMIR</h1> -->
-    <!--- INICIO TARJETAS --->
-    <div class="grid"
-      data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 319, "horizontalOrder": false, "gutter": 20, "fitWidth": false, "resize": false}'>
-      <!-- <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
+        "
+        class="noprint"
+      >
+        <b
+          >Galileo - Resumen Diario -
+          <a
+            style="color: white; text-decoration: underline"
+            href="{{url_for('index')}}"
+            >Volver a Inicio</a
+          ></b
+        >
+      </header>
+      <div>
+        <h1 style="font-size: 47.5px">
+          {{data["Today"]}} - {{data["Weather"]["Icon"]}}
+          <span class="noprint"
+            ><button class="noprint" onclick="printThis()" type="button">
+              🖨️
+            </button></span
+          >
+        </h1>
+        <small style="font-size: 12px">
+          <i> Creado por EuskadiTech&trade;, clima por wttr.in</i>
+        </small>
+      </div>
+      <!-- <h1 style="border: 16px solid red">NO IMPRIMIR</h1> -->
+      <!--- INICIO TARJETAS --->
+      <div
+        class="grid"
+        data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 319, "horizontalOrder": false, "gutter": 20, "fitWidth": false, "resize": false}'
+      >
+        <!-- <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
         <div class="card-body">
           <b>¡Aviso importante!</b><br />
           Estoy migrando este programa a Galileo, algunas secciónes no estarán
           disponibles.
         </div>
       </div> -->
-      {% if data["Receta"] != None and data["Receta"] != "No Disp." %}
-      <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
-        <div class="card-body">
-          <b>☕️ Receta del café</b><br />
-          Hoy con el café tenemos <br><b>{{data["Receta"]}}</b>.
+        {% if data["Receta"] != None and data["Receta"] != "No Disp." %}
+        <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
+          <div class="card-body">
+            <b>☕️ Receta del café</b><br />
+            Hoy con el café tenemos <br /><b>{{data["Receta"]}}</b>.
+          </div>
         </div>
-      </div>
-      {% endif %}
-      {% if data["CafeFree"] | length > 0 %}
-      <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
-        <div class="card-body">
-          <b>☕️ Café gratis</b><br />
-          Personas con café gratis (10+ puntos):
-          <ul>
-            {% for persona in data["CafeFree"] %}
-            <li>{{ persona["Nombre"] }} ({{ persona["Region"].split(";")[0] }}) <b>{{ persona["Puntos"] }} pts.</b></li>
-            {% endfor %}
+        {% endif %} {% if data["CafeFree"] | length > 0 %}
+        <div class="grid-item card" style="border: 4px solid rgb(220, 53, 69)">
+          <div class="card-body">
+            <b>☕️ Café gratis</b><br />
+            Personas con café gratis (10+ puntos):
+            <ul>
+              {% for persona in data["CafeFree"] %}
+              <li>
+                {{ persona["Nombre"] }} ({{ persona["Region"].split(";")[0] }})
+                <b>{{ persona["Puntos"] }} pts.</b>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        {% endif %} {% for menu in data["Comedor"] %}
+        <!--- Menu del comedor Basal --->
+        <div
+          class="grid-item card"
+          style="border: 4px solid rgb(0, 123, 255); min-height: 306"
+        >
+          <div class="card-body">
+            <b>🍽️ Menú {{menu}}</b><br />
 
-          </ul>
+            <ol style="padding-left: 25px">
+              <li>
+                {{data["Comedor"][menu]["P1 Text"]}}
+                <img
+                  src='{{url_for("static", filename="comedorico/" + data["Comedor"][menu]["P1 Img"])}}'
+                  style="max-width: 100px; max-height: 50px"
+                  alt=""
+                  height="50"
+                />
+              </li>
+              <li>
+                {{data["Comedor"][menu]["P2 Text"]}}
+                <img
+                  src='{{url_for("static", filename="comedorico/" + data["Comedor"][menu]["P2 Img"])}}'
+                  style="max-width: 100px; max-height: 50px"
+                  alt=""
+                  height="50"
+                />
+              </li>
+              <li>
+                {{data["Comedor"][menu]["P3 Text"]}}
+                <img
+                  src='{{url_for("static", filename="comedorico/" + data["Comedor"][menu]["P3 Img"])}}'
+                  style="max-width: 100px; max-height: 50px"
+                  alt=""
+                  height="50"
+                />
+              </li>
+            </ol>
+            <small style="font-size: 60%">
+              <i>Puede ser incorrecto.</i>
+              <i
+                >Hay {{data["ComedorOKKO"][data["Comedor"][menu]["IsEnought"]]}}
+                cantidad de comida.
+              </i>
+            </small>
+          </div>
         </div>
-      </div>
-      {% endif %}
-      {% for menu in data["Comedor"] %}
-      <!--- Menu del comedor Basal --->
-      <div class="grid-item card" style="border: 4px solid rgb(0, 123, 255); min-height: 306;">
-        <div class="card-body">
-          <b>🍽️ Menú {{menu}}</b><br />
-
-          <ol style="padding-left: 25px">
-            <li>
-              {{data["Comedor"][menu]["P1 Text"]}}
-              <img src='{{url_for("static", filename="comedorico/" + data["Comedor"][menu]["P1 Img"])}}'
-                style="max-width: 100px; max-height: 50px" alt="" height="50" />
-            </li>
-            <li>
-              {{data["Comedor"][menu]["P2 Text"]}}
-              <img src='{{url_for("static", filename="comedorico/" + data["Comedor"][menu]["P2 Img"])}}'
-                style="max-width: 100px; max-height: 50px" alt="" height="50" />
-            </li>
-            <li>
-              {{data["Comedor"][menu]["P3 Text"]}}
-              <img src='{{url_for("static", filename="comedorico/" + data["Comedor"][menu]["P3 Img"])}}'
-                style="max-width: 100px; max-height: 50px" alt="" height="50" />
-            </li>
-          </ol>
-          <small style="font-size: 60%">
-            <i>Puede ser incorrecto.</i>
-            <i>Hay {{data["ComedorOKKO"][data["Comedor"][menu]["IsEnought"]]}}
-              cantidad de comida.
-            </i>
-          </small>
+        {% endfor %} {% if config["Weather"]["Enabled"] %}
+        <!--- Clima de hoy --->
+        <div class="grid-item card" style="border: 4px solid rgb(23, 162, 184)">
+          <div class="card-body">
+            <b
+              >{{data["Weather"]["Icon"]}} El Tiempo en
+              {{config["Weather"]["Location"]}}</b
+            ><br />
+            {{data["Weather"]["Text"] | safe}}
+            <i>Calculado a las {{data["Time"]}} </i>
+          </div>
         </div>
-      </div>
-      {% endfor %}
-      {% if config["Weather"]["Enabled"] %}
-      <!--- Clima de hoy --->
-      <div class="grid-item card" style="border: 4px solid rgb(23, 162, 184)">
-        <div class="card-body">
-          <b>{{data["Weather"]["Icon"]}} El Tiempo en
-            {{config["Weather"]["Location"]}}</b><br />
-          {{data["Weather"]["Text"] | safe}}
-          <i>Calculado a las {{data["Time"]}} </i>
+        {% endif %} {% if config["Jokes"]["Enabled"] %}
+        <!--- Chiste diario --->
+        <div class="grid-item card" style="border: 4px solid rgb(40, 167, 69)">
+          <div class="card-body">
+            <b>🤣 Chiste diario</b><br />
+            {{data["Joke"] | safe}}
+          </div>
         </div>
-      </div>
-      {% endif %} {% if config["Jokes"]["Enabled"] %}
-      <!--- Chiste diario --->
-      <div class="grid-item card" style="border: 4px solid rgb(40, 167, 69)">
-        <div class="card-body">
-          <b>🤣 Chiste diario</b><br />
-          {{data["Joke"] | safe}}
-        </div>
-      </div>
-      {% endif %}
-      <!--- Encargos --->
-      <!-- <div class="grid-item card" style="border: 4px solid rgb(52, 58, 64);">
+        {% endif %}
+        <!--- Encargos --->
+        <!-- <div class="grid-item card" style="border: 4px solid rgb(52, 58, 64);">
                 <div class="card-body">
                     <b>⚙️ Encargos</b><br>
                     Finalizado Hoy:
@@ -256,10 +293,8 @@
                     </ul>
                 </div>
             </div> -->
-
+      </div>
     </div>
-  </div>
-  <script src="{{url_for('static', filename='masonry.min.js')}}"></script>
-</body>
-
+    <script src="{{url_for('static', filename='masonry.min.js')}}"></script>
+  </body>
 </html>

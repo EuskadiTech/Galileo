@@ -1,38 +1,45 @@
-{% extends "_layout.html" %}
-
-{% block container %}
+{% extends "_layout.html" %} {% block container %}
 <center>
-    <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
-      <legend>{{CONF['singular']}}</legend>
+  <fieldset
+    style="width: calc(100% - 30px); max-width: 35rem; text-align: left"
+  >
+    <legend>{{CONF['singular']}}</legend>
 
-      <table>
-        {% for key in CONF['scheme'] %}
-          {% if not CONF['scheme'][key].get("hiddenform", false) %}
-            <tr>
-              <th style="text-align: right; min-width: 125px; vertical-align: unset;">{{ CONF['scheme'][key]["label"] }}:</th>
-              <td style="padding-left: 10px;">
-                
-                {% if CONF['scheme'][key]["type"] == "markdown" %}
-                  {{markdown(item[key]) | safe}}
-                {% elif CONF['scheme'][key]["type"] == "image" %}
-                  {% for image in item[key] %}
-                    <a target="_blank" href="{{url_for('get_upload', path=image)}}"><img src="{{url_for('get_upload', path=image)}}" height="64"></a>
-                  {% endfor %}
-                  (pulsa para abrir)
-                {% else %}
-                  {{item[key]}}
-                {% endif %}
-              </td>
-            </tr>
-          {% endif %}
-        {% endfor %}
-      </table>
-    </fieldset>
+    <table>
+      {% for key in CONF['scheme'] %} {% if not
+      CONF['scheme'][key].get("hiddenform", false) %}
+      <tr>
+        <th style="text-align: right; min-width: 125px; vertical-align: unset">
+          {{ CONF['scheme'][key]["label"] }}:
+        </th>
+        <td style="padding-left: 10px">
+          {% if CONF['scheme'][key]["type"] == "markdown" %}
+          {{markdown(item[key]) | safe}} {% elif CONF['scheme'][key]["type"] ==
+          "image" %} {% for image in item[key] %}
+          <a target="_blank" href="{{url_for('get_upload', path=image)}}"
+            ><img src="{{url_for('get_upload', path=image)}}" height="64"
+          /></a>
+          {% endfor %} (pulsa para abrir) {% else %} {{item[key]}} {% endif %}
+        </td>
+      </tr>
+      {% endif %} {% endfor %}
+    </table>
+  </fieldset>
 </center>
 <center class="nop">
-  <a class="btn btn-primary" href="{{url_for(CONF['modulename'] + '.index')}}">Salir</a>
+  <a class="btn btn-primary" href="{{url_for(CONF['modulename'] + '.index')}}"
+    >Salir</a
+  >
   <a class="btn btn-primary" onclick="print()">Imprimir</a>
-  <a class="btn btn-warning" href="{{url_for(CONF['modulename'] + '.update', rid = rid)}}">Editar</a>
-  <a class="btn btn-danger" href="{{url_for(CONF['modulename'] + '.delete', rid = rid)}}">Borrar</a>
+  <a
+    class="btn btn-warning"
+    href="{{url_for(CONF['modulename'] + '.update', rid = rid)}}"
+    >Editar</a
+  >
+  <a
+    class="btn btn-danger"
+    href="{{url_for(CONF['modulename'] + '.delete', rid = rid)}}"
+    >Borrar</a
+  >
 </center>
 {% endblock %}

@@ -1,26 +1,36 @@
-{% extends "_layout.html" %}
-
-{% block container %}
-      <center>
-        <h2>Introduce el PIN</h2>
-        <form method="post" autocomplete="off">
-          <fieldset style="width: calc(100% - 30px); max-width: 35rem; text-align: left;">
-            <legend>Introducir PIN</legend>
-            <input type="hidden" name="code" value="{{code}}">
-            <label>
-              <b>PIN:</b><br>
-              <input autofocus type="text" name="pin" style="font-family: monospace; font-size: 30px; max-width: 375px; width: 100%;">
-            </label>
-            <br>
-            <input
-              type="submit"
-              class="btn btn-primary actbtn di di-user"
-              value="Acceder"
-            />
-            <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}"
-              >Salir</a
-            >
-          </fieldset>
-        </form>
-      </center>
+{% extends "_layout.html" %} {% block container %}
+<center>
+  <h2>Introduce el PIN</h2>
+  <form method="post" autocomplete="off">
+    <fieldset
+      style="width: calc(100% - 30px); max-width: 35rem; text-align: left"
+    >
+      <legend>Introducir PIN</legend>
+      <input type="hidden" name="code" value="{{code}}" />
+      <label>
+        <b>PIN:</b><br />
+        <input
+          autofocus
+          type="text"
+          name="pin"
+          style="
+            font-family: monospace;
+            font-size: 30px;
+            max-width: 375px;
+            width: 100%;
+          "
+        />
+      </label>
+      <br />
+      <input
+        type="submit"
+        class="btn btn-primary actbtn di di-user"
+        value="Acceder"
+      />
+      <a class="btn btn-primary di di-exit" href="{{url_for('Personas.index')}}"
+        >Salir</a
+      >
+    </fieldset>
+  </form>
+</center>
 {% endblock %}

@@ -1,20 +1,25 @@
-{% extends "_layout.html" %}
-
-{% block container %}
+{% extends "_layout.html" %} {% block container %}
 <center>
-    <div class="card text-white bg-danger mb-3" style="max-width: 25rem;">
-        <div class="card-header">Confirmación de eliminado</div>
-        <div class="card-body">
-            <h4 class="card-title">¿Realmente quieres borrarlo?</h4>
-            Escribe <b>ELIMINAR</b> para borrarlo
-            <form method="post">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="confirmCode" name="deletecapcha" placeholder="Capcha" autocomplete="off">
-                    <button type="submit" class="btn btn-secondary">Confirmar</button>
-                    <!-- <button type="button" class="btn btn-primary">Cancelar</button> -->
-                </div>
-            </form>
+  <div class="card text-white bg-danger mb-3" style="max-width: 25rem">
+    <div class="card-header">Confirmación de eliminado</div>
+    <div class="card-body">
+      <h4 class="card-title">¿Realmente quieres borrarlo?</h4>
+      Escribe <b>ELIMINAR</b> para borrarlo
+      <form method="post">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            id="confirmCode"
+            name="deletecapcha"
+            placeholder="Capcha"
+            autocomplete="off"
+          />
+          <button type="submit" class="btn btn-secondary">Confirmar</button>
+          <!-- <button type="button" class="btn btn-primary">Cancelar</button> -->
         </div>
+      </form>
     </div>
+  </div>
 </center>
 {% endblock %}

@@ -1,51 +1,81 @@
-{% extends "_layout.html" %}
+{% extends "_layout.html" %} {% block container %}
+<center>
+  <h2 class="nop">Tarjeta Identificativas</h2>
+  {% for key in recetas %}
 
-{% block container %}
-    <center>
-      <h2 class="nop">Tarjeta Identificativas</h2>
-      {% for key in recetas %}
-
-      <table border style="width: calc(100% - 30px); max-width: 30rem; text-align: left; border: 1px solid black; color: black;">
-        <tr>
-          <td colspan="2" style="font-family: monospace !important;font-size: 25px; text-align: center; height: 30px; border: 1px solid black;">{{recetas[key]["Nombre"]}} ({{recetas[key]["Region"].split(";")[0]}})</td>
-          <td style="width: 150px; text-align: center; border: 1px solid black;" rowspan="2">
-            <img src="{{ qrcode(recetas[key]['Codigo'], border=3) }}"
-              width="150px"><br><small>
-                Codigo - {{recetas[key]["Codigo"]}}
-                
-                {% if recetas[key]["PIN"] != "" %}
-                <br>PIN - {{recetas[key]["PIN"]}}
-                {% endif %}
-              </small>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding: 0; width: 125px; border: 1px solid black;">
-            <img src='{{url_for("get_upload", path="personas/"+recetas[key]["Foto"]) }}' alt="" height="125px">
-          </td>
-          <td>
-            <center>
-              {{recetas[key]["markdown"]}}
-            </center>
-          </td>
-        </tr>
-        <tr class="nop">
-          <td colspan="2" style="font-size: 75%; border: 1px solid black;">
-            <b>Roles:</b> <code style="font-family: monospace !important;">{{recetas[key]['Roles']}}</code>
-            <br />
-            <b>Fecha de Nacimiento:</b> {{recetas[key]['F-nac']}}
-          </td>
-          <td style="width: 150px; text-align: center; border: 1px solid black;" rowspan="1">
-            <code style="font-family: monospace !important;font-size: 20px;">{{recetas[key]['Puntos']}} puntos</code>
-          </td>
-        </tr>
-      </table>
-      <br><br>
-      {% endfor %}
-      <div class="nop">
-        <br>
-        <a class="btn btn-primary" href="{{url_for('Personas.index')}}">Salir</a>
-        <a class="btn btn-primary" onclick="print()">Imprimir</a>
-      </div>
-    </center>
+  <table
+    border
+    style="
+      width: calc(100% - 30px);
+      max-width: 30rem;
+      text-align: left;
+      border: 1px solid black;
+      color: black;
+    "
+  >
+    <tr>
+      <td
+        colspan="2"
+        style="
+          font-family: monospace !important;
+          font-size: 25px;
+          text-align: center;
+          height: 30px;
+          border: 1px solid black;
+        "
+      >
+        {{recetas[key]["Nombre"]}} ({{recetas[key]["Region"].split(";")[0]}})
+      </td>
+      <td
+        style="width: 150px; text-align: center; border: 1px solid black"
+        rowspan="2"
+      >
+        <img
+          src="{{ qrcode(recetas[key]['Codigo'], border=3) }}"
+          width="150px"
+        /><br /><small>
+          Codigo - {{recetas[key]["Codigo"]}} {% if recetas[key]["PIN"] != "" %}
+          <br />PIN - {{recetas[key]["PIN"]}} {% endif %}
+        </small>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 0; width: 125px; border: 1px solid black">
+        <img
+          src='{{url_for("get_upload", path="personas/"+recetas[key]["Foto"]) }}'
+          alt=""
+          height="125px"
+        />
+      </td>
+      <td>
+        <center>{{recetas[key]["markdown"]}}</center>
+      </td>
+    </tr>
+    <tr class="nop">
+      <td colspan="2" style="font-size: 75%; border: 1px solid black">
+        <b>Roles:</b>
+        <code style="font-family: monospace !important"
+          >{{recetas[key]['Roles']}}</code
+        >
+        <br />
+        <b>Fecha de Nacimiento:</b> {{recetas[key]['F-nac']}}
+      </td>
+      <td
+        style="width: 150px; text-align: center; border: 1px solid black"
+        rowspan="1"
+      >
+        <code style="font-family: monospace !important; font-size: 20px"
+          >{{recetas[key]['Puntos']}} puntos</code
+        >
+      </td>
+    </tr>
+  </table>
+  <br /><br />
+  {% endfor %}
+  <div class="nop">
+    <br />
+    <a class="btn btn-primary" href="{{url_for('Personas.index')}}">Salir</a>
+    <a class="btn btn-primary" onclick="print()">Imprimir</a>
+  </div>
+</center>
 {% endblock %}

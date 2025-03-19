@@ -1,13 +1,41 @@
 {
-    "name": "Recetas",
-    "db": "recetas",
-    "data_scheme": {
-        "Nombre": {"type": "text", "label": "Nombre", "default": "", "required": true, "primarykey": true},
-        "Origen": {"type": "text", "label": "Origen", "default": "Local", "required": true},
-        "OrigenURL": {"type": "url", "label": "URL Origen", "default": "", "required": false, "hiddentable": true},
-        "YYYY-MM-DD": {"type": "date", "label": "Fecha", "default": "", "required": true},
-        "content": {"type": "textarea", "label": "Contenido", "default": "", "required": true, "hiddentable": true}
+  "name": "Recetas",
+  "db": "recetas",
+  "data_scheme": {
+    "Nombre": {
+      "type": "text",
+      "label": "Nombre",
+      "default": "",
+      "required": true,
+      "primarykey": true
     },
-    "singular": "Receta",
-    "plural": "Recetas"
+    "Origen": {
+      "type": "text",
+      "label": "Origen",
+      "default": "Local",
+      "required": true
+    },
+    "OrigenURL": {
+      "type": "url",
+      "label": "URL Origen",
+      "default": "",
+      "required": false,
+      "hiddentable": true
+    },
+    "YYYY-MM-DD": {
+      "type": "date",
+      "label": "Fecha",
+      "default": "",
+      "required": true
+    },
+    "content": {
+      "type": "textarea",
+      "label": "Contenido",
+      "default": "",
+      "required": true,
+      "hiddentable": true
+    }
+  },
+  "singular": "Receta",
+  "plural": "Recetas"
 }
