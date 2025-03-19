@@ -40,6 +40,7 @@ class ModelView:
             file.save(filesave)
             return "automod/" + modulename + "/" + reqid + "/" + filename
 
+        check_path(USERDATA_DIR + "uploads")
         check_path(USERDATA_DIR + "uploads/automod")
         check_path(USERDATA_DIR + basefolder)
 

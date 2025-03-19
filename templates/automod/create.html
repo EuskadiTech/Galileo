@@ -18,7 +18,7 @@
                 {% elif CONF['scheme'][key]["type"] == "markdown" %}
                   <textarea name="{{key}}" cols="30" rows="5">{{CONF['scheme'][key]['default']}}</textarea>
                 {% elif CONF['scheme'][key]["type"] == "image" %}
-                  <input type="file" name="{{key}}" {{ "required" if CONF['scheme'][key]["required"] == True }}>
+                  <input type="file" name="{{key}}">
                 {% else %}
                   <input type="{{CONF['scheme'][key]['type']}}" value="{{CONF['scheme'][key]['default']}}" name="{{key}}" {{ "required" if CONF['scheme'][key]["required"] == True }}>
                 {% endif %}

@@ -20,7 +20,7 @@
                   {% elif CONF['scheme'][key]["type"] == "image" %}
                     Reemplazar?: <input type="checkbox" value="AXL__replacefile" name="AXL__replacefile">
                     Añadir?: <input type="checkbox" value="AXL__addfile" name="AXL__replacefile">
-                    <input type="file" name="{{key}}" {{ "required" if CONF['scheme'][key]["required"] == True }}>
+                    <input type="file" name="{{key}}">
                 {% else %}
                   <input type="{{CONF['scheme'][key]['type']}}" value="{{item[key]}}" name="{{key}}" {{ "required" if CONF['scheme'][key]["required"] == True }}>
                 {% endif %}
