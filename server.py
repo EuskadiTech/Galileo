@@ -6,7 +6,6 @@ from flask import (
     url_for,
     send_from_directory,
 )
-from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.wrappers import Response
 from os.path import join as path_join
 import logging
@@ -89,22 +88,13 @@ for mod in load_from_dir():
     app.register_blueprint(mod)
 
 if __name__ == "__main__":
-    if utils.os.environ.get("GAL_DOCKERTUNNEL_MYURL") != None:
-        tunnel = utils.DirectTunnel(
-            utils.os.environ.get("GAL_DOCKERTUNNEL_MYURL"),
-            utils.os.environ.get("GAL_DOCKERTUNNEL_ORCHURL", "https://grp.naiel.fyi"),
-        )
-    else:
-        tunnel = utils.PinggyTunnel()
-    TIP = tunnel.start()
     print(
-        f"""
+        """
 ------------------------------------
 Servidor arrancado
 
 Puedes acceder a Galileo desde:
 - http://127.0.0.1:8129/ (local)
-- {TIP} (no caduca)
 
 
 No cierres esta ventana.
@@ -116,12 +106,4 @@ No cierres esta ventana.
     else:
         HOST = "0.0.0.0"
 
-    config = utils.get_config()
-
-    BASE = "/rd/" + config["Clave Proxy"]
-    app.wsgi_app = DispatcherMiddleware(
-        app.wsgi_app,
-        {BASE: app.wsgi_app},
-    )
     app.run(HOST, 8129, False)
-    tunnel.stop()
