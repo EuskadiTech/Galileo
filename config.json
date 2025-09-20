@@ -3,6 +3,5 @@
     "Weather": { "Enabled": true, "Location": "Ortuella" },
     "Jokes": { "Enabled": true, "Url": "https://naiel.fyi/chistes.txt" }
   },
-  "Clave Proxy": "CHANGETHIS",
   "Receta": "Receta"
 }

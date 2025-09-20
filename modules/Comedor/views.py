@@ -53,7 +53,7 @@ def byDayModal():
 @app.route("/comedor/getMenu")
 @with_auth("comedor:read")
 def getMenu():
-    day = DateParser(request.args.get("day")).pretty_dayCode()
+    day = DateParser(request.args.get("day")).pretty_day_code()
     results = fromDay_comedor(day=day, menu=request.args.get("menu", "*"))
     return render_template(
         "comedor/getMenu.html", results=results, day=day, USER=g.user
@@ -97,7 +97,7 @@ def api__downloadMenu(mid):
 @app.route("/api/comedor/today")
 def api__today():
     # GUEST ACCESS API
-    day = DateParser(request.args.get("day")).pretty_dayCode()
+    day = DateParser(request.args.get("day")).pretty_day_code()
     results = fromDay_comedor(day=day, menu=request.args.get("menu", "*"))
     return results
 

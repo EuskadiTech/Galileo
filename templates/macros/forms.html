@@ -1,0 +1,71 @@
+{# Form field macro for consistent styling and reduced duplication #}
+{% macro form_field(field_type, name, label, placeholder="", value="", required=false, options=none, class="form-control") %}
+<div class="mb-3">
+    <label class="col-form-label" for="form{{ name }}">{{ label }}</label>
+    {% if field_type == "text" or field_type == "email" or field_type == "password" or field_type == "number" or field_type == "date" %}
+        <input 
+            type="{{ field_type }}" 
+            class="{{ class }}" 
+            placeholder="{{ placeholder }}" 
+            id="form{{ name }}" 
+            name="{{ name }}"
+            value="{{ value }}"
+            {% if required %}required{% endif %}
+        >
+    {% elif field_type == "color" %}
+        <input 
+            type="color" 
+            class="{{ class }}" 
+            id="form{{ name }}" 
+            name="{{ name }}"
+            value="{{ value or '#ff0000' }}"
+            {% if required %}required{% endif %}
+        >
+    {% elif field_type == "textarea" %}
+        <textarea 
+            class="{{ class }}" 
+            placeholder="{{ placeholder }}" 
+            id="form{{ name }}" 
+            name="{{ name }}"
+            {% if required %}required{% endif %}
+        >{{ value }}</textarea>
+    {% elif field_type == "select" %}
+        <select class="{{ class }}" id="form{{ name }}" name="{{ name }}" {% if required %}required{% endif %}>
+            {% if options %}
+                {% for option in options %}
+                    {% if option is mapping %}
+                        <option value="{{ option.value }}" {% if option.value == value %}selected{% endif %}>
+                            {{ option.label }}
+                        </option>
+                    {% else %}
+                        <option value="{{ option }}" {% if option == value %}selected{% endif %}>
+                            {{ option }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </select>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# Fieldset macro for consistent layout #}
+{% macro fieldset(legend, width="calc(100% - 30px)", max_width="35rem", content="") %}
+<fieldset style="width: {{ width }}; max-width: {{ max_width }}; text-align: left; float: left;">
+    {% if legend %}
+        <legend>{{ legend }}</legend>
+    {% endif %}
+    {{ caller() if caller }}
+    {{ content }}
+</fieldset>
+{% endmacro %}
+
+{# Form buttons macro #}
+{% macro form_buttons(submit_text="Guardar", cancel_url="", cancel_text="Salir") %}
+<div class="mt-3">
+    <input type="submit" class="btn btn-primary" value="{{ submit_text }}" />
+    {% if cancel_url %}
+        <a class="btn btn-secondary" href="{{ cancel_url }}">{{ cancel_text }}</a>
+    {% endif %}
+</div>
+{% endmacro %}

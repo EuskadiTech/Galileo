@@ -41,7 +41,7 @@ def list_comedor_monthMenu():
 
 def fromDay_comedor(day = None, menu: str = "*"):
     if day == None:
-        day = DateParser().pretty_dayCode()
+        day = DateParser().pretty_day_code()
     out = {}
     month = day.split("-")[0] + "-" + day.split("-")[1]
     dayc = day
