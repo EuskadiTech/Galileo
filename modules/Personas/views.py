@@ -52,11 +52,14 @@ def auth_pin():
         resp = make_response(redirect(url_for("index")))
         resp.set_cookie("AUTH_CODE", request.form["code"])
         pin = request.form["pin"]
-        # Validate PIN: only digits, length <= 10
-        if not (pin.isdigit() and len(pin) <= 10):
+        # Validate PIN: only digits, length between 4 and 10
+        if not (pin.isdigit() and 4 <= len(pin) <= 10):
             return redirect(url_for("Personas.auth_pin", code=request.form["code"], err="Invalid PIN."))
-        hashed_pin = hashlib.sha256(pin.encode("utf-8")).hexdigest()
-        resp.set_cookie("AUTH_PIN", hashed_pin, httponly=True)
+        salt = os.urandom(16)
+        hashed_pin = hashlib.pbkdf2_hmac("sha256", pin.encode("utf-8"), salt, 100_000)
+        # Store both salt and hash in cookies (hex-encoded)
+        resp.set_cookie("AUTH_PIN", hashed_pin.hex(), httponly=True)
+        resp.set_cookie("AUTH_PIN_SALT", salt.hex(), httponly=True)
         return resp
     return render_template(
         "personas/auth/pin.html", code=request.args["code"], err=request.args.get("err")
