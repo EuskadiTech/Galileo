@@ -8,6 +8,7 @@ from flask import (
     make_response,
     g,
 )
+import re
 from io import BytesIO
 from markdown import markdown
 import hashlib
@@ -27,15 +28,19 @@ app = Blueprint("Personas", __name__)
 @app.route("/auth/scan", methods=["GET", "POST"])
 def auth_scan():
     if request.method == "POST":
-        user = localutils.PersonAuth(request.form["code"])
+        code = request.form["code"]
+        # Validate code: should be alphanumeric (optionally allow -/_), 1-64 chars
+        if not re.fullmatch(r"[a-zA-Z0-9_\-]{1,64}", code):
+            return redirect(url_for("Personas.auth_scan", err="Invalid code format."))
+        user = localutils.PersonAuth(code)
         try:
             user.isLoggedIn()
         except localutils.PinRequired:
-            return redirect(url_for("Personas.auth_pin", code=request.form["code"]))
+            return redirect(url_for("Personas.auth_pin", code=code))
         except Exception as e:
             return redirect(url_for("Personas.auth_scan", err=e))
         resp = make_response(redirect(url_for("index")))
-        resp.set_cookie("AUTH_CODE", request.form["code"], secure=True, httponly=True, samesite='Strict')
+        resp.set_cookie("AUTH_CODE", code, secure=True, httponly=True, samesite='Strict')
         resp.set_cookie("AUTH_PIN", "", secure=True, httponly=True, samesite='Strict')
         return resp
     return render_template("personas/auth/scan.html", err=request.args.get("err"))
