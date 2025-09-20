@@ -13,17 +13,52 @@
         color-scheme: only light;
       }
 
+      /* Form and fieldset styling */
       fieldset {
-        border: 1px solid black;
-        padding: 15px;
-        border-radius: 15px;
+        border: 1px solid #dee2e6;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        background-color: #fafafa;
+      }
+
+      fieldset legend {
+        font-weight: bold;
+        color: #495057;
+        padding: 0 10px;
+        margin-bottom: 10px;
+      }
+
+      /* Form layout improvements */
+      .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
         margin-bottom: 15px;
       }
 
-      fieldset summary {
-        text-align: center;
-        list-style: none;
-        font-weight: bold;
+      .form-col {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      /* Better spacing for form elements */
+      .mb-3 {
+        margin-bottom: 1rem;
+      }
+
+      .mt-3 {
+        margin-top: 1rem;
+      }
+
+      /* Responsive form layout */
+      @media (max-width: 768px) {
+        fieldset {
+          width: 100% !important;
+          max-width: none !important;
+          float: none !important;
+          margin: 10px 0;
+        }
       }
 
       @media print {

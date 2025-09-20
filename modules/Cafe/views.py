@@ -91,7 +91,7 @@ def comanda(rid):
             "notas": request.form.get("notas"),
             "_persona": rid,
             "_grupo": "00 Sin Agrupar;white;black;",
-            "_fase": "Cocina - " + utils.DateParser().pretty_dayCode(),
+            "_fase": "Cocina - " + utils.DateParser().pretty_day_code(),
         }
         if (
             data["Tama_o"][0] == "Grande"
@@ -233,7 +233,7 @@ def updategrp():
 @with_auth("cafe:cocina")
 def rdel(rid, ft, fc):
     DB_COMANDAS.update_by_id(
-        rid, {"_fase": ft + " - " + utils.DateParser().pretty_dayCode()}
+        rid, {"_fase": ft + " - " + utils.DateParser().pretty_day_code()}
     )
     if "pago" in fc:
         com = DB_COMANDAS.get_by_id(rid)

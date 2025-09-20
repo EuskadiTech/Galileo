@@ -1,0 +1,15 @@
+{% extends "_layout.html" %}
+{% from "macros/forms.html" import form_field, fieldset, form_buttons %}
+
+{% block container %}
+<center>
+    <h2>{{ "Modificar región" if region else "Añadir región" }}</h2>
+    <form method="POST">
+        {{ fieldset(width="100%", max_width="35rem") }}
+            {{ form_field("text", "Nombre", "Nombre", "Nombre", region["Nombre"] if region else "", true) }}
+            {{ form_field("color", "Color", "Color", "", region["Color"] if region else "#ff0000") }}
+            {{ form_buttons("Guardar", url_for('Personas.regiones'), "Salir") }}
+        </fieldset>
+    </form>
+</center>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "_layout.html" %}
+{% from "macros/forms.html" import form_field, fieldset, form_buttons %}
+
+{% block container %}
+<center>
+    <h2>{{ "Persona: " + receta["Nombre"] if receta else "Añadir persona" }}</h2>
+    <form action="{{ action_url }}" method="POST">
+        {{ fieldset(width="calc(100% - 30px)", max_width="35rem") }}
+            {{ form_field("text", "Nombre", "Nombre", "Nombre", receta["Nombre"] if receta else "", true) }}
+            {{ form_field("text", "PIN", "PIN", "PIN", receta["PIN"] if receta else "") }}
+            
+            {# Region select field #}
+            <div class="mb-3">
+                <label class="col-form-label" for="formRegion">Región</label>
+                <select class="form-control" id="formRegion" name="Region">
+                    <option value="Ninguno;black">Ninguno</option>
+                    {% for region in regiones %}
+                        {% set region_value = regiones[region]['Nombre'] + ";" + regiones[region]['Color'] %}
+                        <option value="{{ region_value }}" 
+                                {% if receta and receta["Region"] == region_value %}selected{% endif %}>
+                            {{ regiones[region]['Nombre'] }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {# Avatar select field #}
+            <div class="mb-3">
+                <label for="formFoto" class="form-label">Foto (subir en "uploads/personas")</label>
+                <select class="form-select" id="formFoto" name="Foto">
+                    <option value="">Ninguno</option>
+                    {% for avatar in AVATARS %}
+                        <option {% if receta and receta['Foto'] == avatar %}selected{% endif %}>
+                            {{ avatar }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {{ form_field("number", "Puntos", "Puntos", "Puntos", receta["Puntos"] if receta else "") }}
+            {{ form_field("date", "fecha", "Fecha de nacimiento", "", receta["F-nac"] if receta else "") }}
+            {{ form_field("textarea", "markdown", "Notas", "...", receta["markdown"] if receta else "") }}
+
+            {{ form_buttons("Guardar", cancel_url, "Salir") }}
+        </fieldset>
+
+        {{ fieldset("Anilla SuperCafé", width="calc(100% - 30px)", max_width="15rem") }}
+            {% if receta and receta["SC_Anilla"] %}
+                {% set anilla_parts = receta["SC_Anilla"].split(";") %}
+                <label>Color: 
+                    <input type="color" name="SC_Anilla_Color" value="{{ anilla_parts[1] if anilla_parts|length > 1 else '#ff0000' }}">
+                </label><br>
+                <label>Nombre: 
+                    <input type="text" name="SC_Anilla_Nombre" value="{{ anilla_parts[0] if anilla_parts|length > 0 else 'de color Rojo' }}">
+                </label>
+            {% else %}
+                <label>Color: 
+                    <input type="color" name="SC_Anilla_Color" value="#ff0000">
+                </label><br>
+                <label>Nombre: 
+                    <input type="text" name="SC_Anilla_Nombre" value="de color Rojo">
+                </label>
+            {% endif %}
+        </fieldset>
+
+        {{ fieldset("Roles", width="calc(100% - 30px)", max_width="20rem") }}
+            {% if receta %}
+                {# Edit mode - show all permissions #}
+                {% for app in G_PERMS %}
+                    <b>{{ app }}</b>
+                    <ul style="list-style-type: none; padding-left: 15px; margin: 5px 0;">
+                        {% for perm in G_PERMS[app] %}
+                            {% if (perm["role"] == "admin" and "admin" in USER.u["Roles"]) or perm["role"] != "admin" %}
+                                <li>
+                                    <label>
+                                        <input type="checkbox" style="display: inline-block;" 
+                                               name="roles[]" value="{{ perm['role'] }}"
+                                               {% if perm["role"] in receta["Roles"] %}checked{% endif %}>
+                                        {{ perm["label"] }}
+                                    </label>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            {% else %}
+                {# New mode - only show admin option if configuring admin #}
+                <ul>
+                    <li>
+                        <label>
+                            <input type="checkbox" style="display: inline-block;" 
+                                   name="roles[]" value="admin" 
+                                   {% if err == "Configura a un Administrador" %}checked{% endif %}>
+                            Administrador
+                        </label>
+                    </li>
+                </ul>
+                <i>El resto de roles son disponibles después de crear la persona</i>
+            {% endif %}
+        </fieldset>
+    </form>
+</center>
+{% endblock %}
