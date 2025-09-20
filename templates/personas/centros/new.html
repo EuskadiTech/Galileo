@@ -1,0 +1,6 @@
+{% extends "personas/centros/form.html" %}
+
+{# Set variables for the form template #}
+{% set action_url = url_for('Personas.centros_new') %}
+{% set cancel_url = url_for('Personas.centros') %}
+{% set centro = none %}

@@ -129,7 +129,10 @@ def comanda(rid):
 @app.route("/cafe/cocina", methods=["GET", "POST"])
 @with_auth("cafe:cocina")
 def cocina():
+    from ..Personas.models import DB_CENTROS, DB_REGIONES
     regiones = {}
+    centros_data = DB_CENTROS.get_all()
+    regiones_data = DB_REGIONES.get_all()
 
     def query(data):
         if "cocina" in data["_fase"]:
@@ -137,11 +140,40 @@ def cocina():
         if "Cocina" in data["_fase"]:
             return True
 
+    # Group orders by person's region
     for key, val in DB_COMANDAS.get_by_query(query).items():
         persona = DB_PERSONAS.get_by_id(val["_persona"])
         if regiones.get(persona["Region"]) == None:
             regiones[persona["Region"]] = []
         regiones[persona["Region"]].append((key, val))
+    
+    # Group regions by centers for hierarchical display
+    centros_hierarchy = {}
+    
+    # Process each region and group by center
+    for region_key, commands in regiones.items():
+        region_name = region_key.split(';')[0] if ';' in region_key else region_key
+        centro_name = "Sin Centro"
+        centro_color = "#f0f0f0"
+        
+        # Find which center this region belongs to
+        for region_id, region_data in regiones_data.items():
+            if region_data['Nombre'] == region_name:
+                if region_data.get('Centro') and centros_data.get(region_data['Centro']):
+                    centro_info = centros_data[region_data['Centro']]
+                    centro_name = centro_info['Nombre']
+                    centro_color = centro_info['Color']
+                break
+        
+        # Group by center
+        if centro_name not in centros_hierarchy:
+            centros_hierarchy[centro_name] = {
+                'color': centro_color,
+                'regions': {}
+            }
+        
+        centros_hierarchy[centro_name]['regions'][region_key] = commands
+    
     return render_template(
         utils.get_config().get("SC_DisplayMode", "cafe/display.html"),
         fase="Cocina",
@@ -149,6 +181,8 @@ def cocina():
         Receta=get_receta(),
         comandas=DB_COMANDAS.get_by_query(query).items(),
         regiones=dict(sorted(regiones.items(), key=lambda x: x[0], reverse=True)),
+        centros_hierarchy=dict(sorted(centros_hierarchy.items())),
+        centros=centros_data,
         USER=g.user,
         fc="cocina",
         ft="Pago",
@@ -159,8 +193,11 @@ def cocina():
 @app.route("/cafe/pago", methods=["GET", "POST"])
 @with_auth("cafe:pago")
 def pago():
+    from ..Personas.models import DB_CENTROS, DB_REGIONES
     regiones = {}
     total = 0
+    centros_data = DB_CENTROS.get_all()
+    regiones_data = DB_REGIONES.get_all()
 
     def query(data):
         if "pago" in data["_fase"]:
@@ -176,6 +213,34 @@ def pago():
         print(val)
         if "Efectivo" in val["MetodoDePago"]:
             total += val["_precio"]
+    
+    # Group regions by centers for hierarchical display
+    centros_hierarchy = {}
+    
+    # Process each region and group by center
+    for region_key, commands in regiones.items():
+        region_name = region_key.split(';')[0] if ';' in region_key else region_key
+        centro_name = "Sin Centro"
+        centro_color = "#f0f0f0"
+        
+        # Find which center this region belongs to
+        for region_id, region_data in regiones_data.items():
+            if region_data['Nombre'] == region_name:
+                if region_data.get('Centro') and centros_data.get(region_data['Centro']):
+                    centro_info = centros_data[region_data['Centro']]
+                    centro_name = centro_info['Nombre']
+                    centro_color = centro_info['Color']
+                break
+        
+        # Group by center
+        if centro_name not in centros_hierarchy:
+            centros_hierarchy[centro_name] = {
+                'color': centro_color,
+                'regions': {}
+            }
+        
+        centros_hierarchy[centro_name]['regions'][region_key] = commands
+        
     return render_template(
         utils.get_config().get("SC_DisplayMode", "cafe/display.html"),
         fase="Pago",
@@ -184,6 +249,8 @@ def pago():
         Receta=get_receta(),
         comandas=DB_COMANDAS.get_by_query(query).items(),
         regiones=regiones,
+        centros_hierarchy=dict(sorted(centros_hierarchy.items())),
+        centros=centros_data,
         USER=g.user,
         fc="pago",
         ft="Historial",
@@ -194,7 +261,10 @@ def pago():
 @app.route("/cafe/historialfilter", methods=["GET", "POST"])
 @with_auth("cafe:read")
 def historial():
+    from ..Personas.models import DB_CENTROS, DB_REGIONES
     regiones = {}
+    centros_data = DB_CENTROS.get_all()
+    regiones_data = DB_REGIONES.get_all()
 
     def query(data):
         if request.args.get("fase") != None:
@@ -210,6 +280,34 @@ def historial():
         if regiones.get(persona["Region"]) == None:
             regiones[persona["Region"]] = []
         regiones[persona["Region"]].append((key, val))
+    
+    # Group regions by centers for hierarchical display
+    centros_hierarchy = {}
+    
+    # Process each region and group by center
+    for region_key, commands in regiones.items():
+        region_name = region_key.split(';')[0] if ';' in region_key else region_key
+        centro_name = "Sin Centro"
+        centro_color = "#f0f0f0"
+        
+        # Find which center this region belongs to
+        for region_id, region_data in regiones_data.items():
+            if region_data['Nombre'] == region_name:
+                if region_data.get('Centro') and centros_data.get(region_data['Centro']):
+                    centro_info = centros_data[region_data['Centro']]
+                    centro_name = centro_info['Nombre']
+                    centro_color = centro_info['Color']
+                break
+        
+        # Group by center
+        if centro_name not in centros_hierarchy:
+            centros_hierarchy[centro_name] = {
+                'color': centro_color,
+                'regions': {}
+            }
+        
+        centros_hierarchy[centro_name]['regions'][region_key] = commands
+        
     return render_template(
         utils.get_config().get("SC_DisplayMode", "cafe/display.html"),
         fase="Historial por filtro",
@@ -217,6 +315,8 @@ def historial():
         Receta="Receta del dia",
         comandas=DB_COMANDAS.get_by_query(query).items(),
         regiones=regiones,
+        centros_hierarchy=dict(sorted(centros_hierarchy.items())),
+        centros=centros_data,
         USER=g.user,
         CONFIG=utils.get_config(),
     )

@@ -1,7 +1,21 @@
 {
   "Resumen Diario": {
-    "Weather": { "Enabled": true, "Location": "Ortuella" },
-    "Jokes": { "Enabled": true, "Url": "https://naiel.fyi/chistes.txt" }
+    "Weather": {
+      "Enabled": true,
+      "Location": "Ortuella"
+    },
+    "Jokes": {
+      "Enabled": true,
+      "Url": "https://naiel.fyi/chistes.txt"
+    }
   },
-  "Receta": "Receta"
+  "Receta": "Receta",
+  "SC_CanClientSendComanda": "Desactivar",
+  "SC_DisplayMode": "cafe/display-centers.html",
+  "SC_PRECIO_SERVICIO": 10,
+  "SC_PRECIO_LECHE_G": 20,
+  "SC_PRECIO_LECHE_P": 10,
+  "SC_PRECIO_CAFE": 20,
+  "SC_PRECIO_COLACAO": 20,
+  "SC_PRECIO_RECETA": 10
 }

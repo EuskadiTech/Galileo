@@ -10,7 +10,7 @@ from flask import (
 )
 from io import BytesIO
 from markdown import markdown
-from .models import DB_PERSONAS, DB_REGIONES
+from .models import DB_PERSONAS, DB_REGIONES, DB_CENTROS
 from ..Cafe.models import ANILLAS
 from random import randint
 from . import localutils
@@ -96,6 +96,7 @@ def printstickers():
 @with_auth("personas:write")
 def new():
     regioness = DB_REGIONES.get_all()
+    centros = DB_CENTROS.get_all()
     if request.method == "POST":
         code = str(randint(100, 9999))
         DB_PERSONAS.add(
@@ -122,7 +123,7 @@ def new():
         file.replace("\\", "/")
         for file in glob(os.path.join(USERDATA_DIR, "uploads/personas"))
     ]
-    return render_template("personas/new.html", AVATARS=avatars, regiones=regioness)
+    return render_template("personas/new.html", AVATARS=avatars, regiones=regioness, centros=centros)
 
 
 @app.route("/personas/scan", methods=["GET", "POST"])
@@ -170,6 +171,7 @@ def pointop(rid):
 def edit(rid):
     receta = DB_PERSONAS.get_by_id(str(rid))
     regioness = DB_REGIONES.get_all()
+    centros = DB_CENTROS.get_all()
     if request.method == "POST":
         try:
             DB_PERSONAS.update_by_id(
@@ -213,6 +215,7 @@ def edit(rid):
         USER=g.user,
         AVATARS=avatars,
         regiones=regioness,
+        centros=centros,
         G_PERMS=G_PERMS,
     )
 
@@ -231,23 +234,24 @@ def rdel(rid):
 @with_auth("personas:read")
 def regiones():
     return render_template(
-        "personas/regiones/index.html", regiones=DB_REGIONES.get_all()
+        "personas/regiones/index.html", regiones=DB_REGIONES.get_all(), centros=DB_CENTROS.get_all(), USER=g.user
     )
 
 
 @app.route("/personas_regiones/new", methods=["GET", "POST"])
 @with_auth("personas:write")
 def regiones_new():
+    centros = DB_CENTROS.get_all()
     if request.method == "POST":
-        code = str(randint(100, 9999))
         DB_REGIONES.add(
             {
                 "Nombre": request.form.get("Nombre", ""),
                 "Color": request.form.get("Color", "lightblue"),
+                "Centro": request.form.get("Centro", ""),
             }
         )
         return redirect(url_for("Personas.regiones"))
-    return render_template("personas/regiones/new.html", USER=g.user)
+    return render_template("personas/regiones/new.html", centros=centros, USER=g.user)
 
 
 @app.route("/personas_regiones/<rid>/del", methods=["GET", "POST"])
@@ -263,18 +267,20 @@ def regiones_rdel(rid):
 @with_auth("personas:write")
 def regiones_edit(rid):
     region = DB_REGIONES.get_by_id(str(rid))
+    centros = DB_CENTROS.get_all()
     if request.method == "POST":
         DB_REGIONES.update_by_id(
             str(rid),
             {
                 "Nombre": request.form.get("Nombre", region["Nombre"]),
                 "Color": request.form.get("Color", region["Color"]),
+                "Centro": request.form.get("Centro", region.get("Centro", "")),
             },
         )
-        return redirect(url_for("Personas.index"))
+        return redirect(url_for("Personas.regiones"))
 
     return render_template(
-        "personas/regiones/edit.html", region=region, rid=rid, USER=g.user
+        "personas/regiones/edit.html", region=region, centros=centros, rid=rid, USER=g.user
     )
 
 
@@ -285,6 +291,67 @@ def regiones_region(rid):
     return render_template(
         "personas/regiones/region.html", region=region, rid=rid, USER=g.user
     )
+
+
+# Centro routes
+@app.route("/personas_centros")
+@with_auth("personas:read")
+def centros():
+    return render_template(
+        "personas/centros/index.html", centros=DB_CENTROS.get_all(), USER=g.user
+    )
+
+
+@app.route("/personas_centros/new", methods=["GET", "POST"])
+@with_auth("personas:write")
+def centros_new():
+    if request.method == "POST":
+        DB_CENTROS.add(
+            {
+                "Nombre": request.form.get("Nombre", ""),
+                "Color": request.form.get("Color", "lightblue"),
+            }
+        )
+        return redirect(url_for("Personas.centros"))
+    return render_template("personas/centros/new.html", USER=g.user)
+
+
+@app.route("/personas_centros/<rid>/del", methods=["GET", "POST"])
+@with_auth("personas:delete")
+def centros_rdel(rid):
+    if request.method == "POST" and request.form.get("deletecapcha") == "ELIMINAR":
+        DB_CENTROS.delete_by_id(str(rid))
+        return redirect(url_for("Personas.centros"))
+    return render_template("confirmDeletion.html", USER=g.user)
+
+
+@app.route("/personas_centros/<rid>/edit", methods=["GET", "POST"])
+@with_auth("personas:write")
+def centros_edit(rid):
+    centro = DB_CENTROS.get_by_id(str(rid))
+    if request.method == "POST":
+        DB_CENTROS.update_by_id(
+            str(rid),
+            {
+                "Nombre": request.form.get("Nombre", centro["Nombre"]),
+                "Color": request.form.get("Color", centro["Color"]),
+            },
+        )
+        return redirect(url_for("Personas.centros"))
+
+    return render_template(
+        "personas/centros/edit.html", centro=centro, rid=rid, USER=g.user
+    )
+
+
+@app.route("/personas_centros/<rid>")
+@with_auth("personas:read")
+def centros_centro(rid):
+    centro = DB_CENTROS.get_by_id(str(rid))
+    return render_template(
+        "personas/centros/centro.html", centro=centro, rid=rid, USER=g.user
+    )
+
 
 addperm("Personas", "Acceder", "personas:_module")
 addperm("Personas", "Leer", "personas:read")

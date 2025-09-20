@@ -9,18 +9,47 @@
             {{ form_field("text", "Nombre", "Nombre", "Nombre", receta["Nombre"] if receta else "", true) }}
             {{ form_field("text", "PIN", "PIN", "PIN", receta["PIN"] if receta else "") }}
             
-            {# Region select field #}
+            {# Region select field with center grouping #}
             <div class="mb-3">
                 <label class="col-form-label" for="formRegion">Región</label>
                 <select class="form-control" id="formRegion" name="Region">
                     <option value="Ninguno;black">Ninguno</option>
-                    {% for region in regiones %}
-                        {% set region_value = regiones[region]['Nombre'] + ";" + regiones[region]['Color'] %}
-                        <option value="{{ region_value }}" 
-                                {% if receta and receta["Region"] == region_value %}selected{% endif %}>
-                            {{ regiones[region]['Nombre'] }}
-                        </option>
+                    
+                    {% set regions_by_center = {} %}
+                    {% for region_id in regiones %}
+                        {% set region = regiones[region_id] %}
+                        {% set centro_id = region.get('Centro', '') %}
+                        {% if centro_id not in regions_by_center %}
+                            {% set _ = regions_by_center.update({centro_id: []}) %}
+                        {% endif %}
+                        {% set _ = regions_by_center[centro_id].append((region_id, region)) %}
                     {% endfor %}
+                    
+                    {% for centro_id, regions_list in regions_by_center.items() %}
+                        {% if centro_id and centros.get(centro_id) %}
+                            <optgroup label="{{ centros[centro_id]['Nombre'] }}">
+                                {% for region_id, region in regions_list %}
+                                    {% set region_value = region['Nombre'] + ";" + region['Color'] %}
+                                    <option value="{{ region_value }}" 
+                                            {% if receta and receta["Region"] == region_value %}selected{% endif %}>
+                                        {{ region['Nombre'] }}
+                                    </option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if regions_by_center.get('') %}
+                        <optgroup label="Sin Centro">
+                            {% for region_id, region in regions_by_center[''] %}
+                                {% set region_value = region['Nombre'] + ";" + region['Color'] %}
+                                <option value="{{ region_value }}" 
+                                        {% if receta and receta["Region"] == region_value %}selected{% endif %}>
+                                    {{ region['Nombre'] }}
+                                </option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endif %}
                 </select>
             </div>
 

@@ -1,0 +1,15 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+<center>
+    <h1>Centro: {{ centro["Nombre"] }}</h1>
+    <div style="background-color: {{ centro["Color"] }}; padding: 20px; border-radius: 5px; margin: 20px; display: inline-block;">
+        <h2>{{ centro["Nombre"] }}</h2>
+    </div>
+    <br>
+    <div class="input-group">
+        <a class="btn btn-warning" href="{{ url_for('Personas.centros_edit', rid=rid) }}">Editar</a>
+        <a class="btn btn-secondary" href="{{ url_for('Personas.centros') }}">Volver</a>
+    </div>
+</center>
+{% endblock %}
