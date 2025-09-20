@@ -49,17 +49,21 @@ def auth_scan():
 @app.route("/auth/pin", methods=["GET", "POST"])
 def auth_pin():
     if request.method == "POST":
-        user = localutils.PersonAuth(request.form["code"], request.form["pin"])
+        code = request.form["code"]
+        # Validate code: should be alphanumeric (optionally allow -/_), 1-64 chars
+        if not re.fullmatch(r"[a-zA-Z0-9_\-]{1,64}", code):
+            return redirect(url_for("Personas.auth_pin", code=code, err="Invalid code format."))
+        user = localutils.PersonAuth(code, request.form["pin"])
         try:
             user.isLoggedIn()
         except localutils.PinRequired:
-            return redirect(url_for("Personas.auth_pin", code=request.form["code"]))
+            return redirect(url_for("Personas.auth_pin", code=code))
         resp = make_response(redirect(url_for("index")))
-        resp.set_cookie("AUTH_CODE", request.form["code"], secure=True, httponly=True, samesite='Strict')
+        resp.set_cookie("AUTH_CODE", code, secure=True, httponly=True, samesite='Strict')
         pin = request.form["pin"]
         # Validate PIN: only digits, length between 4 and 10
         if not (pin.isdigit() and 4 <= len(pin) <= 10):
-            return redirect(url_for("Personas.auth_pin", code=request.form["code"], err="Invalid PIN."))
+            return redirect(url_for("Personas.auth_pin", code=code, err="Invalid PIN."))
         salt = os.urandom(16)
         hashed_pin = hashlib.pbkdf2_hmac("sha256", pin.encode("utf-8"), salt, 100_000)
         # Store both salt and hash in cookies (hex-encoded)
