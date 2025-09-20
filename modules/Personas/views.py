@@ -35,8 +35,8 @@ def auth_scan():
         except Exception as e:
             return redirect(url_for("Personas.auth_scan", err=e))
         resp = make_response(redirect(url_for("index")))
-        resp.set_cookie("AUTH_CODE", request.form["code"])
-        resp.set_cookie("AUTH_PIN", "")
+        resp.set_cookie("AUTH_CODE", request.form["code"], secure=True, httponly=True, samesite='Strict')
+        resp.set_cookie("AUTH_PIN", "", secure=True, httponly=True, samesite='Strict')
         return resp
     return render_template("personas/auth/scan.html", err=request.args.get("err"))
 
@@ -50,7 +50,7 @@ def auth_pin():
         except localutils.PinRequired:
             return redirect(url_for("Personas.auth_pin", code=request.form["code"]))
         resp = make_response(redirect(url_for("index")))
-        resp.set_cookie("AUTH_CODE", request.form["code"])
+        resp.set_cookie("AUTH_CODE", request.form["code"], secure=True, httponly=True, samesite='Strict')
         pin = request.form["pin"]
         # Validate PIN: only digits, length between 4 and 10
         if not (pin.isdigit() and 4 <= len(pin) <= 10):
@@ -58,8 +58,8 @@ def auth_pin():
         salt = os.urandom(16)
         hashed_pin = hashlib.pbkdf2_hmac("sha256", pin.encode("utf-8"), salt, 100_000)
         # Store both salt and hash in cookies (hex-encoded)
-        resp.set_cookie("AUTH_PIN", hashed_pin.hex(), httponly=True)
-        resp.set_cookie("AUTH_PIN_SALT", salt.hex(), httponly=True)
+        resp.set_cookie("AUTH_PIN", hashed_pin.hex(), httponly=True, secure=True, samesite='Strict')
+        resp.set_cookie("AUTH_PIN_SALT", salt.hex(), httponly=True, secure=True, samesite='Strict')
         return resp
     return render_template(
         "personas/auth/pin.html", code=request.args["code"], err=request.args.get("err")
@@ -69,8 +69,8 @@ def auth_pin():
 @app.route("/auth/logout", methods=["GET", "POST"])
 def auth_logout():
     resp = make_response(redirect(url_for("index")))
-    resp.set_cookie("AUTH_CODE", "")
-    resp.set_cookie("AUTH_PIN", "")
+    resp.set_cookie("AUTH_CODE", "", secure=True, httponly=True, samesite='Strict')
+    resp.set_cookie("AUTH_PIN", "", secure=True, httponly=True, samesite='Strict')
     return resp
 
 
