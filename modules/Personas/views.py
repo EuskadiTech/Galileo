@@ -10,6 +10,7 @@ from flask import (
 )
 from io import BytesIO
 from markdown import markdown
+import hashlib
 from .models import DB_PERSONAS, DB_REGIONES, DB_CENTROS
 from ..Cafe.models import ANILLAS
 from random import randint
@@ -50,7 +51,12 @@ def auth_pin():
             return redirect(url_for("Personas.auth_pin", code=request.form["code"]))
         resp = make_response(redirect(url_for("index")))
         resp.set_cookie("AUTH_CODE", request.form["code"])
-        resp.set_cookie("AUTH_PIN", request.form["pin"])
+        pin = request.form["pin"]
+        # Validate PIN: only digits, length <= 10
+        if not (pin.isdigit() and len(pin) <= 10):
+            return redirect(url_for("Personas.auth_pin", code=request.form["code"], err="Invalid PIN."))
+        hashed_pin = hashlib.sha256(pin.encode("utf-8")).hexdigest()
+        resp.set_cookie("AUTH_PIN", hashed_pin, httponly=True)
         return resp
     return render_template(
         "personas/auth/pin.html", code=request.args["code"], err=request.args.get("err")
