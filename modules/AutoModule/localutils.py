@@ -7,7 +7,7 @@ from utils import USERDATA_DIR, check_path
 from glob import glob
 from uuid import uuid4
 import json
-
+import re
 
 class ModelView:
     def __init__(
@@ -190,6 +190,9 @@ class ModelView:
 
         @self.app.route(f"/api/{tablename}/<rid>/edit", methods=["POST"])
         @with_api_auth(f"{tablename}:update")
+            # Only allow alphanumeric, dash, and underscore in ids
+            if not re.match(r'^[A-Za-z0-9_-]+$', rid):
+                return {"status": "error", "message": "Invalid ID"}, 400
         def api__update(rid):
             item = model.get_by_id(str(rid))
             inp = {}
