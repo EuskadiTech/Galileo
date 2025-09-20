@@ -3,7 +3,6 @@ from datetime import datetime
 import requests
 from requests import Response
 import json
-import uuid
 
 
 
@@ -15,7 +14,6 @@ DEFAULT_CONFIG = {
         "Weather": {"Enabled": True, "Location": "Ortuella"},
         "Jokes": {"Enabled": True, "Url": "https://naiel.fyi/chistes.txt"},
     },
-    "Clave Proxy": str(uuid.uuid4()),
     "Receta": "No Disp.",
 }
 

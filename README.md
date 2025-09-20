@@ -20,6 +20,6 @@ Ejemplo:
     "Weather": { "Enabled": true, "Location": "Ortuella" },
     "Jokes": { "Enabled": true, "Url": "https://naiel.fyi/chistes.txt" }
   },
-  "Clave Proxy": "<CHANGE THIS>"
+  "Receta": "No Disp."
 }
 ```
