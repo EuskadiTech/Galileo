@@ -8,8 +8,10 @@ from flask import (
     make_response,
     g,
 )
+import re
 from io import BytesIO
 from markdown import markdown
+import hashlib
 from .models import DB_PERSONAS, DB_REGIONES, DB_CENTROS
 from ..Cafe.models import ANILLAS
 from random import randint
@@ -26,16 +28,20 @@ app = Blueprint("Personas", __name__)
 @app.route("/auth/scan", methods=["GET", "POST"])
 def auth_scan():
     if request.method == "POST":
-        user = localutils.PersonAuth(request.form["code"])
+        code = request.form["code"]
+        # Validate code: should be alphanumeric (optionally allow -/_), 1-64 chars
+        if not re.fullmatch(r"[a-zA-Z0-9_\-]{1,64}", code):
+            return redirect(url_for("Personas.auth_scan", err="Invalid code format."))
+        user = localutils.PersonAuth(code)
         try:
             user.isLoggedIn()
         except localutils.PinRequired:
-            return redirect(url_for("Personas.auth_pin", code=request.form["code"]))
+            return redirect(url_for("Personas.auth_pin", code=code))
         except Exception as e:
             return redirect(url_for("Personas.auth_scan", err=e))
         resp = make_response(redirect(url_for("index")))
-        resp.set_cookie("AUTH_CODE", request.form["code"])
-        resp.set_cookie("AUTH_PIN", "")
+        resp.set_cookie("AUTH_CODE", code, secure=False, httponly=True, samesite='Strict')
+        resp.set_cookie("AUTH_PIN", "", secure=False, httponly=True, samesite='Strict')
         return resp
     return render_template("personas/auth/scan.html", err=request.args.get("err"))
 
@@ -43,14 +49,22 @@ def auth_scan():
 @app.route("/auth/pin", methods=["GET", "POST"])
 def auth_pin():
     if request.method == "POST":
-        user = localutils.PersonAuth(request.form["code"], request.form["pin"])
+        code = request.form["code"]
+        # Validate code: should be alphanumeric (optionally allow -/_), 1-64 chars
+        if not re.fullmatch(r"[a-zA-Z0-9_\-]{1,64}", code):
+            return redirect(url_for("Personas.auth_pin", code=code, err="Invalid code format."))
+        user = localutils.PersonAuth(code, request.form["pin"])
         try:
             user.isLoggedIn()
         except localutils.PinRequired:
-            return redirect(url_for("Personas.auth_pin", code=request.form["code"]))
+            return redirect(url_for("Personas.auth_pin", code=code))
         resp = make_response(redirect(url_for("index")))
-        resp.set_cookie("AUTH_CODE", request.form["code"])
-        resp.set_cookie("AUTH_PIN", request.form["pin"])
+        resp.set_cookie("AUTH_CODE", code, secure=False, httponly=True, samesite='Strict')
+        pin = request.form["pin"]
+        # Validate PIN: only digits, length between 4 and 10
+        if not (pin.isdigit() and 4 <= len(pin) <= 10):
+            return redirect(url_for("Personas.auth_pin", code=code, err="Invalid PIN."))
+        resp.set_cookie("AUTH_PIN", pin, httponly=True, secure=False, samesite='Strict')
         return resp
     return render_template(
         "personas/auth/pin.html", code=request.args["code"], err=request.args.get("err")
@@ -60,8 +74,8 @@ def auth_pin():
 @app.route("/auth/logout", methods=["GET", "POST"])
 def auth_logout():
     resp = make_response(redirect(url_for("index")))
-    resp.set_cookie("AUTH_CODE", "")
-    resp.set_cookie("AUTH_PIN", "")
+    resp.set_cookie("AUTH_CODE", "", secure=False, httponly=True, samesite='Strict')
+    resp.set_cookie("AUTH_PIN", "", secure=False, httponly=True, samesite='Strict')
     return resp
 
 
