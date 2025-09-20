@@ -8,6 +8,21 @@
         {{ fieldset(width="100%", max_width="35rem") }}
             {{ form_field("text", "Nombre", "Nombre", "Nombre", region["Nombre"] if region else "", true) }}
             {{ form_field("color", "Color", "Color", "", region["Color"] if region else "#ff0000") }}
+            
+            {# Centro select field #}
+            <div class="mb-3">
+                <label class="col-form-label" for="formCentro">Centro</label>
+                <select class="form-control" id="formCentro" name="Centro">
+                    <option value="">Sin Centro</option>
+                    {% for centro_id in centros %}
+                        <option value="{{ centro_id }}" 
+                                {% if region and region.get("Centro") == centro_id %}selected{% endif %}>
+                            {{ centros[centro_id]['Nombre'] }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
             {{ form_buttons("Guardar", url_for('Personas.regiones'), "Salir") }}
         </fieldset>
     </form>
