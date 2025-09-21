@@ -6,43 +6,45 @@
     href="{{url_for('Personas.centros_new')}}"
     >Añadir centro</a
   >
-  <table border class="table table-striped">
-    <thead>
-      <tr class="table-primary">
-        <th>Nombre</th>
-        <th>Acciónes</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for key in centros %}
-      <tr>
-        <td data-label="Nombre"
-          style="background-color: {{centros[key]['Color']}}; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;"
-        >
-          {{centros[key]["Nombre"]}}
-        </td>
-        <td data-label="Acciónes">
-          <div class="input-group">
-            <a
-              class="btn btn-danger"
-              href="{{url_for('Personas.centros_rdel', rid = key)}}"
-              >Borrar</a
-            >
-            <a
-              class="btn btn-warning"
-              href="{{url_for('Personas.centros_edit', rid = key)}}"
-              >Editar</a
-            >
-            <a
-              class="btn btn-primary"
-              href="{{url_for('Personas.centros_centro', rid = key)}}"
-              >Abrir</a
-            >
-          </div>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table border class="table table-striped">
+      <thead>
+        <tr class="table-primary">
+          <th>Nombre</th>
+          <th>Acciónes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key in centros %}
+        <tr>
+          <td data-label="Nombre"
+            style="background-color: {{centros[key]['Color']}}; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;"
+          >
+            {{centros[key]["Nombre"]}}
+          </td>
+          <td data-label="Acciónes">
+            <div class="input-group">
+              <a
+                class="btn btn-danger"
+                href="{{url_for('Personas.centros_rdel', rid = key)}}"
+                >Borrar</a
+              >
+              <a
+                class="btn btn-warning"
+                href="{{url_for('Personas.centros_edit', rid = key)}}"
+                >Editar</a
+              >
+              <a
+                class="btn btn-primary"
+                href="{{url_for('Personas.centros_centro', rid = key)}}"
+                >Abrir</a
+              >
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </center>
 {% endblock %}

@@ -17,68 +17,70 @@
     href="{{url_for('Admin.files', path = '/'.join(path.split('/')[:-1]))}}"
     >Carpeta superior</a
   >
-  <table border class="table table-striped">
-    <thead>
-      <tr class="table-primary">
-        <th>Nombre</th>
-        <th>Ruta</th>
-        <th>Acciónes</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for folder in folders %}
-      <tr>
-        <td data-label="Nombre">{{folder}}</td>
-        <td data-label="Ruta"><code>{{path + "/" + folder}}</code></td>
-        <td data-label="Acciónes">
-          <div class="input-group">
-            <a
-              class="btn btn-primary"
-              href="{{url_for('Admin.files', path = path + '/' + folder)}}"
-              >Abrir</a
-            >
-            <!-- <a class="btn btn-warning" href="url_for('Personas.edit', rid = key)">Exportar</a> -->
-            <a
-              class="btn btn-danger"
-              href="{{url_for('Admin.filesrmdir', path = path + '/' + folder)}}"
-              >Borrar</a
-            >
-          </div>
-        </td>
-      </tr>
-      {% endfor %} {% for file in files %}
-      <tr>
-        <td data-label="Nombre">{{file}}</td>
-        <td data-label="Ruta"><code>{{path + "/" + file}}</code></td>
-        <td data-label="Acciónes">
-          <div class="input-group">
-            <a
-              class="btn btn-primary"
-              download="{{file}}"
-              href="{{url_for('get_upload', path=path + '/' + file)}}"
-              >Descargar</a
-            >
-            <a
-              class="btn btn-primary"
-              target="_blank"
-              href="{{url_for('get_upload', path=path + '/' + file)}}"
-              >Abrir</a
-            >
-            <a
-              class="btn btn-warning"
-              href="{{url_for('Admin.filesmv', path=path + '/' + file)}}"
-              >Mover</a
-            >
-            <a
-              class="btn btn-danger"
-              href="{{url_for('Admin.filesrm', path = path + '/' + file)}}"
-              >Borrar</a
-            >
-          </div>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table border class="table table-striped">
+      <thead>
+        <tr class="table-primary">
+          <th>Nombre</th>
+          <th>Ruta</th>
+          <th>Acciónes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for folder in folders %}
+        <tr>
+          <td data-label="Nombre">{{folder}}</td>
+          <td data-label="Ruta"><code>{{path + "/" + folder}}</code></td>
+          <td data-label="Acciónes">
+            <div class="input-group">
+              <a
+                class="btn btn-primary"
+                href="{{url_for('Admin.files', path = path + '/' + folder)}}"
+                >Abrir</a
+              >
+              <!-- <a class="btn btn-warning" href="url_for('Personas.edit', rid = key)">Exportar</a> -->
+              <a
+                class="btn btn-danger"
+                href="{{url_for('Admin.filesrmdir', path = path + '/' + folder)}}"
+                >Borrar</a
+              >
+            </div>
+          </td>
+        </tr>
+        {% endfor %} {% for file in files %}
+        <tr>
+          <td data-label="Nombre">{{file}}</td>
+          <td data-label="Ruta"><code>{{path + "/" + file}}</code></td>
+          <td data-label="Acciónes">
+            <div class="input-group">
+              <a
+                class="btn btn-primary"
+                download="{{file}}"
+                href="{{url_for('get_upload', path=path + '/' + file)}}"
+                >Descargar</a
+              >
+              <a
+                class="btn btn-primary"
+                target="_blank"
+                href="{{url_for('get_upload', path=path + '/' + file)}}"
+                >Abrir</a
+              >
+              <a
+                class="btn btn-warning"
+                href="{{url_for('Admin.filesmv', path=path + '/' + file)}}"
+                >Mover</a
+              >
+              <a
+                class="btn btn-danger"
+                href="{{url_for('Admin.filesrm', path = path + '/' + file)}}"
+                >Borrar</a
+              >
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </center>
 {% endblock %}
