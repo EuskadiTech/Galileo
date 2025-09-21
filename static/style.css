@@ -22,6 +22,7 @@ table td {
   min-width: 100px !important;
 }
 table {
+  display: table !important;
   min-width: 600px !important;
 }
 .print .vertical {
