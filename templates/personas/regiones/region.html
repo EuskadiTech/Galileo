@@ -1,0 +1,18 @@
+{% extends "_layout.html" %}
+
+{% block container %}
+<center>
+    <h1>Región: {{ region["Nombre"] }}</h1>
+    <div style="background-color: {{ region["Color"] }}; padding: 20px; border-radius: 5px; margin: 20px; display: inline-block; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;">
+        <h2>{{ region["Nombre"] }}</h2>
+        {% if region.get('Centro') %}
+            <p><strong>Centro:</strong> {{ region["Centro"] }}</p>
+        {% endif %}
+    </div>
+    <br>
+    <div class="input-group">
+        <a class="btn btn-warning" href="{{ url_for('Personas.regiones_edit', rid=rid) }}">Editar</a>
+        <a class="btn btn-secondary" href="{{ url_for('Personas.regiones') }}">Volver</a>
+    </div>
+</center>
+{% endblock %}
