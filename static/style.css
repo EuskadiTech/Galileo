@@ -24,6 +24,7 @@ table td {
 table {
   display: table !important;
   min-width: 600px !important;
+  text-wrap: nowrap !important;
 }
 .print .vertical {
   height: 7.15cm;
