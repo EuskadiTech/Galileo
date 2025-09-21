@@ -190,10 +190,10 @@ class ModelView:
 
         @self.app.route(f"/api/{tablename}/<rid>/edit", methods=["POST"])
         @with_api_auth(f"{tablename}:update")
+        def api__update(rid):
             # Only allow alphanumeric, dash, and underscore in ids
             if not re.match(r'^[A-Za-z0-9_-]+$', rid):
                 return {"status": "error", "message": "Invalid ID"}, 400
-        def api__update(rid):
             item = model.get_by_id(str(rid))
             inp = {}
             for key, value in self.DATA_SCHEME.items():
