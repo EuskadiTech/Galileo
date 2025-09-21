@@ -10,7 +10,45 @@
       <br />
       <label>PIN: <input type="text" autocomplete="off" name="pin" /></label>
       <br />
-      <label>Región: <input type="text" name="region" required /></label>
+      <label>Región: 
+        <select name="region" required>
+          <option value="Ninguno;black">Ninguno</option>
+          
+          {% set regions_by_center = {} %}
+          {% for region_id in regiones %}
+            {% set region = regiones[region_id] %}
+            {% set centro_id = region.get('Centro', '') %}
+            {% if centro_id not in regions_by_center %}
+              {% set _ = regions_by_center.update({centro_id: []}) %}
+            {% endif %}
+            {% set _ = regions_by_center[centro_id].append((region_id, region)) %}
+          {% endfor %}
+          
+          {% for centro_id, regions_list in regions_by_center.items() %}
+            {% if centro_id and centros.get(centro_id) %}
+              <optgroup label="{{ centros[centro_id]['Nombre'] }}">
+                {% for region_id, region in regions_list %}
+                  {% set region_value = region['Nombre'] + ";" + region['Color'] %}
+                  <option value="{{ region_value }}">
+                    {{ region['Nombre'] }}
+                  </option>
+                {% endfor %}
+              </optgroup>
+            {% endif %}
+          {% endfor %}
+          
+          {% if regions_by_center.get('') %}
+            <optgroup label="Sin Centro">
+              {% for region_id, region in regions_by_center[''] %}
+                {% set region_value = region['Nombre'] + ";" + region['Color'] %}
+                <option value="{{ region_value }}">
+                  {{ region['Nombre'] }}
+                </option>
+              {% endfor %}
+            </optgroup>
+          {% endif %}
+        </select>
+      </label>
       <br />
       <label
         >Fecha de Nacimiento: <input type="date" name="fecha" required

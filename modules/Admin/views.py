@@ -11,7 +11,7 @@ from flask import (
 from werkzeug.utils import secure_filename
 from random import randint
 from ..Personas.localutils import PersonAuth, with_auth
-from ..Personas.models import DB_PERSONAS
+from ..Personas.models import DB_PERSONAS, DB_REGIONES, DB_CENTROS
 from utils import USERDATA_DIR, os, check_path, APPDATA_DIR
 from os.path import join as join_path
 import json
@@ -59,7 +59,7 @@ def setup__adminaccount():
                 + ")",
             )
         )
-    return render_template("admin/setup/adminaccount.html")
+    return render_template("admin/setup/adminaccount.html", regiones=DB_REGIONES.get_all(), centros=DB_CENTROS.get_all())
 
 
 @app.route("/admin/files/<path:path>", methods=["GET", "POST"])
