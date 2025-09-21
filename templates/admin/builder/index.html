@@ -11,34 +11,36 @@
 
   <br />
   <br />
-  <table border class="table table-striped">
-    <thead>
-      <tr class="table-primary">
-        <th>Nombre</th>
-        <th>Acciónes</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for mod in mods %}
-      <tr>
-        <td data-label="Nombre">{{mod}}</td>
-        <td data-label="Acciónes">
-          <div class="input-group">
-            <a
-              class="btn btn-warning"
-              href="{{url_for('Admin.builder_editor', mod = mod)}}"
-              >Editar</a
-            >
-            <a
-              class="btn btn-danger"
-              href="url_for('Admin.builder_delete', mod = mod)"
-              >Borrar</a
-            >
-          </div>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table border class="table table-striped">
+      <thead>
+        <tr class="table-primary">
+          <th>Nombre</th>
+          <th>Acciónes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for mod in mods %}
+        <tr>
+          <td data-label="Nombre">{{mod}}</td>
+          <td data-label="Acciónes">
+            <div class="input-group">
+              <a
+                class="btn btn-warning"
+                href="{{url_for('Admin.builder_editor', mod = mod)}}"
+                >Editar</a
+              >
+              <a
+                class="btn btn-danger"
+                href="url_for('Admin.builder_delete', mod = mod)"
+                >Borrar</a
+              >
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </center>
 {% endblock %}
