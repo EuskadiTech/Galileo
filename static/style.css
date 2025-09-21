@@ -222,55 +222,7 @@ table {
   max-width: 900px;
 }
 
-/* Responsive table styles - convert to cards on mobile */
-@media (max-width: 768px) {
-  /* Hide table headers on mobile for list tables */
-  .table.table-striped thead {
-    display: none;
-  }
-  
-  /* Convert table rows to cards */
-  .table.table-striped tbody tr {
-    display: block;
-    margin-bottom: 15px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 15px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  /* Convert table cells to block layout */
-  .table.table-striped tbody td {
-    display: block;
-    border: none;
-    padding: 5px 0;
-    text-align: left;
-  }
-  
-  /* Add labels before content for better UX */
-  .table.table-striped tbody td:before {
-    content: attr(data-label) ": ";
-    font-weight: bold;
-    color: #495057;
-    margin-right: 10px;
-  }
-  
-  /* Style action buttons in mobile cards */
-  .table.table-striped .input-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 10px;
-  }
-  
-  .table.table-striped .input-group .btn {
-    flex: 1;
-    min-width: auto;
-    font-size: 12px;
-    padding: 5px 8px;
-  }
-}
+
 fieldset {
   width: fit-content;
 }
