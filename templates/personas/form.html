@@ -5,7 +5,7 @@
 <center>
     <h2>{{ "Persona: " + receta["Nombre"] if receta else "Añadir persona" }}</h2>
     <form action="{{ action_url }}" method="POST">
-        {{ fieldset(width="calc(100% - 30px)", max_width="35rem") }}
+        {% call fieldset(width="calc(100% - 30px)", max_width="35rem") %}
             {{ form_field("text", "Nombre", "Nombre", "Nombre", receta["Nombre"] if receta else "", true) }}
             {{ form_field("text", "PIN", "PIN", "PIN", receta["PIN"] if receta else "") }}
             
@@ -71,9 +71,9 @@
             {{ form_field("textarea", "markdown", "Notas", "...", receta["markdown"] if receta else "") }}
 
             {{ form_buttons("Guardar", cancel_url, "Salir") }}
-        </fieldset>
+        {% endcall %}
 
-        {{ fieldset("Anilla SuperCafé", width="calc(100% - 30px)", max_width="15rem") }}
+        {% call fieldset("Anilla SuperCafé", width="calc(100% - 30px)", max_width="15rem") %}
             {% if receta and receta["SC_Anilla"] %}
                 {% set anilla_parts = receta["SC_Anilla"].split(";") %}
                 <label>Color: 
@@ -90,9 +90,9 @@
                     <input type="text" name="SC_Anilla_Nombre" value="de color Rojo">
                 </label>
             {% endif %}
-        </fieldset>
+        {% endcall %}
 
-        {{ fieldset("Roles", width="calc(100% - 30px)", max_width="20rem") }}
+        {% call fieldset("Roles", width="calc(100% - 30px)", max_width="20rem") %}
             {% if receta %}
                 {# Edit mode - show all permissions #}
                 {% for app in G_PERMS %}
@@ -126,7 +126,7 @@
                 </ul>
                 <i>El resto de roles son disponibles después de crear la persona</i>
             {% endif %}
-        </fieldset>
+        {% endcall %}
     </form>
 </center>
 {% endblock %}
