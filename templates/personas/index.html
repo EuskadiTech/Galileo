@@ -20,16 +20,16 @@
         <tbody>
           {% for key in personas %}
           <tr>
-            <td>{{personas[key]["Codigo"]}}</td>
-            <td><a href="{{url_for('Personas.persona', rid = key)}}">{{personas[key]["Nombre"]}} ({{personas[key]["Region"].split(";")[0]}})</a></td>
-            <td>{{personas[key]["Puntos"]}} puntos
+            <td data-label="Codigo">{{personas[key]["Codigo"]}}</td>
+            <td data-label="Nombre"><a href="{{url_for('Personas.persona', rid = key)}}">{{personas[key]["Nombre"]}} ({{personas[key]["Region"].split(";")[0]}})</a></td>
+            <td data-label="Puntos">{{personas[key]["Puntos"]}} puntos
               <br>
               <div class="input-group">
                 <button class="btn btn-sm btn-success" onclick="fetch('{{url_for("Personas.pointop", val=1, rid = key)}}').then(setTimeout(() =>{location.reload()}, 70))">+1</a>
                 <button class="btn btn-sm btn-danger" onclick="fetch('{{url_for("Personas.pointop", val=-1, rid = key)}}').then(setTimeout(() =>{location.reload()}, 70))">-1</a>
               </div>
             </td>
-            <td>
+            <td data-label="Acciónes">
               <div class="input-group">
                 <a class="btn btn-danger" href="{{url_for('Personas.rdel', rid = key)}}">Borrar</a>
                 <a class="btn btn-warning" href="{{url_for('Personas.edit', rid = key)}}">Editar</a>

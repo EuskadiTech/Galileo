@@ -18,10 +18,10 @@
     <tbody>
       {% for result in results %}
       <tr>
-        <td>
+        <td data-label="Menú">
           <b>{{result}}</b><br /><small>{{results[result]["IsEnought"]}}</small>
         </td>
-        <td>
+        <td data-label="1er plato">
           {{results[result]["P1 Text"]}}
           <img
             src='{{url_for("static", filename="comedorico/" + results[result]["P1 Img"])}}'
@@ -29,7 +29,7 @@
             alt=""
           />
         </td>
-        <td>
+        <td data-label="2do plato">
           {{results[result]["P2 Text"]}}
           <img
             src='{{url_for("static", filename="comedorico/" + results[result]["P2 Img"])}}'
@@ -37,7 +37,7 @@
             alt=""
           />
         </td>
-        <td>
+        <td data-label="3er plato">
           {{results[result]["P3 Text"]}}
           <img
             src='{{url_for("static", filename="comedorico/" + results[result]["P3 Img"])}}'

@@ -28,9 +28,9 @@
     <tbody>
       {% for folder in folders %}
       <tr>
-        <td>{{folder}}</td>
-        <td><code>{{path + "/" + folder}}</code></td>
-        <td>
+        <td data-label="Nombre">{{folder}}</td>
+        <td data-label="Ruta"><code>{{path + "/" + folder}}</code></td>
+        <td data-label="Acciónes">
           <div class="input-group">
             <a
               class="btn btn-primary"
@@ -48,9 +48,9 @@
       </tr>
       {% endfor %} {% for file in files %}
       <tr>
-        <td>{{file}}</td>
-        <td><code>{{path + "/" + file}}</code></td>
-        <td>
+        <td data-label="Nombre">{{file}}</td>
+        <td data-label="Ruta"><code>{{path + "/" + file}}</code></td>
+        <td data-label="Acciónes">
           <div class="input-group">
             <a
               class="btn btn-primary"
