@@ -27,15 +27,15 @@
     <tbody>
       {% for key in comedor %}
       <tr>
-        <td>{{comedor[key]["meta"]["Menu"]}}</td>
-        <td>{{comedor[key]["meta"]["Description"]}}</td>
-        <td>{{comedor[key]["meta"]["YYYY-MM"]}}</td>
-        <td>
+        <td data-label="Menú">{{comedor[key]["meta"]["Menu"]}}</td>
+        <td data-label="Descripción">{{comedor[key]["meta"]["Description"]}}</td>
+        <td data-label="Mes">{{comedor[key]["meta"]["YYYY-MM"]}}</td>
+        <td data-label="Origen">
           <a href='{{comedor[key]["meta"]["Link"]}}'
             >{{comedor[key]["meta"]["Origin"]}}</a
           >
         </td>
-        <td>
+        <td data-label="Acciónes">
           <div class="input-group">
             <a
               class="btn btn-danger"

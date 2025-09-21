@@ -16,12 +16,12 @@
     <tbody>
       {% for key in centros %}
       <tr>
-        <td
+        <td data-label="Nombre"
           style="background-color: {{centros[key]['Color']}}; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;"
         >
           {{centros[key]["Nombre"]}}
         </td>
-        <td>
+        <td data-label="Acciónes">
           <div class="input-group">
             <a
               class="btn btn-danger"

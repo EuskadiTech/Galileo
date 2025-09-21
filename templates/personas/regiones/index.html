@@ -22,7 +22,7 @@
     <tbody>
       {% for key in regiones %}
       <tr>
-        <td>
+        <td data-label="Centro">
           {% if regiones[key].get('Centro') and centros.get(regiones[key]['Centro']) %}
             <span style="background-color: {{ centros[regiones[key]['Centro']]['Color'] }}; padding: 2px 6px; border-radius: 3px; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;">
               {{ centros[regiones[key]['Centro']]['Nombre'] }}
@@ -31,12 +31,12 @@
             <span style="color: #888;">Sin Centro</span>
           {% endif %}
         </td>
-        <td
+        <td data-label="Nombre"
           style="background-color: {{regiones[key]['Color']}}; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;"
         >
           {{regiones[key]["Nombre"]}}
         </td>
-        <td>
+        <td data-label="Acciónes">
           <div class="input-group">
             <a
               class="btn btn-danger"

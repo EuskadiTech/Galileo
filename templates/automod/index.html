@@ -24,13 +24,13 @@
         {% for kkey in CONF['scheme'] %} {% if not
         CONF['scheme'][kkey].get("hiddentable", false) %} {% if
         CONF['scheme'][kkey].get("primarykey", false) %}
-        <td>
+        <td data-label="{{ CONF['scheme'][kkey]['label'] }}">
           <a href="{{url_for(CONF['modulename'] + '.read', rid = key)}}"
             >{{items[key][kkey]}}</a
           >
         </td>
         {% elif CONF['scheme'][kkey].get("type") == "image" %}
-        <td>
+        <td data-label="{{ CONF['scheme'][kkey]['label'] }}">
           {% for image in items[key][kkey] %}
           <a target="_blank" href="{{url_for('get_upload', path=image)}}"
             ><img src="{{url_for('get_upload', path=image)}}" height="38"
@@ -38,9 +38,9 @@
           {% endfor %}
         </td>
         {% else %}
-        <td>{{ items[key][kkey] }}</td>
+        <td data-label="{{ CONF['scheme'][kkey]['label'] }}">{{ items[key][kkey] }}</td>
         {% endif %} {% endif %} {% endfor %}
-        <td>
+        <td data-label="Acciónes">
           <a
             class="btn btn-primary"
             href="{{url_for(CONF['modulename'] + '.read', rid = key)}}"
