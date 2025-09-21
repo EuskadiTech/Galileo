@@ -5,11 +5,11 @@
 <center>
     <h2>{{ "Modificar centro" if centro else "Añadir centro" }}</h2>
     <form action="{{ action_url }}" method="POST">
-        {{ fieldset(width="100%", max_width="35rem") }}
+        {% call fieldset(width="100%", max_width="35rem") %}
             {{ form_field("text", "Nombre", "Nombre", "Nombre", centro["Nombre"] if centro else "", true) }}
             {{ form_field("color", "Color", "Color", "", centro["Color"] if centro else "#ff0000") }}
             {{ form_buttons("Guardar", cancel_url, "Salir") }}
-        </fieldset>
+        {% endcall %}
     </form>
 </center>
 {% endblock %}
