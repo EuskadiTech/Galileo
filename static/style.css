@@ -19,8 +19,10 @@ html {
   color-scheme: only light;
 }
 table td {
-  min-width: 200px;
-  width: fit-content;
+  min-width: 300px;
+}
+table {
+  width: 600px;
 }
 .print .vertical {
   height: 7.15cm;
