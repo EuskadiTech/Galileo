@@ -18,8 +18,8 @@ html {
   height: 95%;
   color-scheme: only light;
 }
-table {
-  min-width: 30rem;
+table td {
+  min-width: 200px;
   width: fit-content;
 }
 .print .vertical {
